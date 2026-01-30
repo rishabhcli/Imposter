@@ -1,0 +1,52 @@
+{
+  "fill" : "system-light",
+  "groups" : [
+    {
+      "layers" : [
+        {
+          "fill" : {
+            "solid" : "srgb:0.58072,0.06673,0.00000,1.00000"
+          },
+          "image-name" : "Pasted Graphic 7.heic",
+          "name" : "Pasted Graphic 7",
+          "position" : {
+            "scale" : 0.35,
+            "translation-in-points" : [
+              -26.728124999999977,
+              -109.47395833333326
+            ]
+          }
+        },
+        {
+          "blend-mode" : "plus-darker",
+          "fill" : {
+            "solid" : "srgb:0.26052,0.26052,0.26052,1.00000"
+          },
+          "image-name" : "Pasted Graphic 4.heic",
+          "name" : "Pasted Graphic 4",
+          "position" : {
+            "scale" : 0.6,
+            "translation-in-points" : [
+              0,
+              0
+            ]
+          }
+        }
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "circles" : [
+      "watchOS"
+    ],
+    "squares" : "shared"
+  }
+}
