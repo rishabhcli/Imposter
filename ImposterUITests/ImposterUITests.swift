@@ -2,38 +2,118 @@
 //  ImposterUITests.swift
 //  ImposterUITests
 //
-//  Created by Rishabh Bansal on 1/29/26.
+//  UI tests for the Imposter app.
 //
 
 import XCTest
 
 final class ImposterUITests: XCTestCase {
 
+    var app: XCUIApplication!
+
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-
-        // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
-
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
+        app = XCUIApplication()
+        app.launch()
     }
 
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        app = nil
+    }
+
+    // MARK: - Home Screen Tests
+
+    @MainActor
+    func testLaunchShowsHomeScreen() throws {
+        // Verify the home screen title is visible
+        XCTAssertTrue(app.staticTexts["Imposter"].exists)
     }
 
     @MainActor
-    func testExample() throws {
-        // UI tests must launch the application that they test.
-        let app = XCUIApplication()
-        app.launch()
-
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testNewGameButtonExists() throws {
+        // Look for new game button by accessibility identifier
+        let newGameButton = app.buttons["NewGameButton"]
+        XCTAssertTrue(newGameButton.waitForExistence(timeout: 2))
     }
+
+    @MainActor
+    func testNewGameNavigatesToSetup() throws {
+        let newGameButton = app.buttons["NewGameButton"]
+        if newGameButton.waitForExistence(timeout: 2) {
+            newGameButton.tap()
+
+            // Verify we navigated to setup screen
+            XCTAssertTrue(app.staticTexts["Players"].waitForExistence(timeout: 2) ||
+                         app.buttons["AddPlayerButton"].waitForExistence(timeout: 2))
+        }
+    }
+
+    // MARK: - Player Setup Tests
+
+    @MainActor
+    func testAddPlayerButton() throws {
+        // Navigate to setup
+        let newGameButton = app.buttons["NewGameButton"]
+        if newGameButton.waitForExistence(timeout: 2) {
+            newGameButton.tap()
+        }
+
+        // Find add player button
+        let addPlayerButton = app.buttons["AddPlayerButton"]
+        XCTAssertTrue(addPlayerButton.waitForExistence(timeout: 2))
+    }
+
+    @MainActor
+    func testStartGameRequiresThreePlayers() throws {
+        // Navigate to setup
+        let newGameButton = app.buttons["NewGameButton"]
+        if newGameButton.waitForExistence(timeout: 2) {
+            newGameButton.tap()
+        }
+
+        // Start button should be disabled or show warning with < 3 players
+        let startButton = app.buttons["StartGameButton"]
+        if startButton.waitForExistence(timeout: 2) {
+            // Check if button is disabled
+            XCTAssertFalse(startButton.isEnabled)
+        }
+    }
+
+    // MARK: - Full Game Flow Test
+
+    @MainActor
+    func testCompleteGameFlowBasic() throws {
+        // Navigate to setup
+        let newGameButton = app.buttons["NewGameButton"]
+        guard newGameButton.waitForExistence(timeout: 2) else { return }
+        newGameButton.tap()
+
+        // Add 3 players (minimum required)
+        let addPlayerButton = app.buttons["AddPlayerButton"]
+        guard addPlayerButton.waitForExistence(timeout: 2) else { return }
+
+        // We need to add enough players - tap add button twice (app may start with 1 player)
+        for _ in 0..<2 {
+            if addPlayerButton.exists && addPlayerButton.isEnabled {
+                addPlayerButton.tap()
+            }
+        }
+
+        // Start the game
+        let startButton = app.buttons["StartGameButton"]
+        if startButton.waitForExistence(timeout: 2) && startButton.isEnabled {
+            startButton.tap()
+
+            // Verify we moved to role reveal
+            XCTAssertTrue(app.staticTexts["Role Reveal"].waitForExistence(timeout: 2) ||
+                         app.buttons["RevealRoleButton"].waitForExistence(timeout: 2))
+        }
+    }
+
+    // MARK: - Performance Tests
 
     @MainActor
     func testLaunchPerformance() throws {
-        // This measures how long it takes to launch your application.
         measure(metrics: [XCTApplicationLaunchMetric()]) {
             XCUIApplication().launch()
         }

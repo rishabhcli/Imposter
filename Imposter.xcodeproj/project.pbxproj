@@ -6,6 +6,17 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		4948A7D82F2C43A7009A9418 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4948A7D72F2C43A7009A9418 /* SwiftUI.framework */; };
+		4948A7DA2F2C43B3009A9418 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4948A7D92F2C43B3009A9418 /* Foundation.framework */; };
+		4948A7DC2F2C43BB009A9418 /* FoundationModels.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4948A7DB2F2C43BB009A9418 /* FoundationModels.framework */; };
+		4948A7DE2F2C43C0009A9418 /* ImagePlayground.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4948A7DD2F2C43C0009A9418 /* ImagePlayground.framework */; };
+		4948A7E02F2C43C7009A9418 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4948A7DF2F2C43C7009A9418 /* AVFoundation.framework */; };
+		4948A7E22F2C43CC009A9418 /* CoreHaptics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4948A7E12F2C43CC009A9418 /* CoreHaptics.framework */; };
+		4948A7E42F2C43D2009A9418 /* SwiftData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4948A7E32F2C43D2009A9418 /* SwiftData.framework */; };
+		4948A7ED2F2C6CAD009A9418 /* Imposter icon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 4948A7EC2F2C6CAD009A9418 /* Imposter icon.icon */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		4948A6B22F2C0F86009A9418 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,6 +38,14 @@
 		4948A6A22F2C0F85009A9418 /* Imposter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Imposter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4948A6B12F2C0F86009A9418 /* ImposterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ImposterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4948A6BB2F2C0F86009A9418 /* ImposterUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ImposterUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4948A7D72F2C43A7009A9418 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		4948A7D92F2C43B3009A9418 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		4948A7DB2F2C43BB009A9418 /* FoundationModels.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FoundationModels.framework; path = System/Library/Frameworks/FoundationModels.framework; sourceTree = SDKROOT; };
+		4948A7DD2F2C43C0009A9418 /* ImagePlayground.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImagePlayground.framework; path = System/Library/Frameworks/ImagePlayground.framework; sourceTree = SDKROOT; };
+		4948A7DF2F2C43C7009A9418 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		4948A7E12F2C43CC009A9418 /* CoreHaptics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreHaptics.framework; path = System/Library/Frameworks/CoreHaptics.framework; sourceTree = SDKROOT; };
+		4948A7E32F2C43D2009A9418 /* SwiftData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftData.framework; path = System/Library/Frameworks/SwiftData.framework; sourceTree = SDKROOT; };
+		4948A7EC2F2C6CAD009A9418 /* Imposter icon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = "Imposter icon.icon"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -52,6 +71,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4948A7D82F2C43A7009A9418 /* SwiftUI.framework in Frameworks */,
+				4948A7DE2F2C43C0009A9418 /* ImagePlayground.framework in Frameworks */,
+				4948A7E02F2C43C7009A9418 /* AVFoundation.framework in Frameworks */,
+				4948A7E42F2C43D2009A9418 /* SwiftData.framework in Frameworks */,
+				4948A7DC2F2C43BB009A9418 /* FoundationModels.framework in Frameworks */,
+				4948A7E22F2C43CC009A9418 /* CoreHaptics.framework in Frameworks */,
+				4948A7DA2F2C43B3009A9418 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +104,7 @@
 				4948A6A42F2C0F85009A9418 /* Imposter */,
 				4948A6B42F2C0F86009A9418 /* ImposterTests */,
 				4948A6BE2F2C0F86009A9418 /* ImposterUITests */,
+				4948A7D62F2C43A7009A9418 /* Frameworks */,
 				4948A6A32F2C0F85009A9418 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -90,6 +117,21 @@
 				4948A6BB2F2C0F86009A9418 /* ImposterUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		4948A7D62F2C43A7009A9418 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4948A7EC2F2C6CAD009A9418 /* Imposter icon.icon */,
+				4948A7E32F2C43D2009A9418 /* SwiftData.framework */,
+				4948A7E12F2C43CC009A9418 /* CoreHaptics.framework */,
+				4948A7DF2F2C43C7009A9418 /* AVFoundation.framework */,
+				4948A7DD2F2C43C0009A9418 /* ImagePlayground.framework */,
+				4948A7DB2F2C43BB009A9418 /* FoundationModels.framework */,
+				4948A7D92F2C43B3009A9418 /* Foundation.framework */,
+				4948A7D72F2C43A7009A9418 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -212,6 +254,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4948A7ED2F2C6CAD009A9418 /* Imposter icon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -393,18 +436,21 @@
 		4948A6C62F2C0F86009A9418 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "Imposter icon";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = UZD4BS94DT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -416,8 +462,9 @@
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -425,18 +472,21 @@
 		4948A6C72F2C0F86009A9418 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "Imposter icon";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = UZD4BS94DT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -448,8 +498,9 @@
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
