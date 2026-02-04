@@ -124,4 +124,11 @@ xcodebuild test -scheme Imposter -destination 'platform=iOS Simulator,name=iPhon
 
 ## License
 
-MIT License - See LICENSE file for details.
+This project is licensed under the **GNU Affero General Public License v3.0 (AGPL-3.0)**.
+
+This is the strictest open-source license, requiring:
+- Source code disclosure for any modifications
+- Source code disclosure even when software is used over a network
+- Derivative works must use the same license
+
+See [LICENSE](LICENSE) for full details.
