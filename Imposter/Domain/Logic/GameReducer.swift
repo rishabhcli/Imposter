@@ -79,7 +79,7 @@ enum GameReducer {
 
         // MARK: Role Reveal Actions
 
-        case .revealRoleToPlayer:
+        case .revealRoleToPlayer(_):
             guard newState.currentPhase == .roleReveal else { return state }
             guard var round = newState.roundState else { return state }
             round.revealIndex += 1
@@ -170,11 +170,11 @@ enum GameReducer {
             guard newState.currentPhase == .reveal else { return state }
             // UI handles the reveal animation
 
-        case .imposterGuessWord:
+        case .imposterGuessWord(_):
             guard newState.currentPhase == .reveal else { return state }
             // Handled in completeRound
 
-        case .completeRound:
+        case .completeRound(_):
             guard newState.currentPhase == .reveal else { return state }
             // Go directly to setup - no summary screen
             newState.roundState = nil
@@ -199,6 +199,36 @@ enum GameReducer {
 
         case .resetGame:
             return GameState()
+            
+        case .wordGenerationFailed(let error):
+            // Word generation failed - log error and stay in current state
+            // GameStore will handle showing the error to the user
+            #if DEBUG
+            print("[GameReducer] Word generation failed: \(error.message)")
+            #endif
+            return state
+
+        case .imageGenerationFailed(let error):
+            // Image generation failed - log error and stay in current state
+            // GameStore will handle showing the error to the user
+            #if DEBUG
+            print("[GameReducer] Image generation failed: \(error.message)")
+            #endif
+            return state
+
+        case .storageFailed(let error):
+            // Storage operation failed - log error and stay in current state
+            // GameStore will handle showing the error to the user
+            #if DEBUG
+            print("[GameReducer] Storage operation failed: \(error.message)")
+            #endif
+            return state
+
+        case .setGeneratedImage(let image):
+            // Set the generated image for the current round
+            guard var round = newState.roundState else { return state }
+            round.generatedImage = image
+            newState.roundState = round
         }
 
         return newState
@@ -265,25 +295,4 @@ enum GameReducer {
         )
     }
 
-    /// Applies scoring based on the voting result
-    static func applyScoring(to state: GameState, result: VotingResult, settings: GameSettings) {
-        if result.isCorrect {
-            // Non-imposters guessed correctly - each gets points
-            for i in state.players.indices where state.players[i].id != result.imposterID {
-                state.players[i].score += settings.pointsForCorrectVote
-            }
-        } else {
-            // Imposter survived undetected
-            if let idx = state.players.firstIndex(where: { $0.id == result.imposterID }) {
-                state.players[idx].score += settings.pointsForImposterSurvival
-            }
-        }
-
-        // Bonus for imposter correctly guessing the word
-        if result.imposterGuessedCorrectly {
-            if let idx = state.players.firstIndex(where: { $0.id == result.imposterID }) {
-                state.players[idx].score += settings.pointsForImposterGuess
-            }
-        }
-    }
 }

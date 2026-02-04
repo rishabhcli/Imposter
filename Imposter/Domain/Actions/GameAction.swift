@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 // MARK: - GameAction
 
@@ -96,6 +97,42 @@ enum GameAction: Sendable {
 
     /// Reset the entire game state
     case resetGame
+
+    // MARK: - Error Handling
+
+    /// Word generation failed
+    case wordGenerationFailed(GameActionError)
+
+    /// Image generation failed
+    case imageGenerationFailed(GameActionError)
+
+    /// Storage operation failed
+    case storageFailed(GameActionError)
+
+    /// Set the generated image for the current round
+    case setGeneratedImage(UIImage)
+}
+
+// MARK: - GameActionError
+
+/// Sendable-compatible error wrapper for actions
+struct GameActionError: Sendable, LocalizedError {
+    let message: String
+    let underlyingDescription: String?
+
+    init(_ error: Error) {
+        self.message = error.localizedDescription
+        self.underlyingDescription = String(describing: error)
+    }
+
+    init(message: String) {
+        self.message = message
+        self.underlyingDescription = nil
+    }
+
+    var errorDescription: String? {
+        message
+    }
 }
 
 // MARK: - Action Descriptions
@@ -151,6 +188,14 @@ extension GameAction: CustomStringConvertible {
             return "Return to home"
         case .resetGame:
             return "Reset game"
+        case .wordGenerationFailed(let error):
+            return "Word generation failed: \(error.message)"
+        case .imageGenerationFailed(let error):
+            return "Image generation failed: \(error.message)"
+        case .storageFailed(let error):
+            return "Storage failed: \(error.message)"
+        case .setGeneratedImage:
+            return "Set generated image"
         }
     }
 }

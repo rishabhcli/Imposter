@@ -102,6 +102,35 @@ enum HapticManager {
     static func roundCompleted() {
         playNotification(.success)
     }
+    
+    /// Selection changed haptic for toggles and pickers
+    static func selectionChanged() {
+        playSelection()
+    }
+    
+    /// Role revealed haptic - dramatic reveal
+    static func roleRevealed() {
+        playImpact(.medium)
+    }
+    
+    /// Category toggle haptic
+    static func categoryToggled() {
+        playImpact(.light)
+    }
+    
+    /// Timer warning haptic (low time remaining)
+    static func timerWarning() {
+        playNotification(.warning)
+    }
+    
+    /// Triple tap pattern for confirmations
+    static func confirmationPattern() async {
+        playImpact(.medium)
+        try? await Task.sleep(for: .milliseconds(80))
+        playImpact(.light)
+        try? await Task.sleep(for: .milliseconds(80))
+        playImpact(.light)
+    }
 
     // MARK: - Prepare
 

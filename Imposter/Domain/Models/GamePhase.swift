@@ -62,8 +62,14 @@ enum GamePhase: String, Codable, CaseIterable, Sendable {
         case (.voting, .reveal):
             return true
 
-        // Reveal goes directly to setup (no summary)
-        case (.reveal, .setup):
+        // Reveal to summary (shows round results) or directly to setup
+        case (.reveal, .summary),
+             (.reveal, .setup):
+            return true
+
+        // Summary can start new round or return to setup
+        case (.summary, .roleReveal),
+             (.summary, .setup):
             return true
 
         // All other transitions are invalid

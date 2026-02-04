@@ -55,30 +55,41 @@ struct LGButton: View {
     // MARK: - Button Variants
 
     private var primaryButton: some View {
-        Button(action: action) {
+        Button(action: wrappedAction) {
             buttonContent
         }
         .buttonStyle(.glassProminent)
         .disabled(isDisabled || isLoading)
-        .opacity(isDisabled ? 0.5 : 1.0)
+        .opacity(isDisabled ? 0.4 : 1.0)
+        .saturation(isDisabled ? 0.5 : 1.0)
+        .animation(.easeInOut(duration: 0.2), value: isDisabled)
     }
 
     private var secondaryButton: some View {
-        Button(action: action) {
+        Button(action: wrappedAction) {
             buttonContent
         }
         .buttonStyle(.glass)
         .disabled(isDisabled || isLoading)
-        .opacity(isDisabled ? 0.5 : 1.0)
+        .opacity(isDisabled ? 0.4 : 1.0)
+        .saturation(isDisabled ? 0.5 : 1.0)
+        .animation(.easeInOut(duration: 0.2), value: isDisabled)
     }
 
     private var tertiaryButton: some View {
-        Button(action: action) {
+        Button(action: wrappedAction) {
             buttonContent
         }
         .buttonStyle(.glass(.clear))
         .disabled(isDisabled || isLoading)
-        .opacity(isDisabled ? 0.5 : 1.0)
+        .opacity(isDisabled ? 0.4 : 1.0)
+        .saturation(isDisabled ? 0.5 : 1.0)
+        .animation(.easeInOut(duration: 0.2), value: isDisabled)
+    }
+    
+    private func wrappedAction() {
+        HapticManager.buttonTap()
+        action()
     }
 
     // MARK: - Private
@@ -139,7 +150,10 @@ struct LGLargeButton: View {
     }
 
     var body: some View {
-        Button(action: action) {
+        Button {
+            HapticManager.buttonTap()
+            action()
+        } label: {
             HStack(spacing: LGSpacing.medium) {
                 if isLoading {
                     ProgressView()
@@ -157,7 +171,9 @@ struct LGLargeButton: View {
         }
         .buttonStyle(.glassProminent)
         .disabled(isDisabled || isLoading)
-        .opacity(isDisabled ? 0.5 : 1.0)
+        .opacity(isDisabled ? 0.4 : 1.0)
+        .saturation(isDisabled ? 0.5 : 1.0)
+        .animation(.easeInOut(duration: 0.2), value: isDisabled)
     }
 }
 

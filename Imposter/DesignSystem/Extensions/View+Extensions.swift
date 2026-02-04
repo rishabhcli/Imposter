@@ -89,7 +89,7 @@ extension View {
         self
             .accessibilityLabel(label)
             .if(hint != nil) { view in
-                view.accessibilityHint(hint!)
+                view.accessibilityHint(hint ?? "")
             }
             .accessibilityAddTraits(.isButton)
     }
@@ -178,7 +178,8 @@ struct ShakeModifier: ViewModifier {
                     withAnimation(.linear(duration: 0.05).repeatCount(5, autoreverses: true)) {
                         shakeOffset = 10
                     }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    Task { @MainActor in
+                        try? await Task.sleep(for: .milliseconds(300))
                         shakeOffset = 0
                     }
                 }

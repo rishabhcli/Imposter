@@ -2,7 +2,7 @@
 //  CategorySelectionView.swift
 //  Imposter
 //
-//  Category selection and custom prompt entry - shown before player setup.
+//  Category selection and custom prompt entry - Liquid Glass design.
 //
 
 import SwiftUI
@@ -20,187 +20,216 @@ struct CategorySelectionView: View {
 
     var body: some View {
         ZStack {
-            // Background
-            backgroundGradient
-
-            ScrollViewReader { proxy in
-                ScrollView {
-                    VStack(spacing: LGSpacing.extraLarge) {
-                        // Header
-                        headerSection
-
-                        // Word source toggle
-                        wordSourceToggle
-
-                        if useCustomPrompt {
-                            // Custom AI prompt section
-                            customPromptSection
-                                .id("customPromptSection")
-                        } else {
-                            // Category selection
-                            categorySection
+            // Animated background
+            AnimatedBackground(style: .subtle)
+            
+            VStack(spacing: 0) {
+                // Scrollable content
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        VStack(spacing: LGSpacing.extraLarge) {
+                            // Mode selector (segmented style)
+                            modeSelector
+                            
+                            // Content based on mode
+                            if useCustomPrompt {
+                                customPromptCard
+                                    .id("customPromptSection")
+                            } else {
+                                categoryGrid
+                            }
                         }
-
-                        // Continue button
-                        continueButton
-
-                        // Extra space for keyboard
-                        Spacer()
-                            .frame(height: 100)
+                        .padding(.horizontal, LGSpacing.large)
+                        .padding(.top, LGSpacing.medium)
+                        .padding(.bottom, 120)
                     }
-                    .padding(LGSpacing.large)
-                }
-                .scrollDismissesKeyboard(.interactively)
-                .onChange(of: isTextFieldFocused) { _, focused in
-                    if focused {
-                        withAnimation {
-                            proxy.scrollTo("customPromptSection", anchor: .center)
+                    .scrollDismissesKeyboard(.interactively)
+                    .onChange(of: isTextFieldFocused) { _, focused in
+                        if focused {
+                            withAnimation {
+                                proxy.scrollTo("customPromptSection", anchor: .center)
+                            }
                         }
                     }
                 }
+                
+                Spacer(minLength: 0)
+                
+                // Fixed bottom button
+                bottomSection
             }
         }
-        .navigationTitle("Imposter")
+        .navigationTitle("Choose Words")
         .navigationBarTitleDisplayMode(.large)
         .navigationDestination(isPresented: $navigateToPlayerSetup) {
             PlayerSetupView()
         }
     }
 
-    // MARK: - Subviews
-
-    private var backgroundGradient: some View {
-        ZStack {
-            LGColors.darkBackground
-                .ignoresSafeArea()
-
-            LinearGradient(
-                colors: [
-                    LGColors.darkBackgroundSecondary,
-                    LGColors.darkBackground
-                ],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-            .ignoresSafeArea()
-        }
-    }
-
-    private var headerSection: some View {
-        VStack(spacing: LGSpacing.small) {
-            Text("Select Word Source")
-                .font(LGTypography.headlineLarge)
-                .foregroundStyle(.white)
-
-            Text("Choose categories or create a custom word")
-                .font(LGTypography.bodyMedium)
-                .foregroundStyle(.white.opacity(0.7))
-        }
-        .padding(.top, LGSpacing.large)
-    }
-
-    private var wordSourceToggle: some View {
-        VStack(spacing: LGSpacing.medium) {
-            // Random categories option
+    // MARK: - Mode Selector
+    
+    private var modeSelector: some View {
+        HStack(spacing: 0) {
+            // Random Word option
             Button {
-                withAnimation(LGMaterials.springAnimation) {
+                withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                     useCustomPrompt = false
                 }
+                HapticManager.buttonTap()
             } label: {
-                HStack(spacing: LGSpacing.medium) {
-                    Image(systemName: "dice.fill")
-                        .font(.title2)
-                        .foregroundStyle(useCustomPrompt ? .secondary : LGColors.accentPrimary)
-
-                    VStack(alignment: .leading, spacing: LGSpacing.extraSmall) {
-                        Text("Random Word")
-                            .font(LGTypography.labelLarge)
-                            .foregroundStyle(.primary)
-
-                        Text("Pick from themed categories")
-                            .font(LGTypography.bodySmall)
-                            .foregroundStyle(.secondary)
-                    }
-
-                    Spacer()
-
+                HStack(spacing: LGSpacing.small) {
+                    Image(systemName: "shuffle")
+                        .font(.system(size: 14, weight: .semibold))
+                    Text("Random")
+                        .font(.system(size: 15, weight: .semibold, design: .rounded))
+                }
+                .foregroundStyle(!useCustomPrompt ? .white : .white.opacity(0.5))
+                .frame(maxWidth: .infinity)
+                .frame(height: 44)
+                .background {
                     if !useCustomPrompt {
-                        Image(systemName: "checkmark.circle.fill")
-                            .foregroundStyle(LGColors.accentPrimary)
+                        Capsule()
+                            .fill(.clear)
+                            .glassEffect(
+                                .regular.tint(.cyan.opacity(0.4)),
+                                in: .capsule
+                            )
                     }
                 }
-                .padding(LGSpacing.medium)
-                .frame(maxWidth: .infinity)
-                .glassEffect(
-                    useCustomPrompt
-                        ? .regular.interactive()
-                        : .regular.tint(LGColors.accentPrimary).interactive(),
-                    in: .rect(cornerRadius: LGSpacing.cornerRadiusMedium, style: .continuous)
-                )
             }
             .buttonStyle(.plain)
-
-            // Custom AI prompt option
+            
+            // Custom Word option
             Button {
-                withAnimation(LGMaterials.springAnimation) {
+                withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                     useCustomPrompt = true
                 }
+                HapticManager.buttonTap()
             } label: {
-                HStack(spacing: LGSpacing.medium) {
+                HStack(spacing: LGSpacing.small) {
                     Image(systemName: "wand.and.stars")
-                        .font(.title2)
-                        .foregroundStyle(useCustomPrompt ? LGColors.accentPrimary : .secondary)
-
-                    VStack(alignment: .leading, spacing: LGSpacing.extraSmall) {
-                        Text("Custom Word")
-                            .font(LGTypography.labelLarge)
-                            .foregroundStyle(.primary)
-
-                        Text("Enter a theme for a random word")
-                            .font(LGTypography.bodySmall)
-                            .foregroundStyle(.secondary)
-                    }
-
-                    Spacer()
-
+                        .font(.system(size: 14, weight: .semibold))
+                    Text("Custom")
+                        .font(.system(size: 15, weight: .semibold, design: .rounded))
+                }
+                .foregroundStyle(useCustomPrompt ? .white : .white.opacity(0.5))
+                .frame(maxWidth: .infinity)
+                .frame(height: 44)
+                .background {
                     if useCustomPrompt {
-                        Image(systemName: "checkmark.circle.fill")
-                            .foregroundStyle(LGColors.accentPrimary)
+                        Capsule()
+                            .fill(.clear)
+                            .glassEffect(
+                                .regular.tint(.cyan.opacity(0.4)),
+                                in: .capsule
+                            )
                     }
                 }
-                .padding(LGSpacing.medium)
-                .frame(maxWidth: .infinity)
-                .glassEffect(
-                    useCustomPrompt
-                        ? .regular.tint(LGColors.accentPrimary).interactive()
-                        : .regular.interactive(),
-                    in: .rect(cornerRadius: LGSpacing.cornerRadiusMedium, style: .continuous)
-                )
             }
             .buttonStyle(.plain)
         }
+        .padding(4)
+        .glassEffect(.regular, in: .capsule)
     }
 
-    private var categorySection: some View {
-        LGCard(cornerRadius: LGSpacing.cornerRadiusLarge) {
+    // MARK: - Category Grid
+    
+    private var categoryGrid: some View {
+        VStack(alignment: .leading, spacing: LGSpacing.medium) {
+            // Section header
+            HStack {
+                Text("Pick Categories")
+                    .font(.system(size: 14, weight: .medium, design: .rounded))
+                    .foregroundStyle(.white.opacity(0.5))
+                
+                Spacer()
+                
+                if !selectedCategories.isEmpty {
+                    Button {
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                            selectedCategories.removeAll()
+                        }
+                        HapticManager.buttonTap()
+                    } label: {
+                        Text("Clear")
+                            .font(.system(size: 13, weight: .medium))
+                            .foregroundStyle(.cyan)
+                    }
+                }
+            }
+            .padding(.horizontal, LGSpacing.small)
+            
+            // Category cards in a grid
+            LazyVGrid(columns: [
+                GridItem(.flexible(), spacing: LGSpacing.medium),
+                GridItem(.flexible(), spacing: LGSpacing.medium)
+            ], spacing: LGSpacing.medium) {
+                ForEach(GameSettings.availableCategories, id: \.self) { category in
+                    CategoryTile(
+                        title: category,
+                        icon: categoryIcon(for: category),
+                        isSelected: selectedCategories.contains(category)
+                    ) {
+                        toggleCategory(category)
+                    }
+                }
+            }
+            
+            // Helper text
+            Text(selectedCategories.isEmpty ? "All categories will be used" : "\(selectedCategories.count) selected")
+                .font(.system(size: 12, weight: .medium, design: .rounded))
+                .foregroundStyle(.white.opacity(0.4))
+                .frame(maxWidth: .infinity, alignment: .center)
+                .padding(.top, LGSpacing.small)
+        }
+    }
+
+    // MARK: - Custom Prompt Card
+    
+    private var customPromptCard: some View {
+        VStack(alignment: .leading, spacing: LGSpacing.large) {
+            // Prompt input
             VStack(alignment: .leading, spacing: LGSpacing.medium) {
-                Text("Categories")
-                    .font(LGTypography.headlineSmall)
-                    .foregroundStyle(.primary)
-
-                Text("Select one or more categories (or leave empty for all)")
-                    .font(LGTypography.bodySmall)
-                    .foregroundStyle(.secondary)
-
-                // Category chips
-                FlowLayout(spacing: LGSpacing.small) {
-                    ForEach(GameSettings.availableCategories, id: \.self) { category in
-                        CategoryChip(
-                            title: category,
-                            icon: categoryIcon(for: category),
-                            isSelected: selectedCategories.contains(category)
-                        ) {
-                            toggleCategory(category)
+                Text("Enter a Theme")
+                    .font(.system(size: 14, weight: .medium, design: .rounded))
+                    .foregroundStyle(.white.opacity(0.5))
+                
+                HStack(spacing: LGSpacing.medium) {
+                    Image(systemName: "sparkles")
+                        .font(.system(size: 18))
+                        .foregroundStyle(.cyan)
+                    
+                    TextField("e.g., 80s rock bands, fast food chains...", text: $customPrompt)
+                        .font(.system(size: 16, design: .rounded))
+                        .foregroundStyle(.white)
+                        .focused($isTextFieldFocused)
+                        .submitLabel(.done)
+                }
+                .padding(LGSpacing.medium)
+                .glassEffect(.regular, in: .rect(cornerRadius: 12))
+            }
+            
+            // Example suggestions
+            VStack(alignment: .leading, spacing: LGSpacing.small) {
+                Text("Try these")
+                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                    .foregroundStyle(.white.opacity(0.4))
+                
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: LGSpacing.small) {
+                        ForEach(["Fast Food", "NBA Teams", "Disney Villains", "90s Songs", "Superheroes"], id: \.self) { suggestion in
+                            Button {
+                                customPrompt = suggestion
+                                HapticManager.buttonTap()
+                            } label: {
+                                Text(suggestion)
+                                    .font(.system(size: 13, weight: .medium, design: .rounded))
+                                    .foregroundStyle(.white.opacity(0.7))
+                                    .padding(.horizontal, LGSpacing.medium)
+                                    .padding(.vertical, LGSpacing.small)
+                                    .glassEffect(.regular, in: .capsule)
+                            }
+                            .buttonStyle(.glass)
                         }
                     }
                 }
@@ -208,48 +237,63 @@ struct CategorySelectionView: View {
         }
     }
 
-    private var customPromptSection: some View {
-        LGCard(cornerRadius: LGSpacing.cornerRadiusLarge) {
-            VStack(alignment: .leading, spacing: LGSpacing.medium) {
-                HStack {
-                    Image(systemName: "sparkles")
-                        .foregroundStyle(LGColors.accentPrimary)
-                    Text("Custom Word")
-                        .font(LGTypography.headlineSmall)
+    // MARK: - Bottom Section
+    
+    private var bottomSection: some View {
+        VStack(spacing: 0) {
+            // Gradient fade
+            LinearGradient(
+                colors: [.clear, LGColors.darkBackground.opacity(0.8), LGColors.darkBackground],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .frame(height: 40)
+            
+            // Button container
+            VStack(spacing: LGSpacing.small) {
+                if useCustomPrompt && customPrompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    Text("Enter a theme to continue")
+                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                        .foregroundStyle(.orange.opacity(0.8))
                 }
-
-                Text("Enter a theme or topic for a random word.")
-                    .font(LGTypography.bodySmall)
-                    .foregroundStyle(.secondary)
-
-                LGTextField("Enter a theme or topic...", text: $customPrompt, icon: "wand.and.stars", isFocused: $isTextFieldFocused)
-                    .padding(.top, LGSpacing.small)
+                
+                Button {
+                    saveSettings()
+                    navigateToPlayerSetup = true
+                    HapticManager.buttonTap()
+                } label: {
+                    HStack(spacing: LGSpacing.small) {
+                        Text("Continue")
+                            .font(.system(size: 17, weight: .semibold, design: .rounded))
+                        Image(systemName: "arrow.right")
+                            .font(.system(size: 15, weight: .semibold))
+                    }
+                    .foregroundStyle(canContinue ? .white : .white.opacity(0.4))
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 54)
+                    .glassEffect(
+                        canContinue
+                            ? .regular.tint(.cyan.opacity(0.3))
+                            : .regular,
+                        in: .rect(cornerRadius: 16)
+                    )
+                }
+                .buttonStyle(.glass)
+                .disabled(!canContinue)
             }
+            .padding(.horizontal, LGSpacing.large)
+            .padding(.bottom, LGSpacing.large)
+            .background(LGColors.darkBackground)
         }
     }
-
-    private var continueButton: some View {
-        VStack(spacing: LGSpacing.medium) {
-            if useCustomPrompt && customPrompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                HStack {
-                    Image(systemName: "exclamationmark.triangle.fill")
-                        .foregroundStyle(LGColors.warning)
-                    Text("Enter a custom word to continue")
-                        .font(LGTypography.bodyMedium)
-                        .foregroundStyle(LGColors.warning)
-                }
-            }
-
-            LGLargeButton(
-                "Continue to Player Setup",
-                icon: "arrow.right",
-                isDisabled: useCustomPrompt && customPrompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-            ) {
-                saveSettings()
-                navigateToPlayerSetup = true
-            }
+    
+    // MARK: - Computed Properties
+    
+    private var canContinue: Bool {
+        if useCustomPrompt {
+            return !customPrompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         }
-        .padding(.top, LGSpacing.medium)
+        return true
     }
 
     // MARK: - Helpers
@@ -257,22 +301,25 @@ struct CategorySelectionView: View {
     private func categoryIcon(for category: String) -> String {
         switch category {
         case "Animals": return "pawprint.fill"
-        case "Technology": return "desktopcomputer"
+        case "Technology": return "gamecontroller.fill"
         case "Objects": return "cube.fill"
-        case "People": return "person.2.fill"
+        case "Celebrities": return "star.fill"
+        case "People": return "star.fill"
+        case "Movies & TV": return "film.fill"
         case "Movies": return "film.fill"
         default: return "tag.fill"
         }
     }
 
     private func toggleCategory(_ category: String) {
-        withAnimation(LGMaterials.springAnimation) {
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
             if selectedCategories.contains(category) {
                 selectedCategories.remove(category)
             } else {
                 selectedCategories.insert(category)
             }
         }
+        HapticManager.categoryToggled()
     }
 
     private func saveSettings() {
@@ -287,88 +334,6 @@ struct CategorySelectionView: View {
             settings.selectedCategories = selectedCategories.isEmpty ? nil : Array(selectedCategories)
         }
         store.dispatch(.updateSettings(settings))
-    }
-}
-
-// MARK: - Category Chip
-
-struct CategoryChip: View {
-    let title: String
-    let icon: String
-    let isSelected: Bool
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            HStack(spacing: LGSpacing.small) {
-                Image(systemName: icon)
-                    .font(.caption)
-
-                Text(title)
-                    .font(LGTypography.labelMedium)
-            }
-            .padding(.horizontal, LGSpacing.medium)
-            .padding(.vertical, LGSpacing.small)
-            .background {
-                Capsule()
-                    .fill(.clear)
-                    .glassEffect(
-                        isSelected
-                            ? .regular.tint(LGColors.accentPrimary).interactive()
-                            : .regular.interactive(),
-                        in: .capsule
-                    )
-            }
-            .foregroundStyle(isSelected ? .white : .primary)
-        }
-        .buttonStyle(.plain)
-    }
-}
-
-// MARK: - Flow Layout
-
-struct FlowLayout: Layout {
-    var spacing: CGFloat = 8
-
-    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
-        let result = FlowResult(in: proposal.width ?? 0, subviews: subviews, spacing: spacing)
-        return result.size
-    }
-
-    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
-        let result = FlowResult(in: bounds.width, subviews: subviews, spacing: spacing)
-        for (index, subview) in subviews.enumerated() {
-            subview.place(at: CGPoint(x: bounds.minX + result.positions[index].x,
-                                      y: bounds.minY + result.positions[index].y),
-                         proposal: .unspecified)
-        }
-    }
-
-    struct FlowResult {
-        var positions: [CGPoint] = []
-        var size: CGSize = .zero
-
-        init(in maxWidth: CGFloat, subviews: Subviews, spacing: CGFloat) {
-            var currentX: CGFloat = 0
-            var currentY: CGFloat = 0
-            var lineHeight: CGFloat = 0
-
-            for subview in subviews {
-                let size = subview.sizeThatFits(.unspecified)
-
-                if currentX + size.width > maxWidth && currentX > 0 {
-                    currentX = 0
-                    currentY += lineHeight + spacing
-                    lineHeight = 0
-                }
-
-                positions.append(CGPoint(x: currentX, y: currentY))
-                lineHeight = max(lineHeight, size.height)
-                currentX += size.width + spacing
-            }
-
-            self.size = CGSize(width: maxWidth, height: currentY + lineHeight)
-        }
     }
 }
 

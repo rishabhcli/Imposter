@@ -58,10 +58,7 @@ final class GameState: @unchecked Sendable {
         return players.first { $0.id == imposterID }
     }
 
-    /// Players sorted by score (highest first)
-    var leaderboard: [Player] {
-        players.sorted { $0.score > $1.score }
-    }
+
 
     /// Whether we have enough players to start (3-10)
     var canStartGame: Bool {
@@ -104,12 +101,13 @@ final class GameState: @unchecked Sendable {
     // MARK: - Copy
 
     /// Creates a deep copy of the game state
+    /// Note: Players array is copied by value since Player is a struct
     func copy() -> GameState {
         GameState(
-            players: players,
+            players: players.map { $0 },  // Explicit copy of player structs
             settings: settings,
             currentPhase: currentPhase,
-            roundState: roundState,
+            roundState: roundState?.copy(),  // Deep copy of round state
             roundNumber: roundNumber,
             gameHistory: gameHistory
         )

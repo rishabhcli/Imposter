@@ -53,22 +53,10 @@ final class GameStore {
             return
         }
 
-        // Reset scores for loaded players (fresh game)
-        let resetPlayers = players.map { player in
-            Player(
-                id: player.id,
-                name: player.name,
-                color: player.color,
-                emoji: player.emoji,
-                score: 0,
-                isEliminated: false
-            )
-        }
-
-        state.players = resetPlayers
+        state.players = players
 
         #if DEBUG
-        print("GameStore: Loaded \(resetPlayers.count) saved players")
+        print("GameStore: Loaded \(players.count) saved players")
         #endif
     }
 
@@ -298,14 +286,14 @@ final class GameStore {
             let creator = try await ImageCreator()
 
             // Check available styles and select the best one for a party game
-            // Prefer illustration, then animation, then sketch, then first available
+            // Prefer animation style for fun, playful cartoon aesthetic
             let style: ImagePlaygroundStyle
             let availableStyles = creator.availableStyles
 
-            if availableStyles.contains(.illustration) {
-                style = .illustration
-            } else if availableStyles.contains(.animation) {
+            if availableStyles.contains(.animation) {
                 style = .animation
+            } else if availableStyles.contains(.illustration) {
+                style = .illustration
             } else if availableStyles.contains(.sketch) {
                 style = .sketch
             } else if let firstStyle = availableStyles.first {
@@ -378,28 +366,29 @@ final class GameStore {
 
     /// Creates a safe image prompt that avoids people/IP restrictions
     /// Falls back to category-themed abstract imagery if needed
+    /// Uses animation-friendly prompts for playful cartoon aesthetic
     private nonisolated static func safeImagePrompt(for word: String, category: String) -> String {
         // Categories that might have people or IP issues
         let sensitiveCategories = ["People", "Movies", "Music", "Sports"]
 
         if sensitiveCategories.contains(category) {
-            // Use abstract/symbolic imagery instead
+            // Use abstract/symbolic imagery with animation-friendly style
             switch category {
             case "People":
-                return "An abstract silhouette with colorful aura, mysterious figure concept art"
+                return "A friendly cartoon character silhouette with sparkles and colorful aura, cute animated style"
             case "Movies":
-                return "A vintage movie camera with film reels, cinema lights, popcorn, dramatic spotlight"
+                return "A cute cartoon movie camera with film reels, sparkly cinema lights, happy popcorn character"
             case "Music":
-                return "Musical notes floating in colorful waves, instruments in abstract style"
+                return "Happy musical notes dancing in colorful rainbow waves, cute cartoon instruments with faces"
             case "Sports":
-                return "Abstract sports equipment composition, dynamic motion lines, energetic colors"
+                return "Playful cartoon sports equipment bouncing around, dynamic motion lines, bright cheerful colors"
             default:
-                return "Colorful abstract shapes representing: \(category)"
+                return "Cute colorful cartoon shapes representing: \(category)"
             }
         }
 
-        // Safe categories - use the actual word
-        return "A colorful, fun illustration of: \(word)"
+        // Safe categories - use the actual word with animation-friendly prompt
+        return "A cute, playful cartoon of: \(word), bright colors, friendly animated style"
     }
 
     // MARK: - Derived Properties
@@ -422,11 +411,6 @@ final class GameStore {
     /// The current imposter player
     var imposter: Player? {
         state.imposter
-    }
-
-    /// Players sorted by score
-    var leaderboard: [Player] {
-        state.leaderboard
     }
 
     /// Whether we can start the game

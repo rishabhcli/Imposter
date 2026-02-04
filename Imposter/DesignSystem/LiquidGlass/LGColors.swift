@@ -88,8 +88,11 @@ enum LGColors {
     /// Success/positive feedback color
     static let success = Color(red: 0.2, green: 0.85, blue: 0.5)
 
-    /// Warning color
+    /// Warning color (urgent)
     static let warning = Color(red: 1.0, green: 0.8, blue: 0.2)
+
+    /// Caution color (less urgent than warning, more than normal)
+    static let caution = Color(red: 1.0, green: 0.65, blue: 0.0)
 
     /// Warning tint color (lighter variant for backgrounds)
     static let warningTint = Color(uiColor: .systemYellow).opacity(0.15)

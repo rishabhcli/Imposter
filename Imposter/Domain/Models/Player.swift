@@ -16,16 +16,12 @@ struct Player: Identifiable, Codable, Hashable, Sendable {
     var name: String
     var color: PlayerColor
     var emoji: String
-    var score: Int
-    var isEliminated: Bool
 
-    init(id: UUID = UUID(), name: String, color: PlayerColor, emoji: String? = nil, score: Int = 0, isEliminated: Bool = false) {
+    init(id: UUID = UUID(), name: String, color: PlayerColor, emoji: String? = nil) {
         self.id = id
         self.name = name
         self.color = color
         self.emoji = emoji ?? Player.randomFaceEmoji()
-        self.score = score
-        self.isEliminated = isEliminated
     }
 
     /// Collection of face emojis for random assignment

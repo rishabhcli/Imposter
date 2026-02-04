@@ -130,6 +130,25 @@ struct RoundState: Codable, Sendable {
         try container.encode(firstPlayerIndex, forKey: .firstPlayerIndex)
         // generatedImage is not encoded (transient)
     }
+    
+    // MARK: - Copy
+    
+    /// Creates a copy of the round state, preserving all values including the generated image
+    func copy() -> RoundState {
+        var copied = RoundState(
+            secretWord: secretWord,
+            categoryHint: categoryHint,
+            imposterHint: imposterHint,
+            imposterID: imposterID,
+            clues: clues,
+            votes: votes,
+            currentClueIndex: currentClueIndex,
+            revealIndex: revealIndex,
+            firstPlayerIndex: firstPlayerIndex
+        )
+        copied.generatedImage = generatedImage
+        return copied
+    }
 }
 
 // MARK: - VotingResult

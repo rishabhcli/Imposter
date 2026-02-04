@@ -2,23 +2,26 @@
 //  RevealView.swift
 //  Imposter
 //
-//  Reveals the voting results and the Imposter's identity.
+//  Enhanced reveal view with vote bars, word hints, and better animations.
 //
 
 import SwiftUI
 
 // MARK: - RevealView
 
-/// Reveals voting results and the Imposter's identity
+/// Reveals voting results and the Imposter's identity with visual vote bars
 struct RevealView: View {
     @Environment(GameStore.self) private var store
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    @State private var showVotes = false
     @State private var showImposter = false
     @State private var showOutcome = false
     @State private var imposterGuess = ""
     @State private var hasGuessed = false
+    @State private var guessResult: Bool?
+    @State private var titleScale: CGFloat = 0.8
+    @State private var buttonOffset: CGFloat = 40
+    @State private var buttonOpacity: Double = 0
 
     var body: some View {
         ZStack {
@@ -27,17 +30,13 @@ struct RevealView: View {
 
             ScrollView {
                 VStack(spacing: LGSpacing.extraLarge) {
-                    // Title
+                    // Title with scale animation
                     Text("The Votes Are In...")
                         .font(LGTypography.displaySmall)
                         .foregroundStyle(.white)
-                        .opacity(showVotes ? 1 : 0)
-                        .animation(.easeIn(duration: 0.5), value: showVotes)
-
-                    // Vote results
-                    if showVotes {
-                        voteResultsSection
-                    }
+                        .scaleEffect(titleScale)
+                        .opacity(showImposter ? 1 : 0)
+                        .animation(.spring(response: 0.6, dampingFraction: 0.7), value: showImposter)
 
                     // Imposter reveal
                     if showImposter {
@@ -81,30 +80,6 @@ struct RevealView: View {
         }
     }
 
-    private var voteResultsSection: some View {
-        LGCard {
-            VStack(spacing: LGSpacing.medium) {
-                Text("Vote Results")
-                    .font(LGTypography.headlineSmall)
-
-                ForEach(voteCounts.sorted(by: { $0.value > $1.value }), id: \.key) { playerID, count in
-                    if let player = store.players.first(where: { $0.id == playerID }) {
-                        HStack {
-                            LGPlayerColorBadge(player.color, size: 24)
-                            Text(player.name)
-                                .font(LGTypography.bodyMedium)
-                            Spacer()
-                            Text("\(count) vote\(count == 1 ? "" : "s")")
-                                .font(LGTypography.labelMedium)
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-                }
-            }
-        }
-        .transition(.scale.combined(with: .opacity))
-    }
-
     private var imposterRevealSection: some View {
         VStack(spacing: LGSpacing.large) {
             RevealAnimationView(
@@ -118,22 +93,17 @@ struct RevealView: View {
 
     private var outcomeSection: some View {
         VStack(spacing: LGSpacing.large) {
-            // Secret word reveal
-            LGCard {
-                VStack(spacing: LGSpacing.medium) {
-                    Text("The Secret Word Was")
-                        .font(LGTypography.labelMedium)
-                        .foregroundStyle(.secondary)
-
-                    Text(store.secretWord ?? "Unknown")
-                        .font(LGTypography.displaySmall)
-                        .foregroundStyle(LGColors.accentPrimary)
-                }
-            }
+            // Secret word reveal with AI-generated image
+            secretWordRevealCard
 
             // Imposter word guess (if allowed and imposter was caught)
             if store.settings.allowImposterWordGuess && wasImposterCaught && !hasGuessed {
                 imposterGuessSection
+            }
+            
+            // Guess result (if guessed)
+            if hasGuessed, let result = guessResult {
+                guessResultSection(correct: result)
             }
 
             // Outcome message
@@ -153,15 +123,83 @@ struct RevealView: View {
                     .font(LGTypography.bodyMedium)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
+                
+                // Word length hint
+                if let word = store.secretWord {
+                    HStack(spacing: LGSpacing.small) {
+                        Image(systemName: "lightbulb.fill")
+                            .foregroundStyle(LGColors.warning)
+                        Text("Hint: The word has \(word.count) letters")
+                            .font(LGTypography.labelMedium)
+                            .foregroundStyle(LGColors.warning)
+                    }
+                    .padding(.vertical, LGSpacing.small)
+                }
 
-                TextField("Your guess...", text: $imposterGuess)
-                    .textFieldStyle(.liquidGlass)
-
-                LGButton("Submit Guess", style: .primary, icon: "lightbulb") {
+                // Guess input with character counter
+                VStack(alignment: .trailing, spacing: LGSpacing.extraSmall) {
+                    TextField("Your guess...", text: $imposterGuess)
+                        .textFieldStyle(.liquidGlass)
+                        .textInputAutocapitalization(.words)
+                        .autocorrectionDisabled()
+                    
+                    Text("\(imposterGuess.count)/30")
+                        .font(.system(size: 12))
+                        .foregroundStyle(.secondary)
+                }
+                
+                // Submit button with validation
+                LGButton(
+                    "Submit Guess",
+                    style: .primary,
+                    icon: "lightbulb",
+                    isDisabled: imposterGuess.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                ) {
                     submitGuess()
                 }
             }
         }
+    }
+    
+    @ViewBuilder
+    private func guessResultSection(correct: Bool) -> some View {
+        LGCard(cornerRadius: LGSpacing.cornerRadiusLarge) {
+            VStack(spacing: LGSpacing.medium) {
+                if correct {
+                    Image(systemName: "star.circle.fill")
+                        .font(.system(size: 50))
+                        .foregroundStyle(LGColors.warning)
+                    
+                    Text("Correct Guess!")
+                        .font(LGTypography.headlineMedium)
+                        .foregroundStyle(LGColors.warning)
+                    
+                    Text("\(imposter?.name ?? "The Imposter") guessed the word and earns bonus points!")
+                        .font(LGTypography.bodyMedium)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                } else {
+                    Image(systemName: "xmark.circle.fill")
+                        .font(.system(size: 50))
+                        .foregroundStyle(LGColors.imposter)
+                    
+                    Text("Wrong Guess")
+                        .font(LGTypography.headlineMedium)
+                        .foregroundStyle(LGColors.imposter)
+                    
+                    VStack(spacing: LGSpacing.small) {
+                        Text("You guessed: \"\(imposterGuess)\"")
+                            .font(LGTypography.bodyMedium)
+                            .foregroundStyle(.secondary)
+                        
+                        Text("The word was: \"\(store.secretWord ?? "Unknown")\"")
+                            .font(LGTypography.bodyMedium)
+                            .foregroundStyle(LGColors.accentPrimary)
+                    }
+                }
+            }
+        }
+        .transition(.scale.combined(with: .opacity))
     }
 
     private var outcomeMessage: some View {
@@ -200,29 +238,76 @@ struct RevealView: View {
 
     private var continueButton: some View {
         LGLargeButton("New Game", icon: "arrow.counterclockwise") {
-            store.dispatch(.completeRound(imposterGuessedCorrectly: false))
+            HapticManager.roundCompleted()
+            store.dispatch(.completeRound(imposterGuessedCorrectly: guessResult ?? false))
         }
         .padding(.top, LGSpacing.medium)
+        .offset(y: buttonOffset)
+        .opacity(buttonOpacity)
     }
 
+    private var secretWordRevealCard: some View {
+        LGCard(cornerRadius: LGSpacing.cornerRadiusLarge, elevation: LGMaterials.elevation3) {
+            VStack(spacing: LGSpacing.medium) {
+                Text("The Secret Word Was")
+                    .font(LGTypography.labelMedium)
+                    .foregroundStyle(.secondary)
+
+                Text(store.secretWord ?? "Unknown")
+                    .font(LGTypography.displaySmall)
+                    .foregroundStyle(LGColors.accentPrimary)
+                
+                // AI-generated image (if available)
+                if let generatedImage = store.state.roundState?.generatedImage {
+                    Image(uiImage: generatedImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(maxHeight: 200)
+                        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                                .strokeBorder(
+                                    LinearGradient(
+                                        colors: [
+                                            Color.white.opacity(0.4),
+                                            Color.white.opacity(0.1),
+                                            Color.white.opacity(0.2)
+                                        ],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    ),
+                                    lineWidth: 1
+                                )
+                        }
+                        .shadow(color: LGColors.accentPrimary.opacity(0.3), radius: 15, y: 5)
+                        .transition(.scale.combined(with: .opacity))
+                }
+                
+                // Word length indicator
+                if let word = store.secretWord {
+                    Text("\(word.count) letters")
+                        .font(LGTypography.labelSmall)
+                        .foregroundStyle(.secondary)
+                }
+            }
+        }
+    }
+    
     // MARK: - Helpers
 
     private var imposter: Player? {
         store.imposter
     }
 
-    private var voteCounts: [UUID: Int] {
+    private var wasImposterCaught: Bool {
+        guard let imposterID = store.state.roundState?.imposterID else { return false }
+        // Calculate vote counts inline
         var counts: [UUID: Int] = [:]
         for suspectID in store.votes.values {
             counts[suspectID, default: 0] += 1
         }
-        return counts
-    }
-
-    private var wasImposterCaught: Bool {
-        guard let imposterID = store.state.roundState?.imposterID else { return false }
-        let maxVotes = voteCounts.values.max() ?? 0
-        let mostVoted = voteCounts.filter { $0.value == maxVotes }.map { $0.key }
+        let maxVoteCount = counts.values.max() ?? 0
+        let mostVoted = counts.filter { $0.value == maxVoteCount }.map { $0.key }
         return mostVoted.contains(imposterID)
     }
 
@@ -231,28 +316,40 @@ struct RevealView: View {
     private func startRevealSequence() {
         let baseDelay = reduceMotion ? 0.3 : 0.8
 
-        withAnimation {
-            showVotes = true
+        // Show imposter reveal with title animation
+        withAnimation(.spring(response: 0.6, dampingFraction: 0.7)) {
+            showImposter = true
+            titleScale = 1.0
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + baseDelay * 2) {
-            withAnimation(LGMaterials.springAnimation) {
-                showImposter = true
-            }
-        }
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + baseDelay * 4) {
+        // Show outcome after a delay
+        Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(Int(baseDelay * 2.5 * 1000)))
             withAnimation(LGMaterials.springAnimation) {
                 showOutcome = true
+            }
+            
+            // Animate the button in
+            try? await Task.sleep(for: .milliseconds(400))
+            withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
+                buttonOffset = 0
+                buttonOpacity = 1.0
             }
         }
     }
 
     private func submitGuess() {
+        let trimmedGuess = imposterGuess.trimmingCharacters(in: .whitespacesAndNewlines)
+        let isCorrect = trimmedGuess.lowercased() == store.secretWord?.lowercased()
+        
         hasGuessed = true
+        
+        withAnimation(LGMaterials.springAnimation) {
+            guessResult = isCorrect
+        }
 
         // Haptic feedback
-        if imposterGuess.lowercased() == store.secretWord?.lowercased() {
+        if isCorrect {
             HapticManager.playNotification(.success)
         } else {
             HapticManager.playNotification(.error)
@@ -387,7 +484,9 @@ struct RevealAnimationView: View {
         }
 
         // Reveal the imposter
-        DispatchQueue.main.asyncAfter(deadline: .now() + revealDelay) {
+        Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(Int(revealDelay * 1000)))
+            
             // Stop pulsing
             withAnimation(.spring(response: 0.3)) {
                 pulseScale = 1.0

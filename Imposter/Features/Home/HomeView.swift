@@ -3,7 +3,7 @@
 //  Imposter
 //
 //  Unified home screen with category selection and player setup.
-//  LED title and starfield background persist throughout.
+//  Premium Liquid Glass design with animated title and immersive starfield background.
 //
 
 import SwiftUI
@@ -25,6 +25,10 @@ struct HomeView: View {
     @State private var showHowToPlay = false
     @State private var showSettings = false
     @State private var glowIntensity: Double = 0.5
+    @State private var logoScale: CGFloat = 0.8
+    @State private var logoOpacity: Double = 0
+    @State private var buttonsOffset: CGFloat = 50
+    @State private var buttonsOpacity: Double = 0
 
     // Category selection state
     @State private var selectedCategories: Set<String> = []
@@ -35,7 +39,6 @@ struct HomeView: View {
     // Player setup state
     @State private var newPlayerID: UUID?
     private let minPlayers = 3
-    private let maxPlayers = 10
 
     var body: some View {
         ZStack {
@@ -43,38 +46,41 @@ struct HomeView: View {
             Color.black.ignoresSafeArea()
             StarfieldView()
 
-            // Content
-            ScrollViewReader { proxy in
-                ScrollView {
-                    VStack(spacing: LGSpacing.large) {
-                        // LED glowing title - always visible
-                        titleSection
-                            .padding(.top, LGSpacing.extraLarge)
-
-                        // Dynamic content based on setup step
-                        switch setupStep {
-                        case .home:
-                            homeContent
-
-                        case .categorySelection:
-                            categoryContent
-                                .transition(.move(edge: .trailing).combined(with: .opacity))
-
-                        case .playerSetup:
-                            playerContent
-                                .transition(.move(edge: .trailing).combined(with: .opacity))
-                        }
-
-                        Spacer()
-                            .frame(height: 100)
-                    }
+            // Content - Only scroll for player setup
+            if setupStep == .home {
+                // Home screen - no scroll
+                homeContent
                     .padding(.horizontal, LGSpacing.large)
-                }
-                .scrollDismissesKeyboard(.interactively)
-                .onChange(of: isTextFieldFocused) { _, focused in
-                    if focused {
-                        withAnimation {
-                            proxy.scrollTo("customPromptField", anchor: .center)
+            } else if setupStep == .categorySelection {
+                // Category selection - no scroll
+                categoryContent
+                    .padding(.horizontal, LGSpacing.large)
+                    .transition(.asymmetric(
+                        insertion: .move(edge: .trailing).combined(with: .opacity),
+                        removal: .move(edge: .leading).combined(with: .opacity)
+                    ))
+            } else {
+                // Player setup - scrollable for long player lists
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        VStack(spacing: 0) {
+                            playerContent
+                                .transition(.asymmetric(
+                                    insertion: .move(edge: .trailing).combined(with: .opacity),
+                                    removal: .move(edge: .leading).combined(with: .opacity)
+                                ))
+
+                            Spacer()
+                                .frame(height: 100)
+                        }
+                        .padding(.horizontal, LGSpacing.large)
+                    }
+                    .scrollDismissesKeyboard(.interactively)
+                    .onChange(of: isTextFieldFocused) { _, focused in
+                        if focused {
+                            withAnimation {
+                                proxy.scrollTo("customPromptField", anchor: .center)
+                            }
                         }
                     }
                 }
@@ -87,60 +93,235 @@ struct HomeView: View {
             SettingsSheet()
         }
         .onAppear {
-            withAnimation(.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) {
-                glowIntensity = 1.0
-            }
+            startAnimations()
+        }
+    }
+    
+    private func startAnimations() {
+        // Glow pulsing
+        withAnimation(.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) {
+            glowIntensity = 1.0
+        }
+        
+        // Logo entrance
+        withAnimation(.spring(response: 0.8, dampingFraction: 0.7).delay(0.1)) {
+            logoScale = 1.0
+            logoOpacity = 1.0
+        }
+        
+        // Buttons entrance
+        withAnimation(.spring(response: 0.6, dampingFraction: 0.8).delay(0.4)) {
+            buttonsOffset = 0
+            buttonsOpacity = 1.0
         }
     }
 
-    // MARK: - Title Section (Always Visible)
+    // MARK: - Home Content
 
-    private var titleSection: some View {
-        VStack(spacing: LGSpacing.medium) {
-            // LED glowing "IMPOSTER" text
-            Text("IMPOSTER")
-                .font(.system(size: setupStep == .home ? 56 : 36, weight: .black, design: .monospaced))
-                .foregroundStyle(.white)
-                .shadow(color: .cyan.opacity(glowIntensity), radius: 2)
-                .shadow(color: .cyan.opacity(glowIntensity), radius: 4)
-                .shadow(color: .cyan.opacity(glowIntensity * 0.9), radius: 10)
-                .shadow(color: .cyan.opacity(glowIntensity * 0.8), radius: 20)
-                .shadow(color: .cyan.opacity(glowIntensity * 0.6), radius: 40)
-                .shadow(color: .blue.opacity(glowIntensity * 0.3), radius: 60)
-                .animation(.easeInOut(duration: 0.3), value: setupStep)
-
-            // Subtitle changes based on step
-            Text(subtitleText)
-                .font(.system(size: 14, weight: .medium, design: .rounded))
-                .foregroundStyle(.white.opacity(0.6))
-                .animation(.easeInOut, value: setupStep)
-
-            // Spy silhouette icon only on home screen
-            if setupStep == .home {
+    private var homeContent: some View {
+        VStack(spacing: 0) {
+            Spacer()
+                .frame(height: 80)
+            
+            // Hero section with logo
+            heroSection
+            
+            Spacer()
+                .frame(height: 60)
+            
+            // Main actions
+            mainActionsSection
+                .offset(y: buttonsOffset)
+                .opacity(buttonsOpacity)
+            
+            Spacer()
+                .frame(height: 32)
+            
+            // Secondary actions
+            secondaryActionsSection
+                .offset(y: buttonsOffset)
+                .opacity(buttonsOpacity)
+            
+            Spacer()
+            
+            // Footer
+            footerSection
+                .opacity(buttonsOpacity)
+        }
+        .frame(minHeight: 700)
+    }
+    
+    // MARK: - Hero Section
+    
+    private var heroSection: some View {
+        VStack(spacing: LGSpacing.large) {
+            // Animated spy icon with glass effect
+            ZStack {
+                // Glass circle background
+                Circle()
+                    .fill(.clear)
+                    .frame(width: 120, height: 120)
+                    .glassEffect(
+                        .regular.tint(.cyan.opacity(0.2)),
+                        in: .circle
+                    )
+                
+                // Outer glow ring
+                Circle()
+                    .stroke(
+                        LinearGradient(
+                            colors: [.cyan.opacity(0.5), .blue.opacity(0.2)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
+                        lineWidth: 2
+                    )
+                    .frame(width: 130, height: 130)
+                    .blur(radius: 2)
+                    .opacity(glowIntensity * 0.8)
+                
+                // Spy silhouette with question mark
                 ZStack {
-                    // Shadow/glow behind
                     Image(systemName: "person.fill")
-                        .font(.system(size: 80))
-                        .foregroundStyle(.cyan.opacity(glowIntensity * 0.3))
-                        .blur(radius: 20)
-
-                    // Main silhouette
-                    Image(systemName: "person.fill")
-                        .font(.system(size: 65))
-                        .foregroundStyle(.white.opacity(0.7))
-                        .shadow(color: .cyan.opacity(glowIntensity * 0.6), radius: 12)
-
-                    // Question mark overlay (mystery element)
-                    Image(systemName: "questionmark")
-                        .font(.system(size: 24, weight: .bold))
-                        .foregroundStyle(.cyan.opacity(glowIntensity * 0.8))
-                        .offset(y: -5)
+                        .font(.system(size: 50, weight: .medium))
+                        .foregroundStyle(.white.opacity(0.9))
+                        .shadow(color: .cyan.opacity(glowIntensity * 0.4), radius: 12)
+                    
+                    // Question mark badge
+                    ZStack {
+                        Circle()
+                            .fill(.clear)
+                            .frame(width: 28, height: 28)
+                            .glassEffect(
+                                .regular.tint(.cyan.opacity(0.5)),
+                                in: .circle
+                            )
+                        
+                        Text("?")
+                            .font(.system(size: 16, weight: .black, design: .rounded))
+                            .foregroundStyle(.white)
+                    }
+                    .offset(x: 24, y: -22)
                 }
-                .padding(.top, LGSpacing.medium)
             }
+            .scaleEffect(logoScale)
+            .opacity(logoOpacity)
+            
+            // Title
+            VStack(spacing: LGSpacing.small) {
+                Text("IMPOSTER")
+                    .font(.system(size: 44, weight: .black, design: .rounded))
+                    .tracking(3)
+                    .foregroundStyle(.white)
+                    .shadow(color: .cyan.opacity(glowIntensity), radius: 2)
+                    .shadow(color: .cyan.opacity(glowIntensity * 0.7), radius: 8)
+                    .shadow(color: .cyan.opacity(glowIntensity * 0.5), radius: 16)
+                
+                Text("The Social Deduction Party Game")
+                    .font(.system(size: 14, weight: .medium, design: .rounded))
+                    .foregroundStyle(.white.opacity(0.5))
+            }
+            .scaleEffect(logoScale)
+            .opacity(logoOpacity)
         }
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("Imposter, \(subtitleText)")
+        .accessibilityLabel("Imposter, The Social Deduction Party Game")
+    }
+    
+    // MARK: - Main Actions Section
+    
+    private var mainActionsSection: some View {
+        Button {
+            withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
+                setupStep = .categorySelection
+            }
+            HapticManager.buttonTap()
+        } label: {
+            HStack(spacing: LGSpacing.medium) {
+                Image(systemName: "play.fill")
+                    .font(.system(size: 20, weight: .bold))
+                Text("New Game")
+                    .font(.system(size: 18, weight: .bold, design: .rounded))
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 60)
+        }
+        .buttonStyle(.glassProminent)
+        .tint(.cyan)
+        .accessibilityIdentifier("newGameButton")
+    }
+    
+    // MARK: - Secondary Actions Section
+    
+    private var secondaryActionsSection: some View {
+        HStack(spacing: LGSpacing.medium) {
+            // How to Play
+            Button {
+                showHowToPlay = true
+                HapticManager.buttonTap()
+            } label: {
+                HStack(spacing: LGSpacing.small) {
+                    Image(systemName: "book.fill")
+                        .font(.system(size: 16))
+                    Text("How to Play")
+                        .font(.system(size: 15, weight: .medium, design: .rounded))
+                }
+                .frame(maxWidth: .infinity)
+                .frame(height: 48)
+            }
+            .buttonStyle(.glass)
+            .accessibilityIdentifier("howToPlayButton")
+            
+            // Settings
+            Button {
+                showSettings = true
+                HapticManager.buttonTap()
+            } label: {
+                HStack(spacing: LGSpacing.small) {
+                    Image(systemName: "gearshape.fill")
+                        .font(.system(size: 16))
+                    Text("Settings")
+                        .font(.system(size: 15, weight: .medium, design: .rounded))
+                }
+                .frame(maxWidth: .infinity)
+                .frame(height: 48)
+            }
+            .buttonStyle(.glass)
+            .accessibilityIdentifier("settingsButton")
+        }
+    }
+    
+    // MARK: - Footer Section
+    
+    private var footerSection: some View {
+        VStack(spacing: LGSpacing.small) {
+            Text("3+ Players • Pass & Play")
+                .font(.system(size: 12, weight: .medium, design: .rounded))
+                .foregroundStyle(.white.opacity(0.3))
+            
+            Text("v1.0")
+                .font(.system(size: 11, design: .monospaced))
+                .foregroundStyle(.white.opacity(0.2))
+        }
+        .padding(.bottom, LGSpacing.large)
+    }
+
+    // MARK: - Compact Title (for other steps)
+    
+    private var compactTitleSection: some View {
+        VStack(spacing: LGSpacing.small) {
+            Text("IMPOSTER")
+                .font(.system(size: 26, weight: .black, design: .rounded))
+                .tracking(2)
+                .foregroundStyle(.white)
+                .shadow(color: .cyan.opacity(glowIntensity * 0.5), radius: 6)
+            
+            Text(subtitleText)
+                .font(.system(size: 13, weight: .medium, design: .rounded))
+                .foregroundStyle(.white.opacity(0.5))
+        }
+        .padding(.top, LGSpacing.large)
+        .padding(.bottom, LGSpacing.medium)
     }
 
     private var subtitleText: String {
@@ -150,71 +331,7 @@ struct HomeView: View {
         case .categorySelection:
             return "Choose Word Source"
         case .playerSetup:
-            return "\(store.players.count) of \(maxPlayers) Players"
-        }
-    }
-
-    // MARK: - Home Content
-
-    private var homeContent: some View {
-        VStack(spacing: LGSpacing.large) {
-            Spacer()
-                .frame(height: LGSpacing.extraLarge)
-
-            // New Game button
-            Button {
-                withAnimation(LGMaterials.springAnimation) {
-                    setupStep = .categorySelection
-                }
-            } label: {
-                HStack(spacing: LGSpacing.medium) {
-                    Image(systemName: "play.fill")
-                        .font(.system(size: 20, weight: .bold))
-                    Text("New Game")
-                        .font(.system(size: 18, weight: .semibold, design: .rounded))
-                }
-                .frame(maxWidth: .infinity)
-                .frame(height: LGSpacing.buttonHeightLarge)
-            }
-            .buttonStyle(.glassProminent)
-            .accessibilityIdentifier("newGameButton")
-
-            // Secondary buttons
-            HStack(spacing: LGSpacing.medium) {
-                Button {
-                    showHowToPlay = true
-                } label: {
-                    HStack(spacing: LGSpacing.small) {
-                        Image(systemName: "book.fill")
-                        Text("How to Play")
-                    }
-                    .font(LGTypography.labelLarge)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: LGSpacing.buttonHeight)
-                }
-                .buttonStyle(.glass)
-                .accessibilityIdentifier("howToPlayButton")
-
-                Button {
-                    showSettings = true
-                } label: {
-                    HStack(spacing: LGSpacing.small) {
-                        Image(systemName: "gearshape.fill")
-                        Text("Settings")
-                    }
-                    .font(LGTypography.labelLarge)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: LGSpacing.buttonHeight)
-                }
-                .buttonStyle(.glass)
-                .accessibilityIdentifier("settingsButton")
-            }
-
-            // Version
-            Text("v1.0")
-                .font(.system(size: 12))
-                .foregroundStyle(.white.opacity(0.3))
-                .padding(.top, LGSpacing.medium)
+            return "\(store.players.count) Players"
         }
     }
 
@@ -222,138 +339,115 @@ struct HomeView: View {
 
     private var categoryContent: some View {
         VStack(spacing: LGSpacing.large) {
-            // Word source toggle
-            wordSourceToggle
-
-            if useCustomPrompt {
-                customPromptSection
-            } else {
-                categorySection
+            compactTitleSection
+            
+            // Mode selector
+            modeSelector
+            
+            // Content area with fixed top alignment to prevent layout shift
+            VStack(alignment: .leading, spacing: 0) {
+                if useCustomPrompt {
+                    customPromptSection
+                } else {
+                    categorySection
+                }
+                
+                Spacer()
             }
+            .frame(maxWidth: .infinity, alignment: .topLeading)
+            .animation(.none, value: useCustomPrompt)
 
             // Navigation buttons
             HStack(spacing: LGSpacing.medium) {
-                // Back button
                 Button {
-                    withAnimation(LGMaterials.springAnimation) {
+                    withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
                         setupStep = .home
                     }
+                    HapticManager.buttonTap()
                 } label: {
-                    HStack {
+                    HStack(spacing: LGSpacing.small) {
                         Image(systemName: "chevron.left")
+                            .font(.system(size: 14, weight: .semibold))
                         Text("Back")
+                            .font(.system(size: 15, weight: .semibold, design: .rounded))
                     }
-                    .font(LGTypography.labelLarge)
                     .frame(maxWidth: .infinity)
-                    .frame(height: LGSpacing.buttonHeight)
+                    .frame(height: 50)
                 }
                 .buttonStyle(.glass)
 
-                // Continue button
                 Button {
                     saveSettings()
-                    withAnimation(LGMaterials.springAnimation) {
+                    withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
                         setupStep = .playerSetup
                     }
+                    HapticManager.buttonTap()
                 } label: {
-                    HStack {
+                    HStack(spacing: LGSpacing.small) {
                         Text("Continue")
+                            .font(.system(size: 15, weight: .semibold, design: .rounded))
                         Image(systemName: "chevron.right")
+                            .font(.system(size: 14, weight: .semibold))
                     }
-                    .font(LGTypography.labelLarge)
                     .frame(maxWidth: .infinity)
-                    .frame(height: LGSpacing.buttonHeight)
+                    .frame(height: 50)
                 }
                 .buttonStyle(.glassProminent)
-                .disabled(useCustomPrompt && customPrompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-                .opacity(useCustomPrompt && customPrompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? 0.5 : 1)
+                .tint(.cyan)
+                .disabled(!canContinueCategory)
             }
         }
     }
-
-    private var wordSourceToggle: some View {
-        VStack(spacing: LGSpacing.medium) {
-            // Random word option
-            Button {
-                withAnimation(LGMaterials.springAnimation) {
-                    useCustomPrompt = false
-                }
-            } label: {
-                HStack(spacing: LGSpacing.medium) {
-                    Image(systemName: "dice.fill")
-                        .font(.title2)
-                        .foregroundStyle(useCustomPrompt ? Color.secondary : Color.cyan)
-
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Random Word")
-                            .font(LGTypography.labelLarge)
-                            .foregroundStyle(.white)
-
-                        Text("Pick from themed categories")
-                            .font(LGTypography.bodySmall)
-                            .foregroundStyle(.white.opacity(0.6))
-                    }
-
-                    Spacer()
-
-                    if !useCustomPrompt {
-                        Image(systemName: "checkmark.circle.fill")
-                            .foregroundStyle(.cyan)
-                    }
-                }
-                .padding(LGSpacing.medium)
-                .frame(maxWidth: .infinity)
-            }
-            .buttonStyle(.glass)
-
-            // Custom word option
-            Button {
-                withAnimation(LGMaterials.springAnimation) {
-                    useCustomPrompt = true
-                }
-            } label: {
-                HStack(spacing: LGSpacing.medium) {
-                    Image(systemName: "wand.and.stars")
-                        .font(.title2)
-                        .foregroundStyle(useCustomPrompt ? Color.cyan : Color.secondary)
-
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Custom Word")
-                            .font(LGTypography.labelLarge)
-                            .foregroundStyle(.white)
-
-                        Text("Enter a theme for a random word")
-                            .font(LGTypography.bodySmall)
-                            .foregroundStyle(.white.opacity(0.6))
-                    }
-
-                    Spacer()
-
-                    if useCustomPrompt {
-                        Image(systemName: "checkmark.circle.fill")
-                            .foregroundStyle(.cyan)
-                    }
-                }
-                .padding(LGSpacing.medium)
-                .frame(maxWidth: .infinity)
-            }
-            .buttonStyle(.glass)
+    
+    private var canContinueCategory: Bool {
+        if useCustomPrompt {
+            return !customPrompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        }
+        return true
+    }
+    
+    private var modeSelector: some View {
+        Picker("Word Source", selection: $useCustomPrompt) {
+            Label("Random", systemImage: "shuffle")
+                .tag(false)
+            Label("Custom", systemImage: "wand.and.stars")
+                .tag(true)
+        }
+        .pickerStyle(.segmented)
+        .onChange(of: useCustomPrompt) { _, _ in
+            HapticManager.buttonTap()
         }
     }
 
     private var categorySection: some View {
         VStack(alignment: .leading, spacing: LGSpacing.medium) {
-            Text("Categories")
-                .font(LGTypography.headlineSmall)
-                .foregroundStyle(.white)
+            HStack {
+                Text("Pick Categories")
+                    .font(.system(size: 14, weight: .medium, design: .rounded))
+                    .foregroundStyle(.white.opacity(0.5))
+                
+                Spacer()
+                
+                if !selectedCategories.isEmpty {
+                    Button {
+                        withAnimation {
+                            selectedCategories.removeAll()
+                        }
+                        HapticManager.buttonTap()
+                    } label: {
+                        Text("Clear")
+                            .font(.system(size: 13, weight: .medium))
+                            .foregroundStyle(.cyan)
+                    }
+                }
+            }
 
-            Text("Select one or more (or leave empty for all)")
-                .font(LGTypography.bodySmall)
-                .foregroundStyle(.white.opacity(0.6))
-
-            FlowLayout(spacing: LGSpacing.small) {
+            LazyVGrid(columns: [
+                GridItem(.flexible(), spacing: LGSpacing.small),
+                GridItem(.flexible(), spacing: LGSpacing.small)
+            ], spacing: LGSpacing.small) {
                 ForEach(GameSettings.availableCategories, id: \.self) { category in
-                    CategoryChip(
+                    CategoryTile(
                         title: category,
                         icon: categoryIcon(for: category),
                         isSelected: selectedCategories.contains(category)
@@ -362,36 +456,43 @@ struct HomeView: View {
                     }
                 }
             }
+            
+            Text(selectedCategories.isEmpty ? "All categories will be used" : "\(selectedCategories.count) selected")
+                .font(.system(size: 12, weight: .medium, design: .rounded))
+                .foregroundStyle(.white.opacity(0.4))
+                .frame(maxWidth: .infinity, alignment: .center)
         }
-        .padding(LGSpacing.large)
-        .glassEffect(.regular, in: .rect(cornerRadius: LGSpacing.cornerRadiusLarge))
     }
 
     private var customPromptSection: some View {
         VStack(alignment: .leading, spacing: LGSpacing.medium) {
-            HStack {
+            Text("Enter a Theme")
+                .font(.system(size: 14, weight: .medium, design: .rounded))
+                .foregroundStyle(.white.opacity(0.5))
+            
+            HStack(spacing: LGSpacing.medium) {
                 Image(systemName: "sparkles")
+                    .font(.system(size: 18))
                     .foregroundStyle(.cyan)
-                Text("Custom Word")
-                    .font(LGTypography.headlineSmall)
+                
+                TextField("e.g., 80s rock bands...", text: $customPrompt)
+                    .font(.system(size: 16, design: .rounded))
                     .foregroundStyle(.white)
+                    .focused($isTextFieldFocused)
+                    .submitLabel(.done)
             }
-
-            Text("Enter a theme or topic for a random word.")
-                .font(LGTypography.bodySmall)
-                .foregroundStyle(.white.opacity(0.6))
-
-            LGTextField("Enter a theme or topic...", text: $customPrompt, icon: "wand.and.stars", isFocused: $isTextFieldFocused)
-                .id("customPromptField")
+            .padding(LGSpacing.medium)
+            .glassEffect(.regular, in: .rect(cornerRadius: 12))
+            .id("customPromptField")
         }
-        .padding(LGSpacing.large)
-        .glassEffect(.regular, in: .rect(cornerRadius: LGSpacing.cornerRadiusLarge))
     }
 
     // MARK: - Player Setup Content
 
     private var playerContent: some View {
         VStack(spacing: LGSpacing.large) {
+            compactTitleSection
+            
             // Show selected source
             selectedSourceBadge
 
@@ -403,52 +504,58 @@ struct HomeView: View {
 
             // Validation
             if !store.canStartGame {
-                HStack {
-                    Image(systemName: "exclamationmark.triangle.fill")
-                        .foregroundStyle(.orange)
-                    Text("Add at least \(minPlayers) players to start")
-                        .font(LGTypography.bodyMedium)
-                        .foregroundStyle(.orange)
+                HStack(spacing: LGSpacing.small) {
+                    Image(systemName: "info.circle.fill")
+                        .foregroundStyle(.orange.opacity(0.8))
+                    Text("Add at least \(minPlayers) players")
+                        .font(.system(size: 13, weight: .medium, design: .rounded))
+                        .foregroundStyle(.orange.opacity(0.8))
                 }
+                .padding(LGSpacing.small)
+                .glassEffect(.regular.tint(.orange.opacity(0.2)), in: .capsule)
             }
 
             // Navigation buttons
             HStack(spacing: LGSpacing.medium) {
                 Button {
-                    withAnimation(LGMaterials.springAnimation) {
+                    withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
                         setupStep = .categorySelection
                     }
+                    HapticManager.buttonTap()
                 } label: {
-                    HStack {
+                    HStack(spacing: LGSpacing.small) {
                         Image(systemName: "chevron.left")
+                            .font(.system(size: 14, weight: .semibold))
                         Text("Back")
+                            .font(.system(size: 15, weight: .semibold, design: .rounded))
                     }
-                    .font(LGTypography.labelLarge)
                     .frame(maxWidth: .infinity)
-                    .frame(height: LGSpacing.buttonHeight)
+                    .frame(height: 50)
                 }
                 .buttonStyle(.glass)
 
                 Button {
                     startGameWithPreloading()
                 } label: {
-                    HStack {
+                    HStack(spacing: LGSpacing.small) {
                         if store.isPreparingGame {
                             ProgressView()
                                 .tint(.white)
-                            Text("Preparing...")
+                            Text("Loading...")
+                                .font(.system(size: 15, weight: .semibold, design: .rounded))
                         } else {
                             Image(systemName: "play.fill")
+                                .font(.system(size: 14, weight: .bold))
                             Text("Start Game")
+                                .font(.system(size: 15, weight: .semibold, design: .rounded))
                         }
                     }
-                    .font(LGTypography.labelLarge)
                     .frame(maxWidth: .infinity)
-                    .frame(height: LGSpacing.buttonHeight)
+                    .frame(height: 50)
                 }
                 .buttonStyle(.glassProminent)
+                .tint(.cyan)
                 .disabled(!store.canStartGame || store.isPreparingGame)
-                .opacity(store.canStartGame ? 1 : 0.5)
             }
         }
     }
@@ -458,20 +565,22 @@ struct HomeView: View {
             if useCustomPrompt {
                 Image(systemName: "wand.and.stars")
                     .foregroundStyle(.cyan)
-                Text("Theme: \(customPrompt)")
-                    .font(LGTypography.bodySmall)
+                Text(customPrompt)
+                    .font(.system(size: 13, weight: .medium, design: .rounded))
                     .foregroundStyle(.white.opacity(0.7))
+                    .lineLimit(1)
             } else if !selectedCategories.isEmpty {
                 Image(systemName: "folder.fill")
                     .foregroundStyle(.cyan)
                 Text(selectedCategories.joined(separator: ", "))
-                    .font(LGTypography.bodySmall)
+                    .font(.system(size: 13, weight: .medium, design: .rounded))
                     .foregroundStyle(.white.opacity(0.7))
+                    .lineLimit(1)
             } else {
-                Image(systemName: "dice.fill")
+                Image(systemName: "shuffle")
                     .foregroundStyle(.cyan)
                 Text("All Categories")
-                    .font(LGTypography.bodySmall)
+                    .font(.system(size: 13, weight: .medium, design: .rounded))
                     .foregroundStyle(.white.opacity(0.7))
             }
         }
@@ -489,38 +598,42 @@ struct HomeView: View {
                 )
             }
 
-            if store.players.count < maxPlayers {
-                Button {
-                    addNewPlayer()
-                } label: {
-                    HStack {
-                        Image(systemName: "plus.circle.fill")
-                        Text("Add Player")
-                    }
-                    .font(LGTypography.labelLarge)
-                    .foregroundStyle(.cyan)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, LGSpacing.medium)
+            Button {
+                addNewPlayer()
+            } label: {
+                HStack(spacing: LGSpacing.small) {
+                    Image(systemName: "plus.circle.fill")
+                        .font(.system(size: 18))
+                    Text("Add Player")
+                        .font(.system(size: 15, weight: .semibold, design: .rounded))
                 }
-                .buttonStyle(.glass)
+                .foregroundStyle(.cyan)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, LGSpacing.medium)
+                .overlay {
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(.cyan.opacity(0.4), style: StrokeStyle(lineWidth: 1.5, dash: [8]))
+                }
             }
+            .buttonStyle(.glass)
         }
-        .padding(LGSpacing.large)
-        .glassEffect(.regular, in: .rect(cornerRadius: LGSpacing.cornerRadiusLarge))
+        .padding(LGSpacing.medium)
+        .glassEffect(.regular, in: .rect(cornerRadius: 16))
     }
 
     private var gameSettingsSection: some View {
         VStack(alignment: .leading, spacing: LGSpacing.medium) {
             Text("Game Settings")
-                .font(LGTypography.headlineSmall)
-                .foregroundStyle(.white)
+                .font(.system(size: 14, weight: .semibold, design: .rounded))
+                .foregroundStyle(.white.opacity(0.6))
 
             if !useCustomPrompt {
                 HStack {
                     Image(systemName: "speedometer")
                         .foregroundStyle(.cyan)
+                        .frame(width: 24)
                     Text("Difficulty")
-                        .font(LGTypography.bodyMedium)
+                        .font(.system(size: 15, design: .rounded))
                         .foregroundStyle(.white)
                     Spacer()
                     Picker("Difficulty", selection: difficultyBinding) {
@@ -529,17 +642,19 @@ struct HomeView: View {
                         }
                     }
                     .labelsHidden()
+                    .tint(.cyan)
                 }
 
                 Divider()
-                    .background(.white.opacity(0.2))
+                    .background(.white.opacity(0.1))
             }
 
             HStack {
                 Image(systemName: "timer")
                     .foregroundStyle(.cyan)
-                Text("Clue Timer")
-                    .font(LGTypography.bodyMedium)
+                    .frame(width: 24)
+                Text("Discussion Timer")
+                    .font(.system(size: 15, design: .rounded))
                     .foregroundStyle(.white)
                 Spacer()
                 Picker("Timer", selection: timerBinding) {
@@ -548,10 +663,11 @@ struct HomeView: View {
                     }
                 }
                 .labelsHidden()
+                .tint(.cyan)
             }
         }
-        .padding(LGSpacing.large)
-        .glassEffect(.regular, in: .rect(cornerRadius: LGSpacing.cornerRadiusLarge))
+        .padding(LGSpacing.medium)
+        .glassEffect(.regular, in: .rect(cornerRadius: 16))
     }
 
     // MARK: - Helpers
@@ -559,22 +675,25 @@ struct HomeView: View {
     private func categoryIcon(for category: String) -> String {
         switch category {
         case "Animals": return "pawprint.fill"
-        case "Technology": return "desktopcomputer"
+        case "Technology": return "gamecontroller.fill"
         case "Objects": return "cube.fill"
-        case "People": return "person.2.fill"
+        case "Celebrities": return "star.fill"
+        case "People": return "star.fill"
+        case "Movies & TV": return "film.fill"
         case "Movies": return "film.fill"
         default: return "tag.fill"
         }
     }
 
     private func toggleCategory(_ category: String) {
-        withAnimation(LGMaterials.springAnimation) {
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
             if selectedCategories.contains(category) {
                 selectedCategories.remove(category)
             } else {
                 selectedCategories.insert(category)
             }
         }
+        HapticManager.categoryToggled()
     }
 
     private func saveSettings() {
@@ -595,16 +714,18 @@ struct HomeView: View {
         let playerNumber = store.players.count + 1
         store.addNewPlayer(name: "Player \(playerNumber)")
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+        Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(100))
             if let lastPlayer = store.players.last {
                 newPlayerID = lastPlayer.id
             }
         }
+        HapticManager.buttonTap()
     }
 
     private func startGameWithPreloading() {
-        // Prepare game first (generates word + starts image generation), then transitions
         store.prepareAndStartGame()
+        HapticManager.buttonTap()
     }
 
     // MARK: - Bindings
@@ -632,6 +753,57 @@ struct HomeView: View {
         )
     }
 }
+
+// MARK: - Category Tile (Liquid Glass)
+
+struct CategoryTile: View {
+    let title: String
+    let icon: String
+    let isSelected: Bool
+    let action: () -> Void
+    
+    var body: some View {
+        Button {
+            action()
+        } label: {
+            VStack(spacing: LGSpacing.small) {
+                Image(systemName: icon)
+                    .font(.system(size: 28))
+                    .foregroundStyle(isSelected ? .cyan : .white.opacity(0.7))
+                
+                Text(title)
+                    .font(.system(size: 14, weight: .medium, design: .rounded))
+                    .foregroundStyle(.white)
+                    .lineLimit(1)
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 90)
+            .contentShape(Rectangle())
+            .glassEffect(
+                isSelected ? .regular.tint(.cyan.opacity(0.3)).interactive() : .regular.interactive(),
+                in: .rect(cornerRadius: 14)
+            )
+        }
+        .buttonStyle(.plain)
+        .overlay(alignment: .topTrailing) {
+            if isSelected {
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.system(size: 18))
+                    .foregroundStyle(.cyan)
+                    .background {
+                        Circle()
+                            .fill(.black)
+                            .padding(2)
+                    }
+                    .offset(x: 6, y: -6)
+                    .transition(.scale.combined(with: .opacity))
+            }
+        }
+        .accessibilityLabel("\(title), \(isSelected ? "selected" : "not selected")")
+    }
+}
+
+
 
 // MARK: - Starfield View
 

@@ -52,7 +52,8 @@ struct PlayerRowView: View {
         .onAppear {
             if shouldFocus {
                 // Small delay to allow view to appear
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                Task { @MainActor in
+                    try? await Task.sleep(for: .milliseconds(100))
                     isNameFocused = true
                 }
             }

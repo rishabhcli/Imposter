@@ -1,0 +1,172 @@
+# SwiftLint Configuration for Imposter
+# https://github.com/realm/SwiftLint
+
+# Paths to include in linting
+included:
+  - Imposter
+  - ImposterTests
+  - ImposterUITests
+
+# Paths to exclude from linting
+excluded:
+  - Pods
+  - .build
+  - DerivedData
+  - Package.swift
+  - "*.generated.swift"
+
+# Disabled rules
+disabled_rules:
+  - trailing_comma           # Preference: allow trailing commas
+  - identifier_name          # Allow short names like 'id', 'x', 'y'
+  - large_tuple              # Allow larger tuples for complex returns
+  - todo                     # Allow TODO comments in code
+  - nesting                  # Allow nested types for organization
+
+# Opt-in rules (not enabled by default)
+opt_in_rules:
+  - empty_count              # Prefer isEmpty over count == 0
+  - empty_string             # Prefer isEmpty over string == ""
+  - fatal_error_message      # Require message in fatalError
+  - first_where              # Prefer .first(where:) over .filter().first
+  - force_unwrapping         # Warn on force unwraps
+  - implicitly_unwrapped_optional  # Warn on implicitly unwrapped optionals
+  - last_where               # Prefer .last(where:) over .filter().last
+  - legacy_random            # Use new random API
+  - modifier_order           # Consistent modifier order
+  - overridden_super_call    # Call super in overrides
+  - private_action           # IBActions should be private
+  - private_outlet           # IBOutlets should be private
+  - redundant_nil_coalescing # Remove redundant ?? nil
+  - sorted_first_last        # Use min/max instead of sorted().first/last
+  - unavailable_function     # Mark unavailable functions with @available
+  - unneeded_parentheses_in_closure_argument  # Remove unneeded parens
+  - vertical_parameter_alignment_on_call  # Align params on multiline calls
+  - yoda_condition           # Avoid Yoda conditions (if 0 == value)
+  - closure_body_length      # Warn on long closures
+  - collection_alignment     # Align collection elements
+  - contains_over_filter_count  # Use contains instead of filter().count
+  - contains_over_filter_is_empty  # Use contains instead of filter().isEmpty
+  - contains_over_first_not_nil  # Use contains instead of first != nil
+  - discouraged_optional_boolean  # Avoid Bool?
+  - empty_collection_literal  # Use isEmpty for empty checks
+  - fallthrough              # Require comment on fallthrough
+  - file_name                # File name should match type name
+  - flatmap_over_map_reduce  # Use flatMap instead of map().reduce()
+  - joined_default_parameter  # Don't specify default separator
+  - literal_expression_end_indentation  # Consistent literal indentation
+  - lower_acl_than_parent    # Child access level <= parent
+  - multiline_arguments      # Consistent multiline arguments
+  - multiline_function_chains  # Chain methods on new lines
+  - multiline_parameters     # Consistent multiline parameters
+  - operator_usage_whitespace  # Consistent operator spacing
+  - prefer_self_type_over_type_of_self  # Use Self instead of type(of: self)
+  - prefer_zero_over_explicit_init  # Use .zero instead of explicit init
+  - reduce_into              # Use reduce(into:) for better performance
+  - redundant_type_annotation  # Remove redundant type annotations
+  - toggle_bool              # Use .toggle() instead of = !value
+  - unowned_variable_capture  # Warn on unowned captures
+  - vertical_whitespace_between_cases  # Blank line between switch cases
+  - vertical_whitespace_closing_braces  # No blank line before closing brace
+
+# Analyzer rules (require building the project)
+analyzer_rules:
+  - unused_import            # Remove unused imports
+  - unused_declaration       # Remove unused declarations
+
+# Rule configurations
+force_cast: error           # Force cast is an error
+force_try: error            # Force try is an error
+force_unwrapping:
+  severity: warning         # Force unwrap is a warning (may be needed in tests)
+
+line_length:
+  warning: 120
+  error: 200
+  ignores_comments: true
+  ignores_urls: true
+  ignores_function_declarations: false
+  ignores_interpolated_strings: true
+
+type_body_length:
+  warning: 300
+  error: 500
+
+file_length:
+  warning: 500
+  error: 1000
+  ignore_comment_only_lines: true
+
+function_body_length:
+  warning: 60
+  error: 100
+
+function_parameter_count:
+  warning: 6
+  error: 10
+  ignores_default_parameters: true
+
+cyclomatic_complexity:
+  warning: 12
+  error: 20
+  ignores_case_statements: true
+
+type_name:
+  min_length: 2
+  max_length:
+    warning: 50
+    error: 60
+  excluded:
+    - ID
+
+vertical_whitespace:
+  max_empty_lines: 2
+
+trailing_whitespace:
+  ignores_empty_lines: true
+  ignores_comments: true
+
+closure_body_length:
+  warning: 30
+  error: 50
+
+# Custom rules
+custom_rules:
+  no_print_in_production:
+    name: "No Print in Production"
+    regex: '^\s*print\('
+    message: "Use Logger instead of print for production code"
+    severity: warning
+    match_kinds:
+      - comment.line
+      - comment.block
+    excluded: ".*Tests.*"  # Allow in tests
+
+  no_nslog:
+    name: "No NSLog"
+    regex: 'NSLog\('
+    message: "Use Logger instead of NSLog"
+    severity: error
+
+  final_class_preferred:
+    name: "Prefer Final Classes"
+    regex: '^(?!final)\s*class\s+(?!.*:.*UIView|.*ViewController|.*Coordinator)'
+    message: "Consider making classes final for performance unless they need to be subclassed"
+    severity: warning
+
+  prefer_swiftui_environment:
+    name: "Prefer Environment for DI"
+    regex: 'UIApplication\.shared'
+    message: "Consider using SwiftUI @Environment instead of UIApplication.shared"
+    severity: warning
+
+  avoid_hardcoded_strings:
+    name: "Avoid Hardcoded User-Facing Strings"
+    regex: '(Text|Label|Button)\s*\(\s*"[^"]+"\s*\)'
+    message: "Consider using localized strings for user-facing text"
+    severity: warning
+    match_kinds:
+      - identifier
+
+# Reporter type
+reporter: "xcode"
