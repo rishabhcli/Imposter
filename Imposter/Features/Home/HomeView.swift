@@ -162,7 +162,7 @@ struct HomeView: View {
                     .fill(.clear)
                     .frame(width: 120, height: 120)
                     .glassEffect(
-                        .regular.tint(.cyan.opacity(0.2)),
+                        .regular.tint(LGColors.accentPrimary.opacity(0.3)),
                         in: .circle
                     )
                 
@@ -170,7 +170,7 @@ struct HomeView: View {
                 Circle()
                     .stroke(
                         LinearGradient(
-                            colors: [.cyan.opacity(0.5), .blue.opacity(0.2)],
+                            colors: [LGColors.accentPrimary.opacity(0.6), LGColors.accentSecondary.opacity(0.3)],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         ),
@@ -185,7 +185,7 @@ struct HomeView: View {
                     Image(systemName: "person.fill")
                         .font(.system(size: 50, weight: .medium))
                         .foregroundStyle(.white.opacity(0.9))
-                        .shadow(color: .cyan.opacity(glowIntensity * 0.4), radius: 12)
+                        .shadow(color: LGColors.accentPrimary.opacity(glowIntensity * 0.5), radius: 12)
                     
                     // Question mark badge
                     ZStack {
@@ -193,7 +193,7 @@ struct HomeView: View {
                             .fill(.clear)
                             .frame(width: 28, height: 28)
                             .glassEffect(
-                                .regular.tint(.cyan.opacity(0.5)),
+                                .regular.tint(LGColors.accentPrimary.opacity(0.5)),
                                 in: .circle
                             )
                         
@@ -213,9 +213,9 @@ struct HomeView: View {
                     .font(.system(size: 44, weight: .black, design: .rounded))
                     .tracking(3)
                     .foregroundStyle(.white)
-                    .shadow(color: .cyan.opacity(glowIntensity), radius: 2)
-                    .shadow(color: .cyan.opacity(glowIntensity * 0.7), radius: 8)
-                    .shadow(color: .cyan.opacity(glowIntensity * 0.5), radius: 16)
+                    .shadow(color: LGColors.accentPrimary.opacity(glowIntensity), radius: 2)
+                    .shadow(color: LGColors.accentPrimary.opacity(glowIntensity * 0.7), radius: 8)
+                    .shadow(color: LGColors.accentPrimary.opacity(glowIntensity * 0.5), radius: 16)
                 
                 Text("The Social Deduction Party Game")
                     .font(.system(size: 14, weight: .medium, design: .rounded))
@@ -247,7 +247,7 @@ struct HomeView: View {
             .frame(height: 60)
         }
         .buttonStyle(.glassProminent)
-        .tint(.cyan)
+        .tint(LGColors.accentPrimary)
         .accessibilityIdentifier("newGameButton")
     }
     
@@ -314,7 +314,7 @@ struct HomeView: View {
                 .font(.system(size: 26, weight: .black, design: .rounded))
                 .tracking(2)
                 .foregroundStyle(.white)
-                .shadow(color: .cyan.opacity(glowIntensity * 0.5), radius: 6)
+                .shadow(color: LGColors.accentPrimary.opacity(glowIntensity * 0.5), radius: 6)
             
             Text(subtitleText)
                 .font(.system(size: 13, weight: .medium, design: .rounded))
@@ -393,7 +393,7 @@ struct HomeView: View {
                     .frame(height: 50)
                 }
                 .buttonStyle(.glassProminent)
-                .tint(.cyan)
+                .tint(LGColors.accentPrimary)
                 .disabled(!canContinueCategory)
             }
         }
@@ -437,7 +437,7 @@ struct HomeView: View {
                     } label: {
                         Text("Clear")
                             .font(.system(size: 13, weight: .medium))
-                            .foregroundStyle(.cyan)
+                            .foregroundStyle(LGColors.accentPrimary)
                     }
                 }
             }
@@ -473,7 +473,7 @@ struct HomeView: View {
             HStack(spacing: LGSpacing.medium) {
                 Image(systemName: "sparkles")
                     .font(.system(size: 18))
-                    .foregroundStyle(.cyan)
+                    .foregroundStyle(LGColors.accentPrimary)
                 
                 TextField("e.g., 80s rock bands...", text: $customPrompt)
                     .font(.system(size: 16, design: .rounded))
@@ -554,7 +554,7 @@ struct HomeView: View {
                     .frame(height: 50)
                 }
                 .buttonStyle(.glassProminent)
-                .tint(.cyan)
+                .tint(LGColors.accentPrimary)
                 .disabled(!store.canStartGame || store.isPreparingGame)
             }
         }
@@ -564,21 +564,21 @@ struct HomeView: View {
         HStack(spacing: LGSpacing.small) {
             if useCustomPrompt {
                 Image(systemName: "wand.and.stars")
-                    .foregroundStyle(.cyan)
+                    .foregroundStyle(LGColors.accentPrimary)
                 Text(customPrompt)
                     .font(.system(size: 13, weight: .medium, design: .rounded))
                     .foregroundStyle(.white.opacity(0.7))
                     .lineLimit(1)
             } else if !selectedCategories.isEmpty {
                 Image(systemName: "folder.fill")
-                    .foregroundStyle(.cyan)
+                    .foregroundStyle(LGColors.accentPrimary)
                 Text(selectedCategories.joined(separator: ", "))
                     .font(.system(size: 13, weight: .medium, design: .rounded))
                     .foregroundStyle(.white.opacity(0.7))
                     .lineLimit(1)
             } else {
                 Image(systemName: "shuffle")
-                    .foregroundStyle(.cyan)
+                    .foregroundStyle(LGColors.accentPrimary)
                 Text("All Categories")
                     .font(.system(size: 13, weight: .medium, design: .rounded))
                     .foregroundStyle(.white.opacity(0.7))
@@ -607,7 +607,7 @@ struct HomeView: View {
                     Text("Add Player")
                         .font(.system(size: 15, weight: .semibold, design: .rounded))
                 }
-                .foregroundStyle(.cyan)
+                .foregroundStyle(LGColors.accentPrimary)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, LGSpacing.medium)
                 .overlay {
@@ -630,7 +630,7 @@ struct HomeView: View {
             if !useCustomPrompt {
                 HStack {
                     Image(systemName: "speedometer")
-                        .foregroundStyle(.cyan)
+                        .foregroundStyle(LGColors.accentPrimary)
                         .frame(width: 24)
                     Text("Difficulty")
                         .font(.system(size: 15, design: .rounded))
@@ -642,7 +642,7 @@ struct HomeView: View {
                         }
                     }
                     .labelsHidden()
-                    .tint(.cyan)
+                    .tint(LGColors.accentPrimary)
                 }
 
                 Divider()
@@ -651,7 +651,7 @@ struct HomeView: View {
 
             HStack {
                 Image(systemName: "timer")
-                    .foregroundStyle(.cyan)
+                    .foregroundStyle(LGColors.accentPrimary)
                     .frame(width: 24)
                 Text("Discussion Timer")
                     .font(.system(size: 15, design: .rounded))
@@ -663,7 +663,7 @@ struct HomeView: View {
                     }
                 }
                 .labelsHidden()
-                .tint(.cyan)
+                .tint(LGColors.accentPrimary)
             }
         }
         .padding(LGSpacing.medium)
@@ -789,7 +789,7 @@ struct CategoryTile: View {
             if isSelected {
                 Image(systemName: "checkmark.circle.fill")
                     .font(.system(size: 18))
-                    .foregroundStyle(.cyan)
+                    .foregroundStyle(LGColors.accentPrimary)
                     .background {
                         Circle()
                             .fill(.black)

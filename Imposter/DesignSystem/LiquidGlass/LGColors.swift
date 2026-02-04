@@ -39,80 +39,80 @@ enum LGColors {
     /// Inverse text color (for use on solid colored backgrounds)
     static let textInverse = Color(uiColor: .systemBackground)
 
-    // MARK: - Accent Colors (Vibrant)
+    // MARK: - Accent Colors (Dark Red Theme)
 
-    /// Primary accent color - vibrant cyan/blue
-    static let accentPrimary = Color(red: 0.0, green: 0.75, blue: 1.0) // Vibrant cyan
+    /// Primary accent color - deep burgundy red
+    static let accentPrimary = Color(red: 0.75, green: 0.15, blue: 0.2) // Deep red
+    
+    /// Secondary accent color - lighter rose red
+    static let accentSecondary = Color(red: 0.9, green: 0.25, blue: 0.3) // Rose red
 
-    /// Secondary accent color - purple
-    static let accentSecondary = Color(red: 0.6, green: 0.4, blue: 1.0) // Vibrant purple
-
-    /// Tertiary accent - pink/magenta
-    static let accentTertiary = Color(red: 1.0, green: 0.4, blue: 0.7)
+    /// Tertiary accent - warm crimson
+    static let accentTertiary = Color(red: 0.85, green: 0.2, blue: 0.25)
 
     // MARK: - Gradient Presets
 
     /// Primary gradient for buttons and important elements
     static let gradientPrimary: [Color] = [
-        Color(red: 0.0, green: 0.75, blue: 1.0),   // Cyan
-        Color(red: 0.4, green: 0.5, blue: 1.0)    // Blue-purple
+        Color(red: 0.7, green: 0.12, blue: 0.18),  // Deep burgundy
+        Color(red: 0.85, green: 0.2, blue: 0.25)   // Crimson
     ]
 
     /// Vibrant gradient for hero elements
     static let gradientVibrant: [Color] = [
-        Color(red: 1.0, green: 0.4, blue: 0.6),   // Pink
-        Color(red: 1.0, green: 0.6, blue: 0.2),   // Orange
-        Color(red: 1.0, green: 0.85, blue: 0.3)   // Yellow
+        Color(red: 0.6, green: 0.1, blue: 0.15),   // Dark red
+        Color(red: 0.8, green: 0.15, blue: 0.2),   // Medium red
+        Color(red: 0.95, green: 0.25, blue: 0.3)   // Bright red
     ]
 
     /// Cool gradient for informational elements
     static let gradientCool: [Color] = [
-        Color(red: 0.4, green: 0.8, blue: 1.0),   // Light cyan
-        Color(red: 0.6, green: 0.4, blue: 1.0)    // Purple
+        Color(red: 0.5, green: 0.1, blue: 0.15),   // Dark burgundy
+        Color(red: 0.7, green: 0.15, blue: 0.2)    // Burgundy
     ]
 
-    /// Imposter gradient - dramatic red/orange
+    /// Imposter gradient - dramatic dark red
     static let gradientImposter: [Color] = [
-        Color(red: 1.0, green: 0.2, blue: 0.3),   // Red
-        Color(red: 1.0, green: 0.5, blue: 0.2)    // Orange
+        Color(red: 0.6, green: 0.08, blue: 0.12),  // Very dark red
+        Color(red: 0.85, green: 0.15, blue: 0.2)   // Crimson
     ]
 
-    /// Success gradient
+    /// Success gradient - muted sage/olive (works with red theme)
     static let gradientSuccess: [Color] = [
-        Color(red: 0.2, green: 0.9, blue: 0.5),   // Green
-        Color(red: 0.4, green: 0.85, blue: 0.7)   // Teal
+        Color(red: 0.4, green: 0.5, blue: 0.35),   // Sage
+        Color(red: 0.5, green: 0.55, blue: 0.4)    // Light olive
     ]
 
     // MARK: - Status Colors
 
-    /// Success/positive feedback color
-    static let success = Color(red: 0.2, green: 0.85, blue: 0.5)
+    /// Success/positive feedback color - muted to work with red theme
+    static let success = Color(red: 0.45, green: 0.55, blue: 0.4)
 
-    /// Warning color (urgent)
-    static let warning = Color(red: 1.0, green: 0.8, blue: 0.2)
+    /// Warning color (urgent) - amber
+    static let warning = Color(red: 0.95, green: 0.7, blue: 0.3)
 
     /// Caution color (less urgent than warning, more than normal)
-    static let caution = Color(red: 1.0, green: 0.65, blue: 0.0)
+    static let caution = Color(red: 0.9, green: 0.55, blue: 0.2)
 
     /// Warning tint color (lighter variant for backgrounds)
-    static let warningTint = Color(uiColor: .systemYellow).opacity(0.15)
+    static let warningTint = Color(red: 0.95, green: 0.7, blue: 0.3).opacity(0.15)
 
     /// Error/destructive action color
-    static let error = Color(red: 1.0, green: 0.35, blue: 0.35)
+    static let error = Color(red: 1.0, green: 0.3, blue: 0.3)
 
     // MARK: - Game-Specific Colors
 
-    /// Color for imposter-related UI elements
-    static let imposter = Color(red: 1.0, green: 0.25, blue: 0.3)
+    /// Color for imposter-related UI elements - dark blood red
+    static let imposter = Color(red: 0.7, green: 0.1, blue: 0.15)
 
-    /// Color for informed player UI elements
-    static let informed = Color(red: 0.0, green: 0.75, blue: 1.0)
+    /// Color for informed player UI elements - matches theme
+    static let informed = Color(red: 0.85, green: 0.2, blue: 0.25)
 
     /// Scary bloody red color for title
-    static let bloodyRed = Color(red: 0.85, green: 0.1, blue: 0.15)
+    static let bloodyRed = Color(red: 0.7, green: 0.08, blue: 0.12)
 
     /// Darker bloody red for shadow/glow effect
-    static let bloodyRedDark = Color(red: 0.5, green: 0.0, blue: 0.0)
+    static let bloodyRedDark = Color(red: 0.4, green: 0.02, blue: 0.05)
 
     // MARK: - Neon Glow Colors
 

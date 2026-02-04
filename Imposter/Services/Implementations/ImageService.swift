@@ -82,28 +82,29 @@ final class ImageService: ImageServiceProtocol, @unchecked Sendable {
                 available: creator.availableStyles
             )
 
-            // Create safe prompt
+            // Try generating with primary prompt first
             let imagePrompt = createSafePrompt(for: word, category: category)
-            let concepts: [ImagePlaygroundConcept] = [.text(imagePrompt)]
-
-            logger.debug("Generating with prompt: \(imagePrompt)")
-
-            // Generate image
-            let imageSequence = creator.images(
-                for: concepts,
+            
+            if let image = try await attemptGeneration(
+                creator: creator,
+                prompt: imagePrompt,
                 style: playgroundStyle,
-                limit: 1
-            )
-
-            // Get first generated image
-            for try await generatedImage in imageSequence {
-                let uiImage = UIImage(cgImage: generatedImage.cgImage)
-
-                // Cache the image
-                cache.setObject(uiImage, forKey: cacheKey)
-
-                logger.info("Successfully generated image for: \(word)")
-                return uiImage
+                cacheKey: cacheKey
+            ) {
+                return image
+            }
+            
+            // If that fails, try with a more abstract fallback prompt
+            let fallbackPrompt = createFallbackPrompt(for: word, category: category)
+            logger.debug("Retrying with fallback prompt: \(fallbackPrompt)")
+            
+            if let image = try await attemptGeneration(
+                creator: creator,
+                prompt: fallbackPrompt,
+                style: playgroundStyle,
+                cacheKey: cacheKey
+            ) {
+                return image
             }
 
             logger.warning("No images generated for: \(word)")
@@ -113,8 +114,45 @@ final class ImageService: ImageServiceProtocol, @unchecked Sendable {
             throw error
         } catch {
             logger.error("Image generation failed: \(error.localizedDescription)")
-            throw ImageServiceError.generationFailed(underlying: error)
+            // Return nil instead of throwing - allows game to continue without image
+            return nil
         }
+    }
+    
+    private func attemptGeneration(
+        creator: ImageCreator,
+        prompt: String,
+        style: ImagePlaygroundStyle,
+        cacheKey: NSString
+    ) async throws -> UIImage? {
+        let concepts: [ImagePlaygroundConcept] = [.text(prompt)]
+        
+        logger.debug("ImagePlayground: Generating image with prompt: '\(prompt)'")
+        
+        do {
+            let imageSequence = creator.images(
+                for: concepts,
+                style: style,
+                limit: 1
+            )
+            
+            for try await generatedImage in imageSequence {
+                let uiImage = UIImage(cgImage: generatedImage.cgImage)
+                cache.setObject(uiImage, forKey: cacheKey)
+                logger.info("Successfully generated image")
+                return uiImage
+            }
+        } catch {
+            // Check if it's the person identity error
+            let errorString = String(describing: error)
+            if errorString.contains("conceptsRequirePersonIdentity") {
+                logger.warning("ImagePlayground requires person identity - will try fallback")
+                return nil
+            }
+            throw error
+        }
+        
+        return nil
     }
 
     func clearCache() {
@@ -192,7 +230,12 @@ final class ImageService: ImageServiceProtocol, @unchecked Sendable {
             }
         }
 
-        // Safe categories - use the actual word with animation-friendly prompt
-        return "A cute, playful cartoon of: \(word), bright colors, friendly animated style"
+        // Safe object-focused prompt - explicitly avoid any person implications
+        return "A single \(word) object floating in space, cute cartoon style illustration, no people, no hands, bright colorful background, simple clean design"
+    }
+    
+    private func createFallbackPrompt(for word: String, category: String) -> String {
+        // Ultra-safe abstract prompt that should never require person identity
+        return "Abstract colorful geometric shapes and patterns inspired by the concept of '\(category)', vibrant colors, playful design, cartoon illustration style, no people, no faces, no characters"
     }
 }

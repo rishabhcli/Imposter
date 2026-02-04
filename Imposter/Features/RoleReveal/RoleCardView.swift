@@ -28,6 +28,7 @@ struct RoleCardView: View {
     var isGeneratingImage: Bool = false
     
     @State private var motionManager = MotionManager.shared
+    @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
         GeometryReader { geometry in
@@ -47,59 +48,45 @@ struct RoleCardView: View {
     private func premiumLiquidGlassCard(size: CGSize) -> some View {
         let width = cardWidth(for: size)
         let height = cardHeight(for: size)
+        let hasImage = generatedImage != nil && !isImposterRole
         
         return cardContent
             .frame(width: width, height: height)
-            .background {
-                // Multi-layer liquid glass background
-                RoundedRectangle(cornerRadius: 24, style: .continuous)
-                    .fill(.clear)
-                    .glassEffect(.regular, in: .rect(cornerRadius: 24, style: .continuous))
-            }
-            .overlay {
-                // Dynamic liquid highlight that follows device tilt
-                LiquidGlassHighlight(
-                    cornerRadius: 24,
-                    tintColor: roleTintColor,
-                    pitch: motionManager.pitch,
-                    roll: motionManager.roll
-                )
-            }
-            .overlay {
-                // Gyro-reactive prismatic border
-                PrismaticBorderView(
-                    cornerRadius: 24,
-                    baseColor: roleTintColor,
-                    pitch: motionManager.pitch,
-                    roll: motionManager.roll
-                )
-            }
             .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
-            // 3D perspective tilt based on device motion
-            .rotation3DEffect(
-                .degrees(motionManager.pitch * 6),
-                axis: (x: 1, y: 0, z: 0),
-                perspective: 0.4
-            )
-            .rotation3DEffect(
-                .degrees(-motionManager.roll * 6),
-                axis: (x: 0, y: 1, z: 0),
-                perspective: 0.4
-            )
-            // Dynamic shadow that shifts with tilt
-            .shadow(
-                color: shadowColor.opacity(0.5),
-                radius: 30,
-                x: CGFloat(motionManager.roll * 15),
-                y: CGFloat(motionManager.pitch * 10) + 12
-            )
-            // Secondary glow shadow
-            .shadow(
-                color: shadowColor.opacity(0.2),
-                radius: 60,
-                x: CGFloat(motionManager.roll * 8),
-                y: CGFloat(motionManager.pitch * 8) + 20
-            )
+            .background {
+                // Glass effect for cards without image
+                if !hasImage {
+                    RoundedRectangle(cornerRadius: 24, style: .continuous)
+                        .fill(.clear)
+                        .glassEffect(
+                            .regular.tint(roleTintColor.opacity(0.2)),
+                            in: .rect(cornerRadius: 24, style: .continuous)
+                        )
+                }
+            }
+            .overlay {
+                // Simple border
+                RoundedRectangle(cornerRadius: 24, style: .continuous)
+                    .strokeBorder(
+                        LinearGradient(
+                            colors: [
+                                Color.white.opacity(0.5),
+                                Color.white.opacity(0.15),
+                                Color.white.opacity(0.3)
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
+                        lineWidth: 1.5
+                    )
+            }
+            // Subtle shadow
+            .shadow(color: shadowColor.opacity(0.4), radius: 25, y: 10)
+    }
+    
+    private var isImposterRole: Bool {
+        if case .imposter = role { return true }
+        return false
     }
 
     private func cardWidth(for size: CGSize) -> CGFloat {
@@ -160,21 +147,17 @@ struct RoleCardView: View {
     // MARK: - Card Content
 
     private var cardContent: some View {
-        VStack(spacing: 0) {
-            // Card top banner with matching corner radius
-            cardTopBanner
-
-            // Main content area
-            VStack(spacing: LGSpacing.medium) {
-                switch role {
-                case .informed(let word):
-                    informedContent(word: word)
-                case .imposter(let hint):
-                    imposterContent(hint: hint)
-                }
+        ZStack(alignment: .top) {
+            // Main content area - fills entire card
+            switch role {
+            case .informed(let word):
+                informedContent(word: word)
+            case .imposter(let hint):
+                imposterContent(hint: hint)
             }
-            .padding(LGSpacing.large)
-            .frame(maxHeight: .infinity)
+            
+            // Card top banner overlays on top
+            cardTopBanner
         }
     }
     
@@ -209,152 +192,153 @@ struct RoleCardView: View {
     }
 
     // MARK: - Informed Player Content
-
+    
     private func informedContent(word: String) -> some View {
-        VStack(spacing: LGSpacing.small) {
-            Spacer()
-
-            // Secret word label
-            Text("THE SECRET WORD")
-                .font(LGTypography.caption)
-                .foregroundStyle(.secondary)
-                .tracking(2)
-
-            // The word itself - scales down if needed
-            Text(word)
-                .font(.system(size: 36, weight: .bold, design: .rounded))
-                .minimumScaleFactor(0.5)
-                .lineLimit(2)
-                .foregroundStyle(
-                    LinearGradient(
-                        colors: [LGColors.accentPrimary, LGColors.accentSecondary],
-                        startPoint: .leading,
-                        endPoint: .trailing
-                    )
-                )
-                .multilineTextAlignment(.center)
-                .shadow(color: LGColors.accentPrimary.opacity(0.3), radius: 8)
-
-            // AI-generated image - BIGGER
-            imageSection
-
-            Spacer()
-
-            // Status badge
-            HStack(spacing: LGSpacing.small) {
-                Image(systemName: "checkmark.shield.fill")
-                    .foregroundStyle(LGColors.success)
-                Text("You know the word")
-                    .font(LGTypography.labelMedium)
+        ZStack {
+            // Layer 1: Blurred image fills entire card as seamless background
+            if let image = generatedImage {
+                Image(uiImage: image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .blur(radius: 60)
+                    .scaleEffect(1.6)
+                    .saturation(1.1)
+            } else if isGeneratingImage {
+                Color.black.opacity(0.2)
+                ImageLoadingPlaceholder()
+            } else {
+                Color.black.opacity(0.15)
             }
-            .foregroundStyle(.secondary)
+            
+            // Layer 2: Content - image and text
+            VStack(spacing: 0) {
+                Spacer()
+                    .frame(height: 50)
+                
+                // Sharp image in center (if available)
+                if let image = generatedImage {
+                    Image(uiImage: image)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(maxHeight: 180)
+                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                        .shadow(color: .black.opacity(0.5), radius: 20, y: 8)
+                        .padding(.horizontal, 24)
+                }
+                
+                Spacer()
+                
+                // Secret word at bottom
+                VStack(spacing: 4) {
+                    Text("THE SECRET WORD")
+                        .font(.system(size: 10, weight: .bold, design: .rounded))
+                        .tracking(2)
+                        .foregroundStyle(.white.opacity(0.7))
+
+                    Text(word)
+                        .font(.system(size: 28, weight: .bold, design: .rounded))
+                        .minimumScaleFactor(0.5)
+                        .lineLimit(2)
+                        .foregroundStyle(.white)
+                        .multilineTextAlignment(.center)
+                        .shadow(color: .black.opacity(0.5), radius: 8)
+                }
+                .padding(.horizontal, 20)
+                .padding(.top, 16)
+                .padding(.bottom, 20)
+                .frame(maxWidth: .infinity)
+                .background {
+                    // Gradient fade to darker at bottom
+                    LinearGradient(
+                        colors: [
+                            Color.black.opacity(0.0),
+                            Color.black.opacity(0.4),
+                            Color.black.opacity(0.6)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                }
+            }
         }
         .accessibilityElement(children: .combine)
         .accessibilityLabel("The secret word is \(word). You are not the Imposter.")
     }
 
-    @ViewBuilder
-    private var imageSection: some View {
-        if let image = generatedImage {
-            // Enhanced image display with blur extension effect
-            ZStack {
-                // Blurred background extension
-                Image(uiImage: image)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 280)
-                    .blur(radius: 25)
-                    .scaleEffect(1.3)
-                    .clipped()
-                    .opacity(0.6)
-                
-                // Main image
-                Image(uiImage: image)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(maxHeight: 260)
-                    .shadow(color: .black.opacity(0.4), radius: 20, y: 8)
-            }
-            .frame(height: 280)
-            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-            .overlay {
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .strokeBorder(
-                        LinearGradient(
-                            colors: [
-                                Color.white.opacity(0.4),
-                                Color.white.opacity(0.1),
-                                Color.white.opacity(0.2)
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        ),
-                        lineWidth: 1
-                    )
-            }
-            .transition(.opacity.combined(with: .scale(scale: 0.95)))
-        } else if isGeneratingImage {
-            ImageLoadingPlaceholder()
-                .frame(height: 200)
-                .transition(.opacity)
-        }
-    }
-
     // MARK: - Imposter Content
 
     private func imposterContent(hint: String) -> some View {
-        VStack(spacing: LGSpacing.medium) {
-            Spacer()
+        ZStack {
+            // Dark red gradient background
+            LinearGradient(
+                colors: [
+                    Color(red: 0.15, green: 0.02, blue: 0.03),
+                    Color(red: 0.25, green: 0.04, blue: 0.06),
+                    Color(red: 0.15, green: 0.02, blue: 0.03)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            
+            // Subtle vignette effect
+            RadialGradient(
+                colors: [
+                    Color.clear,
+                    Color.black.opacity(0.4)
+                ],
+                center: .center,
+                startRadius: 50,
+                endRadius: 250
+            )
+            
+            // Content
+            VStack(spacing: LGSpacing.large) {
+                Spacer()
 
-            // Imposter icon
-            Image(systemName: "eye.slash.fill")
-                .font(.system(size: 60))
-                .foregroundStyle(
+                // Imposter icon
+                Image(systemName: "eye.slash.fill")
+                    .font(.system(size: 56))
+                    .foregroundStyle(.white.opacity(0.9))
+                    .shadow(color: LGColors.imposter.opacity(0.8), radius: 20)
+
+                // Title
+                Text("IMPOSTER")
+                    .font(.system(size: 28, weight: .black, design: .rounded))
+                    .tracking(4)
+                    .foregroundStyle(.white)
+                    .shadow(color: LGColors.imposter, radius: 10)
+
+                Spacer()
+
+                // Hint section at bottom
+                VStack(spacing: LGSpacing.small) {
+                    Text("HINT")
+                        .font(.system(size: 10, weight: .bold, design: .rounded))
+                        .tracking(2)
+                        .foregroundStyle(.white.opacity(0.5))
+
+                    Text(hint)
+                        .font(.system(size: 22, weight: .semibold, design: .rounded))
+                        .foregroundStyle(.white.opacity(0.9))
+                        .multilineTextAlignment(.center)
+                        .minimumScaleFactor(0.7)
+                        .lineLimit(2)
+                }
+                .padding(.horizontal, LGSpacing.large)
+                .padding(.vertical, LGSpacing.medium)
+                .frame(maxWidth: .infinity)
+                .background {
                     LinearGradient(
-                        colors: [LGColors.imposter, LGColors.imposter.opacity(0.6)],
+                        colors: [
+                            Color.clear,
+                            Color.black.opacity(0.4)
+                        ],
                         startPoint: .top,
                         endPoint: .bottom
                     )
-                )
-                .shadow(color: LGColors.imposter.opacity(0.5), radius: 12)
-
-            // Title
-            Text("IMPOSTER")
-                .font(.system(size: 32, weight: .black, design: .rounded))
-                .foregroundStyle(LGColors.imposter)
-                .shadow(color: LGColors.imposter.opacity(0.3), radius: 6)
-
-            Divider()
-                .background(LGColors.imposter.opacity(0.3))
-
-            // Vague hint
-            VStack(spacing: LGSpacing.extraSmall) {
-                Text("HINT")
-                    .font(LGTypography.caption)
-                    .foregroundStyle(.secondary)
-                    .tracking(2)
-
-                Text(hint)
-                    .font(LGTypography.headlineLarge)
-                    .foregroundStyle(LGColors.warning)
-                    .multilineTextAlignment(.center)
-                    .minimumScaleFactor(0.7)
-                    .lineLimit(2)
+                }
             }
-            .padding(LGSpacing.medium)
-            .frame(maxWidth: .infinity)
-            .background {
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(Color.white.opacity(0.05))
-            }
-
-            Spacer()
-
-            // Simple instruction
-            Text("Blend in. Don't get caught.")
-                .font(LGTypography.labelMedium)
-                .foregroundStyle(.secondary)
+            .padding(.top, 40) // Account for banner
         }
         .accessibilityElement(children: .combine)
         .accessibilityLabel("You are the Imposter! Your hint is: \(hint).")
@@ -390,8 +374,8 @@ struct RoleCardView: View {
 
     private var shadowColor: Color {
         switch role {
-        case .informed: return .cyan
-        case .imposter: return .red
+        case .informed: return LGColors.accentPrimary
+        case .imposter: return LGColors.imposter
         }
     }
 }

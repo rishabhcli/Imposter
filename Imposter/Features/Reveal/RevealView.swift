@@ -105,9 +105,6 @@ struct RevealView: View {
             if hasGuessed, let result = guessResult {
                 guessResultSection(correct: result)
             }
-
-            // Outcome message
-            outcomeMessage
         }
         .transition(.scale.combined(with: .opacity))
     }
@@ -202,40 +199,6 @@ struct RevealView: View {
         .transition(.scale.combined(with: .opacity))
     }
 
-    private var outcomeMessage: some View {
-        LGCard(cornerRadius: LGSpacing.cornerRadiusLarge) {
-            VStack(spacing: LGSpacing.medium) {
-                if wasImposterCaught {
-                    Image(systemName: "checkmark.circle.fill")
-                        .font(.system(size: 50))
-                        .foregroundStyle(LGColors.success)
-
-                    Text("The Imposter Was Caught!")
-                        .font(LGTypography.headlineMedium)
-                        .foregroundStyle(LGColors.success)
-
-                    Text("The informed players successfully identified the Imposter.")
-                        .font(LGTypography.bodyMedium)
-                        .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.center)
-                } else {
-                    Image(systemName: "xmark.circle.fill")
-                        .font(.system(size: 50))
-                        .foregroundStyle(LGColors.imposter)
-
-                    Text("The Imposter Escaped!")
-                        .font(LGTypography.headlineMedium)
-                        .foregroundStyle(LGColors.imposter)
-
-                    Text("The Imposter successfully blended in and wasn't caught.")
-                        .font(LGTypography.bodyMedium)
-                        .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.center)
-                }
-            }
-        }
-    }
-
     private var continueButton: some View {
         LGLargeButton("New Game", icon: "arrow.counterclockwise") {
             HapticManager.roundCompleted()
@@ -247,50 +210,105 @@ struct RevealView: View {
     }
 
     private var secretWordRevealCard: some View {
-        LGCard(cornerRadius: LGSpacing.cornerRadiusLarge, elevation: LGMaterials.elevation3) {
+        // Premium card with seamless image blending
+        ZStack {
+            // Layer 1: Blurred image fills entire card as seamless background
+            if let generatedImage = store.state.roundState?.generatedImage {
+                Image(uiImage: generatedImage)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .blur(radius: 60)
+                    .scaleEffect(1.6)
+                    .saturation(1.1)
+            } else {
+                // Fallback gradient when no image
+                LinearGradient(
+                    colors: [
+                        LGColors.accentPrimary.opacity(0.3),
+                        LGColors.accentSecondary.opacity(0.2)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            }
+            
+            // Layer 2: Content - image and text
             VStack(spacing: LGSpacing.medium) {
-                Text("The Secret Word Was")
-                    .font(LGTypography.labelMedium)
-                    .foregroundStyle(.secondary)
-
-                Text(store.secretWord ?? "Unknown")
-                    .font(LGTypography.displaySmall)
-                    .foregroundStyle(LGColors.accentPrimary)
+                // Header label
+                Text("THE SECRET WORD")
+                    .font(.system(size: 10, weight: .bold, design: .rounded))
+                    .tracking(2)
+                    .foregroundStyle(.white.opacity(0.7))
+                    .padding(.top, LGSpacing.large)
                 
-                // AI-generated image (if available)
+                // Sharp image in center (if available)
                 if let generatedImage = store.state.roundState?.generatedImage {
                     Image(uiImage: generatedImage)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(maxHeight: 200)
-                        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-                        .overlay {
-                            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                                .strokeBorder(
-                                    LinearGradient(
-                                        colors: [
-                                            Color.white.opacity(0.4),
-                                            Color.white.opacity(0.1),
-                                            Color.white.opacity(0.2)
-                                        ],
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    ),
-                                    lineWidth: 1
-                                )
-                        }
-                        .shadow(color: LGColors.accentPrimary.opacity(0.3), radius: 15, y: 5)
-                        .transition(.scale.combined(with: .opacity))
+                        .frame(maxHeight: 180)
+                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                        .shadow(color: .black.opacity(0.5), radius: 20, y: 8)
+                        .padding(.horizontal, 24)
                 }
                 
-                // Word length indicator
-                if let word = store.secretWord {
-                    Text("\(word.count) letters")
-                        .font(LGTypography.labelSmall)
-                        .foregroundStyle(.secondary)
+                Spacer()
+                
+                // Secret word at bottom with gradient fade
+                VStack(spacing: 4) {
+                    Text(store.secretWord ?? "Unknown")
+                        .font(.system(size: 32, weight: .bold, design: .rounded))
+                        .minimumScaleFactor(0.5)
+                        .lineLimit(2)
+                        .foregroundStyle(.white)
+                        .multilineTextAlignment(.center)
+                        .shadow(color: .black.opacity(0.5), radius: 8)
+                    
+                    // Word length indicator
+                    if let word = store.secretWord {
+                        Text("\(word.count) letters")
+                            .font(LGTypography.labelSmall)
+                            .foregroundStyle(.white.opacity(0.6))
+                    }
+                }
+                .padding(.horizontal, 20)
+                .padding(.top, 16)
+                .padding(.bottom, 24)
+                .frame(maxWidth: .infinity)
+                .background {
+                    // Gradient fade to darker at bottom
+                    LinearGradient(
+                        colors: [
+                            Color.black.opacity(0.0),
+                            Color.black.opacity(0.4),
+                            Color.black.opacity(0.6)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
                 }
             }
         }
+        .frame(height: 320)
+        .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+        .overlay {
+            // Premium border
+            RoundedRectangle(cornerRadius: 24, style: .continuous)
+                .strokeBorder(
+                    LinearGradient(
+                        colors: [
+                            Color.white.opacity(0.5),
+                            Color.white.opacity(0.1),
+                            Color.white.opacity(0.3)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ),
+                    lineWidth: 1
+                )
+        }
+        .shadow(color: LGColors.accentPrimary.opacity(0.4), radius: 25, y: 10)
+        .transition(.scale.combined(with: .opacity))
     }
     
     // MARK: - Helpers

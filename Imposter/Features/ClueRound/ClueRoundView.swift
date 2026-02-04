@@ -221,17 +221,17 @@ struct ClueRoundView: View {
 
 // MARK: - Slide to End Control
 
-/// iOS 26 style slide-to-action control with liquid glass styling
+/// iOS 26 style slide-to-action control with proper Liquid Glass APIs
 struct SlideToEndControl: View {
     let onComplete: () -> Void
     
     @State private var dragOffset: CGFloat = 0
     @State private var isDragging = false
     @State private var hasCompleted = false
-    @GestureState private var gestureOffset: CGFloat = 0
+    @State private var shimmerOffset: CGFloat = -200
     
-    private let trackHeight: CGFloat = 64
-    private let thumbSize: CGFloat = 52
+    private let trackHeight: CGFloat = 72
+    private let thumbSize: CGFloat = 60
     private let horizontalPadding: CGFloat = 6
     
     var body: some View {
@@ -241,70 +241,60 @@ struct SlideToEndControl: View {
             let progress = min(dragOffset / maxOffset, 1.0)
             
             ZStack(alignment: .leading) {
-                // Track background with glass effect
+                // Progress fill underneath the glass
                 Capsule()
-                    .fill(.clear)
-                    .glassEffect(.regular, in: .capsule)
-                    .frame(height: trackHeight)
-                
-                // Progress fill
-                Capsule()
-                    .fill(
-                        LinearGradient(
-                            colors: [
-                                LGColors.imposter.opacity(0.3 * progress),
-                                LGColors.imposter.opacity(0.5 * progress)
-                            ],
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
-                    )
+                    .fill(LGColors.accentPrimary.opacity(0.35 * progress))
                     .frame(width: thumbSize + dragOffset + horizontalPadding, height: trackHeight)
                     .animation(.none, value: dragOffset)
                 
-                // Center text
+                // Center text with chevrons
                 HStack {
                     Spacer()
                     HStack(spacing: LGSpacing.small) {
-                        Image(systemName: "arrow.right")
-                            .font(.system(size: 14, weight: .semibold))
-                        Text("Slide to End Game")
-                            .font(.system(size: 16, weight: .semibold, design: .rounded))
-                        Image(systemName: "arrow.right")
-                            .font(.system(size: 14, weight: .semibold))
+                        HStack(spacing: 2) {
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 12, weight: .bold))
+                                .opacity(0.4)
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 14, weight: .bold))
+                                .opacity(0.6)
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 16, weight: .bold))
+                                .opacity(0.8)
+                        }
+                        
+                        Text("Slide to Vote")
+                            .font(.system(size: 17, weight: .bold, design: .rounded))
+                        
+                        HStack(spacing: 2) {
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 16, weight: .bold))
+                                .opacity(0.8)
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 14, weight: .bold))
+                                .opacity(0.6)
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 12, weight: .bold))
+                                .opacity(0.4)
+                        }
                     }
-                    .foregroundStyle(.white.opacity(0.5 * (1 - progress)))
+                    .foregroundStyle(.white.opacity(0.6 * (1 - progress)))
                     Spacer()
                 }
+                .frame(height: trackHeight)
+                .glassEffect(.regular, in: .capsule)
                 
-                // Draggable thumb
-                Circle()
-                    .fill(.clear)
+                // Draggable thumb with interactive glass
+                Image(systemName: "flag.checkered")
+                    .font(.system(size: 26, weight: .bold))
+                    .foregroundStyle(.white)
+                    .frame(width: thumbSize, height: thumbSize)
                     .glassEffect(
-                        .regular.tint(LGColors.imposter.opacity(0.4)),
+                        .regular.tint(LGColors.accentPrimary.opacity(0.5)).interactive(),
                         in: .circle
                     )
-                    .frame(width: thumbSize, height: thumbSize)
-                    .overlay {
-                        Image(systemName: "flag.checkered")
-                            .font(.system(size: 22, weight: .semibold))
-                            .foregroundStyle(.white)
-                    }
-                    .overlay {
-                        Circle()
-                            .strokeBorder(
-                                LinearGradient(
-                                    colors: [
-                                        Color.white.opacity(0.6),
-                                        Color.white.opacity(0.2)
-                                    ],
-                                    startPoint: .top,
-                                    endPoint: .bottom
-                                ),
-                                lineWidth: 2
-                            )
-                    }
-                    .shadow(color: LGColors.imposter.opacity(0.5), radius: 10)
+                    .scaleEffect(isDragging ? 1.08 : 1.0)
+                    .animation(.spring(response: 0.2), value: isDragging)
                     .offset(x: horizontalPadding + dragOffset)
                     .gesture(
                         DragGesture()
@@ -314,42 +304,36 @@ struct SlideToEndControl: View {
                                 let newOffset = max(0, min(value.translation.width, maxOffset))
                                 dragOffset = newOffset
                                 
-                                // Haptic feedback at intervals
-                                if Int(newOffset) % 50 == 0 {
+                                if Int(newOffset) % 40 == 0 {
                                     HapticManager.selectionChanged()
                                 }
                             }
-                            .onEnded { value in
+                            .onEnded { _ in
                                 isDragging = false
                                 
                                 if dragOffset >= maxOffset * 0.85 {
-                                    // Complete the action
                                     withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                                         dragOffset = maxOffset
                                     }
                                     hasCompleted = true
                                     HapticManager.imposterCaught()
                                     
-                                    // Delay to show completion state
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                                         onComplete()
                                     }
                                 } else {
-                                    // Spring back
                                     withAnimation(.spring(response: 0.4, dampingFraction: 0.6)) {
                                         dragOffset = 0
                                     }
                                 }
                             }
                     )
-                    .scaleEffect(isDragging ? 1.1 : 1.0)
-                    .animation(.spring(response: 0.2), value: isDragging)
             }
         }
         .frame(height: trackHeight)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Slide to end game")
-        .accessibilityHint("Swipe right to reveal the imposter")
+        .accessibilityLabel("Slide to start voting")
+        .accessibilityHint("Swipe right to end discussion and vote")
     }
 }
 
