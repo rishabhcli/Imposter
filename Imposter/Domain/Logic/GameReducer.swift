@@ -21,7 +21,7 @@ enum GameReducer {
     ///   - action: The action to process
     /// - Returns: A new game state reflecting the action
     static func reduce(state: GameState, action: GameAction) -> GameState {
-        let newState = state.copy()
+        var newState = state
 
         switch action {
 
@@ -30,7 +30,9 @@ enum GameReducer {
         case .addPlayer(let name, let color):
             guard newState.currentPhase == .setup else { return state }
             guard newState.players.count < 10 else { return state }
-            let player = Player(name: name, color: color)
+            let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !trimmedName.isEmpty else { return state }
+            let player = Player(name: trimmedName, color: color)
             newState.players.append(player)
 
         case .removePlayer(let id):
@@ -40,8 +42,10 @@ enum GameReducer {
 
         case .updatePlayer(let id, let name, let color):
             guard newState.currentPhase == .setup else { return state }
+            let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !trimmedName.isEmpty else { return state }
             if let idx = newState.players.firstIndex(where: { $0.id == id }) {
-                newState.players[idx].name = name
+                newState.players[idx].name = trimmedName
                 newState.players[idx].color = color
             }
 
@@ -174,16 +178,40 @@ enum GameReducer {
             guard newState.currentPhase == .reveal else { return state }
             // Handled in completeRound
 
-        case .completeRound(_):
+        case .completeRound(let imposterGuessedCorrectly):
             guard newState.currentPhase == .reveal else { return state }
-            // Go directly to setup - no summary screen
+            guard let roundState = newState.roundState else { return state }
+
+            // Calculate and apply scores
+            let scores = ScoringEngine.calculate(
+                roundState: roundState,
+                players: newState.players,
+                settings: newState.settings,
+                imposterGuessedCorrectly: imposterGuessedCorrectly
+            )
+            newState.players = ScoringEngine.applyScores(scores, to: newState.players)
+
+            // Archive the completed round
+            let votingResult = Self.calculateVotingResult(roundState: roundState)
+            let imposterName = newState.players.first { $0.id == roundState.imposterID }?.name ?? "Unknown"
+            let completedRound = CompletedRound(
+                from: roundState,
+                result: votingResult,
+                roundNumber: newState.roundNumber,
+                imposterName: imposterName
+            )
+            newState.gameHistory.append(completedRound)
+
+            // Clear round state and move to summary
             newState.roundState = nil
-            newState.currentPhase = .setup
+            newState.currentPhase = .summary
 
         // MARK: Summary/Reset Actions
 
         case .startNewRound:
             guard newState.currentPhase == .summary else { return state }
+            // Clear any lingering image from previous round
+            newState.roundState?.generatedImage = nil
             newState.roundNumber += 1
             newState.currentPhase = .roleReveal
             newState.roundState = createNewRound(players: newState.players, settings: newState.settings)
@@ -267,8 +295,24 @@ enum GameReducer {
         let nonImposterIndices = players.indices.filter { players[$0].id != imposter.id }
         let firstPlayerIndex = nonImposterIndices.randomElement() ?? 0
 
+        // In hidden mode, select a different word for the imposter
+        let imposterWord: String?
+        if settings.gameMode == .hidden && settings.wordSource != .customPrompt {
+            // Keep selecting until we get a different word
+            var differentWord = WordSelector.selectWord(from: settings)
+            var attempts = 0
+            while differentWord.lowercased() == word.lowercased() && attempts < 10 {
+                differentWord = WordSelector.selectWord(from: settings)
+                attempts += 1
+            }
+            imposterWord = differentWord
+        } else {
+            imposterWord = nil
+        }
+
         return RoundState(
             secretWord: word,
+            imposterWord: imposterWord,
             categoryHint: categoryHint,
             imposterID: imposter.id,
             firstPlayerIndex: firstPlayerIndex
@@ -283,15 +327,21 @@ enum GameReducer {
             voteCounts[suspectID, default: 0] += 1
         }
 
-        // Find the player with the most votes
-        let mostVoted = voteCounts.max(by: { $0.value < $1.value })?.key
-        let isCorrect = mostVoted == roundState.imposterID
+        // Find the player(s) with the most votes
+        let maxVotes = voteCounts.values.max() ?? 0
+        let playersWithMaxVotes = voteCounts.filter { $0.value == maxVotes }.map { $0.key }
+        let isTie = playersWithMaxVotes.count > 1
+
+        // In a tie, no single player is "most voted"
+        let mostVoted: UUID? = isTie ? nil : playersWithMaxVotes.first
+        let isCorrect = !isTie && mostVoted == roundState.imposterID
 
         return VotingResult(
             mostVotedPlayerID: mostVoted,
             imposterID: roundState.imposterID,
             isCorrect: isCorrect,
-            voteCounts: voteCounts
+            voteCounts: voteCounts,
+            isTie: isTie
         )
     }
 

@@ -26,6 +26,30 @@ struct GameSettings: Codable, Sendable, Equatable {
         }
     }
 
+    /// Game mode determines how the imposter experiences the game
+    enum GameMode: String, Codable, CaseIterable, Sendable {
+        /// Classic mode: Imposter knows they're the imposter and gets a hint
+        case classic
+        /// Hidden mode: Imposter gets a different word and doesn't know they're the imposter
+        case hidden
+
+        var displayName: String {
+            switch self {
+            case .classic: return "Classic"
+            case .hidden: return "Hidden Imposter"
+            }
+        }
+
+        var description: String {
+            switch self {
+            case .classic:
+                return "The Imposter knows their role and receives a hint about the category."
+            case .hidden:
+                return "The Imposter receives a different word and doesn't know they're the Imposter."
+            }
+        }
+    }
+
     /// Source of the secret word
     enum WordSource: String, Codable, Sendable {
         /// Random selection from word packs
@@ -85,6 +109,11 @@ struct GameSettings: Codable, Sendable, Equatable {
     /// When enabled, imposter gets a cryptic hint instead of just the category
     var imposterHintEnabled: Bool
 
+    // MARK: - Game Mode
+
+    /// The game mode (classic or hidden imposter)
+    var gameMode: GameMode
+
     // MARK: - Scoring
 
     /// Points awarded to each non-imposter for correct vote
@@ -95,6 +124,53 @@ struct GameSettings: Codable, Sendable, Equatable {
 
     /// Points awarded to imposter for correctly guessing the word
     var pointsForImposterGuess: Int
+
+    // MARK: - Multi-Round
+
+    /// Number of rounds to play (0 = unlimited)
+    var numberOfRounds: Int
+
+    // MARK: - Initialization
+
+    init(
+        wordSource: WordSource,
+        selectedCategories: [String]?,
+        wordPackDifficulty: Difficulty,
+        customWordPrompt: String?,
+        numberOfClueRounds: Int,
+        clueTimerEnabled: Bool,
+        clueTimerMinutes: Int,
+        discussionTimerEnabled: Bool,
+        discussionSeconds: Int,
+        votingTimerEnabled: Bool,
+        votingSeconds: Int,
+        allowImposterWordGuess: Bool,
+        imposterHintEnabled: Bool,
+        gameMode: GameMode,
+        pointsForCorrectVote: Int,
+        pointsForImposterSurvival: Int,
+        pointsForImposterGuess: Int,
+        numberOfRounds: Int = 0
+    ) {
+        self.wordSource = wordSource
+        self.selectedCategories = selectedCategories
+        self.wordPackDifficulty = wordPackDifficulty
+        self.customWordPrompt = customWordPrompt
+        self.numberOfClueRounds = numberOfClueRounds
+        self.clueTimerEnabled = clueTimerEnabled
+        self.clueTimerMinutes = clueTimerMinutes
+        self.discussionTimerEnabled = discussionTimerEnabled
+        self.discussionSeconds = discussionSeconds
+        self.votingTimerEnabled = votingTimerEnabled
+        self.votingSeconds = votingSeconds
+        self.allowImposterWordGuess = allowImposterWordGuess
+        self.imposterHintEnabled = imposterHintEnabled
+        self.gameMode = gameMode
+        self.pointsForCorrectVote = pointsForCorrectVote
+        self.pointsForImposterSurvival = pointsForImposterSurvival
+        self.pointsForImposterGuess = pointsForImposterGuess
+        self.numberOfRounds = numberOfRounds
+    }
 
     // MARK: - Default Settings
 
@@ -112,10 +188,46 @@ struct GameSettings: Codable, Sendable, Equatable {
         votingSeconds: 30,
         allowImposterWordGuess: true,
         imposterHintEnabled: true,
+        gameMode: .classic,
         pointsForCorrectVote: 1,
         pointsForImposterSurvival: 2,
-        pointsForImposterGuess: 3
+        pointsForImposterGuess: 3,
+        numberOfRounds: 0
     )
+
+    // MARK: - Codable
+
+    enum CodingKeys: String, CodingKey {
+        case wordSource, selectedCategories, wordPackDifficulty, customWordPrompt
+        case numberOfClueRounds, clueTimerEnabled, clueTimerMinutes
+        case discussionTimerEnabled, discussionSeconds
+        case votingTimerEnabled, votingSeconds
+        case allowImposterWordGuess, imposterHintEnabled, gameMode
+        case pointsForCorrectVote, pointsForImposterSurvival, pointsForImposterGuess
+        case numberOfRounds
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        wordSource = try container.decode(WordSource.self, forKey: .wordSource)
+        selectedCategories = try container.decodeIfPresent([String].self, forKey: .selectedCategories)
+        wordPackDifficulty = try container.decode(Difficulty.self, forKey: .wordPackDifficulty)
+        customWordPrompt = try container.decodeIfPresent(String.self, forKey: .customWordPrompt)
+        numberOfClueRounds = try container.decode(Int.self, forKey: .numberOfClueRounds)
+        clueTimerEnabled = try container.decode(Bool.self, forKey: .clueTimerEnabled)
+        clueTimerMinutes = try container.decode(Int.self, forKey: .clueTimerMinutes)
+        discussionTimerEnabled = try container.decode(Bool.self, forKey: .discussionTimerEnabled)
+        discussionSeconds = try container.decode(Int.self, forKey: .discussionSeconds)
+        votingTimerEnabled = try container.decode(Bool.self, forKey: .votingTimerEnabled)
+        votingSeconds = try container.decode(Int.self, forKey: .votingSeconds)
+        allowImposterWordGuess = try container.decode(Bool.self, forKey: .allowImposterWordGuess)
+        imposterHintEnabled = try container.decode(Bool.self, forKey: .imposterHintEnabled)
+        gameMode = try container.decode(GameMode.self, forKey: .gameMode)
+        pointsForCorrectVote = try container.decode(Int.self, forKey: .pointsForCorrectVote)
+        pointsForImposterSurvival = try container.decode(Int.self, forKey: .pointsForImposterSurvival)
+        pointsForImposterGuess = try container.decode(Int.self, forKey: .pointsForImposterGuess)
+        numberOfRounds = try container.decodeIfPresent(Int.self, forKey: .numberOfRounds) ?? 0
+    }
 
     /// Available timer durations in minutes
     static let timerOptions = [0, 1, 2, 3, 4, 5]

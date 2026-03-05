@@ -32,6 +32,9 @@ final class GameStore {
     /// Flag indicating if game is being prepared (word/image generation in progress before start)
     private(set) var isPreparingGame: Bool = false
 
+    /// Error message to display as a toast (auto-clears after 4 seconds)
+    private(set) var errorMessage: String?
+
     /// UserDefaults key for persisted players
     private static let playersKey = "savedPlayers"
 
@@ -41,6 +44,19 @@ final class GameStore {
         self.state = state
         // Load saved players on init
         loadSavedPlayers()
+    }
+
+    // MARK: - Error Display
+
+    /// Shows an error toast that auto-dismisses after 4 seconds
+    private func showError(_ message: String) {
+        errorMessage = message
+        Task {
+            try? await Task.sleep(for: .seconds(4))
+            if errorMessage == message {
+                errorMessage = nil
+            }
+        }
     }
 
     // MARK: - Player Persistence
@@ -102,11 +118,31 @@ final class GameStore {
 
         // Apply the new state
         let phaseChanged = state.currentPhase != newState.currentPhase
-        state = newState
+
+        // Cap game history to prevent unbounded growth
+        if newState.gameHistory.count > 50 {
+            var capped = newState
+            capped.gameHistory = Array(capped.gameHistory.suffix(50))
+            state = capped
+        } else {
+            state = newState
+        }
 
         // Announce phase change for VoiceOver
         if phaseChanged {
             AccessibilityAnnouncer.announcePhaseChange(state.currentPhase)
+        }
+
+        // Show error toasts for error actions
+        switch action {
+        case .wordGenerationFailed(let error):
+            showError("Word generation failed: \(error.message)")
+        case .imageGenerationFailed(let error):
+            showError("Image generation failed: \(error.message)")
+        case .storageFailed(let error):
+            showError("Storage error: \(error.message)")
+        default:
+            break
         }
 
         // Save players when they change
@@ -200,19 +236,31 @@ final class GameStore {
         }
     }
 
-    /// Performs word generation using Foundation Models
+    /// Performs word generation using Foundation Models with a 15-second timeout
     private func performWordGeneration(from prompt: String) async {
         var finalWord: String
 
         do {
-            // Generate a related word using Foundation Models
-            let generatedWord = try await WordGenerator.generateWord(from: prompt)
+            // Race word generation against a 15-second timeout
+            finalWord = try await withThrowingTaskGroup(of: String.self) { group in
+                group.addTask {
+                    try await WordGenerator.generateWord(from: prompt)
+                }
+                group.addTask {
+                    try await Task.sleep(for: .seconds(15))
+                    throw CancellationError()
+                }
+                // Return whichever finishes first
+                guard let result = try await group.next() else {
+                    throw CancellationError()
+                }
+                group.cancelAll()
+                return result
+            }
 
             #if DEBUG
-            print("WordGenerator: Generated '\(generatedWord)' from prompt '\(prompt)'")
+            print("WordGenerator: Generated '\(finalWord)' from prompt '\(prompt)'")
             #endif
-
-            finalWord = generatedWord
 
         } catch {
             #if DEBUG
@@ -221,6 +269,7 @@ final class GameStore {
 
             // Fallback: use the prompt itself as the word
             finalWord = prompt.capitalized
+            showError("Word generation timed out. Using fallback word.")
         }
 
         // Update the secret word in the state

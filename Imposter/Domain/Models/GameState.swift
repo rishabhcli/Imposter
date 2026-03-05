@@ -2,18 +2,16 @@
 //  GameState.swift
 //  Imposter
 //
-//  Central observable state container for the game.
+//  Central state container for the game.
 //
 
 import Foundation
-import Observation
 
 // MARK: - GameState
 
 /// Central state container for the entire game.
-/// Uses @Observable for fine-grained SwiftUI updates.
-@Observable
-final class GameState: @unchecked Sendable {
+/// Value type with proper Sendable conformance. Observation flows through GameStore.
+struct GameState: Sendable, Equatable {
     /// All players in the current game
     var players: [Player]
 
@@ -58,8 +56,6 @@ final class GameState: @unchecked Sendable {
         return players.first { $0.id == imposterID }
     }
 
-
-
     /// Whether we have enough players to start (3-10)
     var canStartGame: Bool {
         players.count >= 3 && players.count <= 10
@@ -85,7 +81,6 @@ final class GameState: @unchecked Sendable {
     /// The player whose turn it is to give a clue
     var currentClueGiver: Player? {
         guard let round = roundState, currentPhase == .clueRound else { return nil }
-        // Offset by firstPlayerIndex so the randomly selected first player starts
         let playerIndex = (round.firstPlayerIndex + round.currentClueIndex) % players.count
         guard playerIndex < players.count else { return nil }
         return players[playerIndex]
@@ -98,29 +93,14 @@ final class GameState: @unchecked Sendable {
         return players[round.firstPlayerIndex]
     }
 
-    // MARK: - Copy
+    // MARK: - Equatable
 
-    /// Creates a deep copy of the game state
-    /// Note: Players array is copied by value since Player is a struct
-    func copy() -> GameState {
-        GameState(
-            players: players.map { $0 },  // Explicit copy of player structs
-            settings: settings,
-            currentPhase: currentPhase,
-            roundState: roundState?.copy(),  // Deep copy of round state
-            roundNumber: roundNumber,
-            gameHistory: gameHistory
-        )
-    }
-}
-
-// MARK: - Equatable for Testing
-
-extension GameState: Equatable {
     static func == (lhs: GameState, rhs: GameState) -> Bool {
         lhs.players == rhs.players &&
         lhs.settings == rhs.settings &&
         lhs.currentPhase == rhs.currentPhase &&
-        lhs.roundNumber == rhs.roundNumber
+        lhs.roundNumber == rhs.roundNumber &&
+        lhs.roundState == rhs.roundState &&
+        lhs.gameHistory == rhs.gameHistory
     }
 }

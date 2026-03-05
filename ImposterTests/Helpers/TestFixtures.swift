@@ -43,9 +43,7 @@ enum TestFixtures {
         id: PlayerIDs.alice,
         name: "Alice",
         color: .crimson,
-        emoji: "😀",
-        score: 0,
-        isEliminated: false
+        emoji: "😀"
     )
 
     /// Minimum players for a valid game (3 players)
@@ -126,9 +124,7 @@ enum TestFixtures {
         phase: GamePhase = .setup,
         settings: GameSettings = .default
     ) -> GameState {
-        let state = GameState(players: players, settings: settings)
-        state.currentPhase = phase
-        return state
+        GameState(players: players, settings: settings, currentPhase: phase)
     }
 
     /// Game state ready to start (3+ players in setup phase)
@@ -138,28 +134,28 @@ enum TestFixtures {
 
     /// Game state in role reveal phase
     static var roleRevealState: GameState {
-        let state = gameState(phase: .roleReveal)
+        var state = gameState(phase: .roleReveal)
         state.roundState = defaultRoundState
         return state
     }
 
     /// Game state in clue round phase
     static var clueRoundState: GameState {
-        let state = gameState(phase: .clueRound)
+        var state = gameState(phase: .clueRound)
         state.roundState = defaultRoundState
         return state
     }
 
     /// Game state in voting phase
     static var votingState: GameState {
-        let state = gameState(phase: .voting)
+        var state = gameState(phase: .voting)
         state.roundState = defaultRoundState
         return state
     }
 
     /// Game state in reveal phase
     static var revealState: GameState {
-        let state = gameState(phase: .reveal)
+        var state = gameState(phase: .reveal)
         state.roundState = defaultRoundState
         return state
     }

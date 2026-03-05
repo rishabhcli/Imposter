@@ -96,6 +96,9 @@ struct RevealView: View {
             // Secret word reveal with AI-generated image
             secretWordRevealCard
 
+            // Vote breakdown
+            voteBreakdownSection
+
             // Imposter word guess (if allowed and imposter was caught)
             if store.settings.allowImposterWordGuess && wasImposterCaught && !hasGuessed {
                 imposterGuessSection
@@ -311,6 +314,52 @@ struct RevealView: View {
         .transition(.scale.combined(with: .opacity))
     }
     
+    private var voteBreakdownSection: some View {
+        VStack(spacing: LGSpacing.medium) {
+            Text("VOTE BREAKDOWN")
+                .font(.system(size: 12, weight: .bold, design: .rounded))
+                .tracking(2)
+                .foregroundStyle(.white.opacity(0.5))
+
+            VStack(spacing: LGSpacing.small) {
+                ForEach(store.players) { player in
+                    HStack(spacing: LGSpacing.medium) {
+                        // Who they voted for
+                        ZStack {
+                            Circle()
+                                .fill(LGColors.playerColor(player.color))
+                                .frame(width: 28, height: 28)
+                            Text(player.emoji)
+                                .font(.system(size: 16))
+                        }
+
+                        Text(player.name)
+                            .font(.system(size: 14, weight: .medium, design: .rounded))
+                            .foregroundStyle(.white)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+
+                        if let target = store.votedFor(by: player.id) {
+                            Image(systemName: "arrow.right")
+                                .font(.system(size: 10, weight: .bold))
+                                .foregroundStyle(.white.opacity(0.4))
+
+                            Text(target.name)
+                                .font(.system(size: 14, weight: .semibold, design: .rounded))
+                                .foregroundStyle(store.isImposter(target.id) ? LGColors.imposter : .white.opacity(0.7))
+                        } else {
+                            Text("No vote")
+                                .font(.system(size: 13, design: .rounded))
+                                .foregroundStyle(.white.opacity(0.4))
+                        }
+                    }
+                    .padding(.vertical, LGSpacing.extraSmall)
+                }
+            }
+            .padding(LGSpacing.medium)
+            .glassEffect(.regular, in: .rect(cornerRadius: 16))
+        }
+    }
+
     // MARK: - Helpers
 
     private var imposter: Player? {

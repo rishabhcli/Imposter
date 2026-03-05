@@ -14,6 +14,8 @@ import CoreMotion
 enum Role {
     case informed(word: String)
     case imposter(hint: String)
+    /// Hidden imposter mode: the imposter receives a different word and doesn't know they're the imposter
+    case hiddenImposter(word: String)
 }
 
 // MARK: - RoleCardView
@@ -89,6 +91,11 @@ struct RoleCardView: View {
         return false
     }
 
+    private var isHiddenImposterRole: Bool {
+        if case .hiddenImposter = role { return true }
+        return false
+    }
+
     private func cardWidth(for size: CGSize) -> CGFloat {
         // Account for player header (~150pt) and spacing when calculating max width from height
         let availableHeight = size.height - 180
@@ -154,6 +161,9 @@ struct RoleCardView: View {
                 informedContent(word: word)
             case .imposter(let hint):
                 imposterContent(hint: hint)
+            case .hiddenImposter(let word):
+                // Hidden imposter sees a word like an informed player, but it's a different word
+                hiddenImposterContent(word: word)
             }
             
             // Card top banner overlays on top
@@ -165,6 +175,7 @@ struct RoleCardView: View {
         switch role {
         case .informed: return LGColors.accentPrimary
         case .imposter: return LGColors.imposter
+        case .hiddenImposter: return LGColors.accentPrimary // Same as informed to hide their role
         }
     }
 
@@ -344,12 +355,77 @@ struct RoleCardView: View {
         .accessibilityLabel("You are the Imposter! Your hint is: \(hint).")
     }
 
+    // MARK: - Hidden Imposter Content
+
+    /// Content for hidden imposter mode - looks like informed player but with a different word
+    private func hiddenImposterContent(word: String) -> some View {
+        ZStack {
+            // Layer 1: Same style as informed player
+            Color.black.opacity(0.15)
+            
+            // Layer 2: Content - word display (looks identical to informed player)
+            VStack(spacing: 0) {
+                Spacer()
+                    .frame(height: 50)
+                
+                // Icon to match the informed aesthetic
+                Image(systemName: "checkmark.seal.fill")
+                    .font(.system(size: 56))
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [LGColors.success, LGColors.accentPrimary],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .shadow(color: LGColors.success.opacity(0.5), radius: 15)
+                
+                Spacer()
+                
+                // Secret word at bottom (actually the imposter's different word)
+                VStack(spacing: 4) {
+                    Text("THE SECRET WORD")
+                        .font(.system(size: 10, weight: .bold, design: .rounded))
+                        .tracking(2)
+                        .foregroundStyle(.white.opacity(0.7))
+
+                    Text(word)
+                        .font(.system(size: 28, weight: .bold, design: .rounded))
+                        .minimumScaleFactor(0.5)
+                        .lineLimit(2)
+                        .foregroundStyle(.white)
+                        .multilineTextAlignment(.center)
+                        .shadow(color: .black.opacity(0.5), radius: 8)
+                }
+                .padding(.horizontal, 20)
+                .padding(.top, 16)
+                .padding(.bottom, 20)
+                .frame(maxWidth: .infinity)
+                .background {
+                    // Gradient fade to darker at bottom
+                    LinearGradient(
+                        colors: [
+                            Color.black.opacity(0.0),
+                            Color.black.opacity(0.4),
+                            Color.black.opacity(0.6)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                }
+            }
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("The secret word is \(word). You are not the Imposter.")
+    }
+
     // MARK: - Styling
 
     private var roleTitle: String {
         switch role {
         case .informed: return "INFORMED"
         case .imposter: return "IMPOSTER"
+        case .hiddenImposter: return "INFORMED" // Don't reveal they're the imposter
         }
     }
 
@@ -357,6 +433,7 @@ struct RoleCardView: View {
         switch role {
         case .informed: return LGColors.success
         case .imposter: return LGColors.imposter
+        case .hiddenImposter: return LGColors.success // Same as informed
         }
     }
 
@@ -364,6 +441,7 @@ struct RoleCardView: View {
         switch role {
         case .informed: return LGColors.success
         case .imposter: return LGColors.imposter
+        case .hiddenImposter: return LGColors.success // Same as informed
         }
     }
 
@@ -376,6 +454,7 @@ struct RoleCardView: View {
         switch role {
         case .informed: return LGColors.accentPrimary
         case .imposter: return LGColors.imposter
+        case .hiddenImposter: return LGColors.accentPrimary // Same as informed
         }
     }
 }

@@ -27,7 +27,6 @@ struct ImposterTests {
         #expect(player.name == "Test")
         #expect(player.color == .azure)
         #expect(player.score == 0)
-        #expect(!player.isEliminated)
     }
 
     @Test func gameSettingsHaveDefaults() {

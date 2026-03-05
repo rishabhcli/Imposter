@@ -480,10 +480,20 @@ struct HomeView: View {
                     .foregroundStyle(.white)
                     .focused($isTextFieldFocused)
                     .submitLabel(.done)
+                    .onChange(of: customPrompt) { _, newValue in
+                        if newValue.count > 100 {
+                            customPrompt = String(newValue.prefix(100))
+                        }
+                    }
             }
             .padding(LGSpacing.medium)
             .glassEffect(.regular, in: .rect(cornerRadius: 12))
             .id("customPromptField")
+
+            Text("\(customPrompt.count)/100")
+                .font(.system(size: 12, weight: .medium, design: .monospaced))
+                .foregroundStyle(.white.opacity(customPrompt.count >= 90 ? 0.8 : 0.4))
+                .frame(maxWidth: .infinity, alignment: .trailing)
         }
     }
 

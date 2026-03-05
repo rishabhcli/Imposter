@@ -16,12 +16,29 @@ struct Player: Identifiable, Codable, Hashable, Sendable {
     var name: String
     var color: PlayerColor
     var emoji: String
+    var score: Int
 
-    init(id: UUID = UUID(), name: String, color: PlayerColor, emoji: String? = nil) {
+    // MARK: - CodingKeys
+
+    enum CodingKeys: String, CodingKey {
+        case id, name, color, emoji, score
+    }
+
+    init(id: UUID = UUID(), name: String, color: PlayerColor, emoji: String? = nil, score: Int = 0) {
         self.id = id
         self.name = name
         self.color = color
         self.emoji = emoji ?? Player.randomFaceEmoji()
+        self.score = score
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(UUID.self, forKey: .id)
+        name = try container.decode(String.self, forKey: .name)
+        color = try container.decode(PlayerColor.self, forKey: .color)
+        emoji = try container.decode(String.self, forKey: .emoji)
+        score = try container.decodeIfPresent(Int.self, forKey: .score) ?? 0
     }
 
     /// Collection of face emojis for random assignment

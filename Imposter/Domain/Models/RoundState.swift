@@ -15,6 +15,10 @@ struct RoundState: Codable, Sendable {
     /// The secret word that informed players know
     var secretWord: String
 
+    /// The word shown to the imposter in hidden mode (different from secretWord)
+    /// In classic mode, this is nil and the imposter sees a hint instead
+    var imposterWord: String?
+
     /// The category or theme hint for the imposter
     /// For random pack: the category name (e.g., "Animals")
     /// For custom prompt: the user's theme (e.g., "Ocean")
@@ -55,7 +59,7 @@ struct RoundState: Codable, Sendable {
     // MARK: - Nested Types
 
     /// A clue given by a player during the clue round
-    struct Clue: Codable, Identifiable, Sendable {
+    struct Clue: Codable, Identifiable, Sendable, Equatable {
         let id: UUID
         let playerID: UUID
         let text: String
@@ -76,6 +80,7 @@ struct RoundState: Codable, Sendable {
 
     init(
         secretWord: String,
+        imposterWord: String? = nil,
         categoryHint: String,
         imposterHint: String? = nil,
         imposterID: UUID,
@@ -86,6 +91,7 @@ struct RoundState: Codable, Sendable {
         firstPlayerIndex: Int = 0
     ) {
         self.secretWord = secretWord
+        self.imposterWord = imposterWord
         self.categoryHint = categoryHint
         self.imposterHint = imposterHint
         self.imposterID = imposterID
@@ -100,12 +106,13 @@ struct RoundState: Codable, Sendable {
     // MARK: - Codable
 
     enum CodingKeys: String, CodingKey {
-        case secretWord, categoryHint, imposterHint, imposterID, clues, votes, currentClueIndex, revealIndex, firstPlayerIndex
+        case secretWord, imposterWord, categoryHint, imposterHint, imposterID, clues, votes, currentClueIndex, revealIndex, firstPlayerIndex
     }
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         secretWord = try container.decode(String.self, forKey: .secretWord)
+        imposterWord = try container.decodeIfPresent(String.self, forKey: .imposterWord)
         categoryHint = try container.decodeIfPresent(String.self, forKey: .categoryHint) ?? "Unknown"
         imposterHint = try container.decodeIfPresent(String.self, forKey: .imposterHint)
         imposterID = try container.decode(UUID.self, forKey: .imposterID)
@@ -120,6 +127,7 @@ struct RoundState: Codable, Sendable {
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(secretWord, forKey: .secretWord)
+        try container.encodeIfPresent(imposterWord, forKey: .imposterWord)
         try container.encode(categoryHint, forKey: .categoryHint)
         try container.encodeIfPresent(imposterHint, forKey: .imposterHint)
         try container.encode(imposterID, forKey: .imposterID)
@@ -130,24 +138,23 @@ struct RoundState: Codable, Sendable {
         try container.encode(firstPlayerIndex, forKey: .firstPlayerIndex)
         // generatedImage is not encoded (transient)
     }
-    
-    // MARK: - Copy
-    
-    /// Creates a copy of the round state, preserving all values including the generated image
-    func copy() -> RoundState {
-        var copied = RoundState(
-            secretWord: secretWord,
-            categoryHint: categoryHint,
-            imposterHint: imposterHint,
-            imposterID: imposterID,
-            clues: clues,
-            votes: votes,
-            currentClueIndex: currentClueIndex,
-            revealIndex: revealIndex,
-            firstPlayerIndex: firstPlayerIndex
-        )
-        copied.generatedImage = generatedImage
-        return copied
+}
+
+// MARK: - Equatable
+
+extension RoundState: Equatable {
+    static func == (lhs: RoundState, rhs: RoundState) -> Bool {
+        lhs.secretWord == rhs.secretWord &&
+        lhs.imposterWord == rhs.imposterWord &&
+        lhs.categoryHint == rhs.categoryHint &&
+        lhs.imposterHint == rhs.imposterHint &&
+        lhs.imposterID == rhs.imposterID &&
+        lhs.clues == rhs.clues &&
+        lhs.votes == rhs.votes &&
+        lhs.currentClueIndex == rhs.currentClueIndex &&
+        lhs.revealIndex == rhs.revealIndex &&
+        lhs.firstPlayerIndex == rhs.firstPlayerIndex
+        // generatedImage excluded (UIImage is not Equatable)
     }
 }
 
@@ -167,6 +174,9 @@ struct VotingResult: Sendable {
     /// Vote counts per player
     let voteCounts: [UUID: Int]
 
+    /// Whether the vote was a tie (multiple players with same max votes)
+    var isTie: Bool = false
+
     /// Whether the imposter correctly guessed the word (if allowed)
     var imposterGuessedCorrectly: Bool = false
 }
@@ -174,7 +184,7 @@ struct VotingResult: Sendable {
 // MARK: - CompletedRound
 
 /// Archive of a completed round for game history
-struct CompletedRound: Codable, Identifiable, Sendable {
+struct CompletedRound: Codable, Identifiable, Sendable, Equatable {
     let id: UUID
     let roundNumber: Int
     let secretWord: String

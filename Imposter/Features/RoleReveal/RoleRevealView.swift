@@ -177,7 +177,7 @@ struct RoleRevealView: View {
         VStack(spacing: LGSpacing.large) {
             // Role card
             RoleCardView(
-                role: isCurrentPlayerImposter ? .imposter(hint: imposterHint) : .informed(word: secretWord),
+                role: roleForCurrentPlayer,
                 playerName: currentPlayer.name,
                 playerEmoji: currentPlayer.emoji,
                 playerColor: currentPlayer.color,
@@ -225,6 +225,28 @@ struct RoleRevealView: View {
     private var imposterHint: String {
         // Use AI-generated hint if available, otherwise fallback to category
         store.state.roundState?.imposterHint ?? categoryHint
+    }
+
+    private var imposterWord: String? {
+        store.state.roundState?.imposterWord
+    }
+
+    private var isHiddenMode: Bool {
+        store.settings.gameMode == .hidden
+    }
+
+    private var roleForCurrentPlayer: Role {
+        if isCurrentPlayerImposter {
+            if isHiddenMode, let word = imposterWord {
+                // Hidden mode: imposter gets a different word and doesn't know they're the imposter
+                return .hiddenImposter(word: word)
+            } else {
+                // Classic mode: imposter knows their role and gets a hint
+                return .imposter(hint: imposterHint)
+            }
+        } else {
+            return .informed(word: secretWord)
+        }
     }
 
     // MARK: - Actions
