@@ -79,7 +79,7 @@ struct HomeView: View {
                     .onChange(of: isTextFieldFocused) { _, focused in
                         if focused {
                             withAnimation {
-                                proxy.scrollTo("customPromptField", anchor: .center)
+                                proxy.scrollTo(AccessibilityIDs.customPromptField, anchor: .center)
                             }
                         }
                     }
@@ -216,6 +216,7 @@ struct HomeView: View {
                     .shadow(color: LGColors.accentPrimary.opacity(glowIntensity), radius: 2)
                     .shadow(color: LGColors.accentPrimary.opacity(glowIntensity * 0.7), radius: 8)
                     .shadow(color: LGColors.accentPrimary.opacity(glowIntensity * 0.5), radius: 16)
+                    .accessibilityIdentifier(AccessibilityIDs.homeTitle)
                 
                 Text("The Social Deduction Party Game")
                     .font(.system(size: 14, weight: .medium, design: .rounded))
@@ -248,7 +249,7 @@ struct HomeView: View {
         }
         .buttonStyle(.glassProminent)
         .tint(LGColors.accentPrimary)
-        .accessibilityIdentifier("newGameButton")
+        .accessibilityIdentifier(AccessibilityIDs.newGameButton)
     }
     
     // MARK: - Secondary Actions Section
@@ -270,7 +271,7 @@ struct HomeView: View {
                 .frame(height: 48)
             }
             .buttonStyle(.glass)
-            .accessibilityIdentifier("howToPlayButton")
+            .accessibilityIdentifier(AccessibilityIDs.howToPlayButton)
             
             // Settings
             Button {
@@ -287,7 +288,7 @@ struct HomeView: View {
                 .frame(height: 48)
             }
             .buttonStyle(.glass)
-            .accessibilityIdentifier("settingsButton")
+            .accessibilityIdentifier(AccessibilityIDs.settingsButton)
         }
     }
     
@@ -375,6 +376,7 @@ struct HomeView: View {
                     .frame(height: 50)
                 }
                 .buttonStyle(.glass)
+                .accessibilityIdentifier(AccessibilityIDs.categoryBackButton)
 
                 Button {
                     saveSettings()
@@ -395,6 +397,7 @@ struct HomeView: View {
                 .buttonStyle(.glassProminent)
                 .tint(LGColors.accentPrimary)
                 .disabled(!canContinueCategory)
+                .accessibilityIdentifier(AccessibilityIDs.categoryContinueButton)
             }
         }
     }
@@ -488,7 +491,8 @@ struct HomeView: View {
             }
             .padding(LGSpacing.medium)
             .glassEffect(.regular, in: .rect(cornerRadius: 12))
-            .id("customPromptField")
+            .id(AccessibilityIDs.customPromptField)
+            .accessibilityIdentifier(AccessibilityIDs.customPromptField)
 
             Text("\(customPrompt.count)/100")
                 .font(.system(size: 12, weight: .medium, design: .monospaced))
@@ -566,6 +570,7 @@ struct HomeView: View {
                 .buttonStyle(.glassProminent)
                 .tint(LGColors.accentPrimary)
                 .disabled(!store.canStartGame || store.isPreparingGame)
+                .accessibilityIdentifier(AccessibilityIDs.startGameButton)
             }
         }
     }
@@ -734,7 +739,7 @@ struct HomeView: View {
     }
 
     private func startGameWithPreloading() {
-        store.prepareAndStartGame()
+        store.startGame()
         HapticManager.buttonTap()
     }
 
@@ -795,6 +800,7 @@ struct CategoryTile: View {
             )
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier(AccessibilityIDs.categoryTile(title))
         .overlay(alignment: .topTrailing) {
             if isSelected {
                 Image(systemName: "checkmark.circle.fill")

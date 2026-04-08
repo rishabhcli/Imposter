@@ -37,6 +37,9 @@ enum GameAction: Sendable {
     /// Start the game (transitions from setup to roleReveal)
     case startGame
 
+    /// Start the game with a precomputed round state.
+    case startGameWithPreparedRound(RoundState)
+
     // MARK: - Role Reveal Phase
 
     /// Mark that a player has viewed their role
@@ -88,6 +91,9 @@ enum GameAction: Sendable {
 
     /// Start a new round with the same players
     case startNewRound
+
+    /// Start a new round with a precomputed round state.
+    case startNewRoundWithPreparedRound(RoundState)
 
     /// End the entire game
     case endGame
@@ -154,6 +160,8 @@ extension GameAction: CustomStringConvertible {
             return "Update settings"
         case .startGame:
             return "Start game"
+        case .startGameWithPreparedRound:
+            return "Start game with prepared round"
         case .revealRoleToPlayer(let id):
             return "Reveal role to player: \(id)"
         case .completeRoleReveal:
@@ -182,6 +190,8 @@ extension GameAction: CustomStringConvertible {
             return "Complete round (imposter guessed: \(correct))"
         case .startNewRound:
             return "Start new round"
+        case .startNewRoundWithPreparedRound:
+            return "Start new round with prepared round"
         case .endGame:
             return "End game"
         case .returnToHome:

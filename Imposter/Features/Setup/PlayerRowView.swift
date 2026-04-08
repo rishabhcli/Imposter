@@ -99,7 +99,7 @@ struct PlayerRowView: View {
                     updatePlayer(name: name)
                 }
             }
-            .accessibilityIdentifier("playerNameField_\(player.id)")
+            .accessibilityIdentifier(AccessibilityIDs.playerNameField(for: player.id))
     }
 
     private var deleteButton: some View {

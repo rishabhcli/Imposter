@@ -9,13 +9,20 @@ import SwiftUI
 
 @main
 struct ImposterApp: App {
-    /// The central game store, injected into the environment
-    @State private var gameStore = GameStore()
+    @State private var appEnvironment: AppEnvironment
+    @State private var gameStore: GameStore
+
+    init() {
+        let appEnvironment = AppEnvironment.live()
+        _appEnvironment = State(initialValue: appEnvironment)
+        _gameStore = State(initialValue: appEnvironment.makeGameStore())
+    }
 
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environment(gameStore)
+                .environment(\.appEnvironment, appEnvironment)
         }
     }
 }

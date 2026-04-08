@@ -1,0 +1,24 @@
+# macOS
+.DS_Store
+Icon?
+Thumbs.db
+
+# Xcode / SwiftPM / build artifacts
+DerivedData/
+build/
+.build/
+.swiftpm/
+*.xcuserstate
+**/xcuserdata/
+*.xccheckout
+*.xcscmblueprint
+*.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+
+# App / archive outputs
+*.ipa
+*.dSYM
+*.dSYM.zip
+
+# Local agent/runtime notes that should never live inside the synced app source root
+Imposter/.claude/

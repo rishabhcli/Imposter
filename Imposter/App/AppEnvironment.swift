@@ -27,6 +27,9 @@ final class AppEnvironment {
     /// Image generation service
     let imageService: any ImageServiceProtocol
 
+    /// Imposter hint generation service
+    let hintService: any HintServiceProtocol
+
     /// Persistent storage service
     let storageService: any StorageServiceProtocol
 
@@ -38,11 +41,13 @@ final class AppEnvironment {
     init(
         wordService: any WordServiceProtocol,
         imageService: any ImageServiceProtocol,
+        hintService: any HintServiceProtocol,
         storageService: any StorageServiceProtocol,
         hapticsService: any HapticsServiceProtocol
     ) {
         self.wordService = wordService
         self.imageService = imageService
+        self.hintService = hintService
         self.storageService = storageService
         self.hapticsService = hapticsService
     }
@@ -54,6 +59,7 @@ final class AppEnvironment {
         AppEnvironment(
             wordService: AIWordService(),
             imageService: ImageService(),
+            hintService: AIHintService(),
             storageService: StorageService(),
             hapticsService: HapticsService()
         )
@@ -65,6 +71,7 @@ final class AppEnvironment {
         AppEnvironment(
             wordService: WordService(),
             imageService: ImageService(),
+            hintService: FallbackHintService(),
             storageService: StorageService(),
             hapticsService: HapticsService()
         )
@@ -76,6 +83,7 @@ final class AppEnvironment {
         AppEnvironment(
             wordService: MockWordService(),
             imageService: MockImageService(),
+            hintService: MockHintService(),
             storageService: MockStorageService(),
             hapticsService: MockHapticsService()
         )
@@ -85,20 +93,34 @@ final class AppEnvironment {
     /// - Parameters:
     ///   - wordService: Custom word service (defaults to mock)
     ///   - imageService: Custom image service (defaults to mock)
+    ///   - hintService: Custom hint service (defaults to mock)
     ///   - storageService: Custom storage service (defaults to mock)
     ///   - hapticsService: Custom haptics service (defaults to mock)
     /// - Returns: Configured test environment
     static func test(
         wordService: (any WordServiceProtocol)? = nil,
         imageService: (any ImageServiceProtocol)? = nil,
+        hintService: (any HintServiceProtocol)? = nil,
         storageService: (any StorageServiceProtocol)? = nil,
         hapticsService: (any HapticsServiceProtocol)? = nil
     ) -> AppEnvironment {
         AppEnvironment(
             wordService: wordService ?? MockWordService(),
             imageService: imageService ?? MockImageService(),
+            hintService: hintService ?? MockHintService(),
             storageService: storageService ?? MockStorageService(),
             hapticsService: hapticsService ?? MockHapticsService()
+        )
+    }
+
+    /// Creates a game store wired to this environment's services.
+    func makeGameStore(state: GameState = GameState()) -> GameStore {
+        GameStore(
+            state: state,
+            storageService: storageService,
+            wordService: wordService,
+            hintService: hintService,
+            imageService: imageService
         )
     }
 }

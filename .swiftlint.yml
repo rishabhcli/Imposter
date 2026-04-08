@@ -134,13 +134,10 @@ closure_body_length:
 custom_rules:
   no_print_in_production:
     name: "No Print in Production"
-    regex: '^\s*print\('
+    regex: '\bprint\s*\('
     message: "Use Logger instead of print for production code"
     severity: warning
-    match_kinds:
-      - comment.line
-      - comment.block
-    excluded: ".*Tests.*"  # Allow in tests
+    excluded: ".*Tests.*"
 
   no_nslog:
     name: "No NSLog"

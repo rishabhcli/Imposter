@@ -203,7 +203,7 @@ struct RevealView: View {
     }
 
     private var continueButton: some View {
-        LGLargeButton("New Game", icon: "arrow.counterclockwise") {
+        LGLargeButton("Continue to Summary", icon: "arrow.right") {
             HapticManager.roundCompleted()
             store.dispatch(.completeRound(imposterGuessedCorrectly: guessResult ?? false))
         }

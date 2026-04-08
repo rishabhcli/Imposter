@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import ImagePlayground
 import Observation
+import OSLog
 import UIKit
 
 // MARK: - GameStore
@@ -23,6 +23,14 @@ final class GameStore {
     /// The current game state
     private(set) var state: GameState
 
+    /// Services used for persistence and AI-backed generation.
+    private let storageService: any StorageServiceProtocol
+    private let wordService: any WordServiceProtocol
+    private let hintService: any HintServiceProtocol
+    private let imageService: any ImageServiceProtocol
+
+    private let logger = Logger(subsystem: "com.imposter", category: "GameStore")
+
     /// Flag indicating if AI image generation is in progress
     private(set) var isGeneratingImage: Bool = false
 
@@ -35,14 +43,21 @@ final class GameStore {
     /// Error message to display as a toast (auto-clears after 4 seconds)
     private(set) var errorMessage: String?
 
-    /// UserDefaults key for persisted players
-    private static let playersKey = "savedPlayers"
-
     // MARK: - Initialization
 
-    init(state: GameState = GameState()) {
+    init(
+        state: GameState = GameState(),
+        storageService: (any StorageServiceProtocol)? = nil,
+        wordService: (any WordServiceProtocol)? = nil,
+        hintService: (any HintServiceProtocol)? = nil,
+        imageService: (any ImageServiceProtocol)? = nil
+    ) {
         self.state = state
-        // Load saved players on init
+        self.storageService = storageService ?? StorageService()
+        self.wordService = wordService ?? AIWordService()
+        self.hintService = hintService ?? AIHintService()
+        self.imageService = imageService ?? ImageService()
+
         loadSavedPlayers()
     }
 
@@ -61,34 +76,33 @@ final class GameStore {
 
     // MARK: - Player Persistence
 
-    /// Loads previously saved players from UserDefaults
+    /// Loads previously saved players from persistent storage.
     private func loadSavedPlayers() {
-        guard let data = UserDefaults.standard.data(forKey: Self.playersKey),
-              let players = try? JSONDecoder().decode([Player].self, from: data),
-              !players.isEmpty else {
-            return
+        do {
+            guard let players = try storageService.loadPlayers(), !players.isEmpty else {
+                return
+            }
+
+            state.players = players
+            logger.debug("Loaded \(players.count) saved players")
+        } catch {
+            logger.error("Failed to load saved players: \(error.localizedDescription)")
         }
-
-        state.players = players
-
-        #if DEBUG
-        print("GameStore: Loaded \(players.count) saved players")
-        #endif
     }
 
-    /// Saves current players to UserDefaults
+    /// Saves current players to persistent storage.
     private func savePlayers() {
-        guard !state.players.isEmpty else {
-            UserDefaults.standard.removeObject(forKey: Self.playersKey)
-            return
-        }
+        do {
+            guard !state.players.isEmpty else {
+                storageService.delete(forKey: StorageKeys.lastPlayers)
+                return
+            }
 
-        if let data = try? JSONEncoder().encode(state.players) {
-            UserDefaults.standard.set(data, forKey: Self.playersKey)
-
-            #if DEBUG
-            print("GameStore: Saved \(state.players.count) players")
-            #endif
+            try storageService.savePlayers(state.players)
+            logger.debug("Saved \(self.state.players.count) players")
+        } catch {
+            logger.error("Failed to save players: \(error.localizedDescription)")
+            showError("Couldn't save players. Changes will stay available until the app closes.")
         }
     }
 
@@ -98,28 +112,23 @@ final class GameStore {
     /// Validates phase transitions before applying changes.
     /// - Parameter action: The action to dispatch
     func dispatch(_ action: GameAction) {
-        // Log the action for debugging
         #if DEBUG
-        print("GameStore: Dispatching \(action)")
+        logger.debug("Dispatching action: \(action.description)")
         #endif
 
-        // Compute new state using the reducer
         let newState = GameReducer.reduce(state: state, action: action)
 
-        // Validate phase transitions
         if newState.currentPhase != state.currentPhase {
             guard state.currentPhase.canTransition(to: newState.currentPhase) else {
                 #if DEBUG
-                print("GameStore: Invalid phase transition from \(state.currentPhase) to \(newState.currentPhase)")
+                logger.error("Invalid phase transition from \(self.state.currentPhase.rawValue) to \(newState.currentPhase.rawValue)")
                 #endif
                 return
             }
         }
 
-        // Apply the new state
         let phaseChanged = state.currentPhase != newState.currentPhase
 
-        // Cap game history to prevent unbounded growth
         if newState.gameHistory.count > 50 {
             var capped = newState
             capped.gameHistory = Array(capped.gameHistory.suffix(50))
@@ -128,12 +137,10 @@ final class GameStore {
             state = newState
         }
 
-        // Announce phase change for VoiceOver
         if phaseChanged {
             AccessibilityAnnouncer.announcePhaseChange(state.currentPhase)
         }
 
-        // Show error toasts for error actions
         switch action {
         case .wordGenerationFailed(let error):
             showError("Word generation failed: \(error.message)")
@@ -145,7 +152,6 @@ final class GameStore {
             break
         }
 
-        // Save players when they change
         switch action {
         case .addPlayer, .removePlayer, .updatePlayer, .returnToHome, .resetGame:
             savePlayers()
@@ -153,7 +159,6 @@ final class GameStore {
             break
         }
 
-        // Handle side effects after state update
         handleSideEffects(for: action)
     }
 
@@ -161,37 +166,47 @@ final class GameStore {
 
     /// Prepares the game by starting generation early, then dispatches startGame.
     func prepareAndStartGame() {
+        startGame()
+    }
+
+    /// Starts the game through the store-owned round preparation pipeline.
+    func startGame() {
         #if DEBUG
-        print("GameStore: prepareAndStartGame called - isPreparingGame: \(isPreparingGame), canStartGame: \(canStartGame), phase: \(state.currentPhase)")
+        logger.debug("startGame called - isPreparingGame: \(self.isPreparingGame), canStartGame: \(self.canStartGame), phase: \(self.state.currentPhase.rawValue)")
         #endif
 
         guard !isPreparingGame else {
             #if DEBUG
-            print("GameStore: Already preparing, returning")
+            logger.debug("Ignoring startGame because the game is already preparing")
             #endif
             return
         }
+
+        guard currentPhase == .setup else {
+            return
+        }
+
         guard canStartGame else {
             #if DEBUG
-            print("GameStore: Cannot start game, returning")
+            logger.debug("Ignoring startGame because the game cannot start in the current state")
             #endif
             return
         }
 
-        isPreparingGame = true
+        beginRoundPreparation(for: .newGame)
+    }
 
-        // Dispatch startGame - this changes phase and triggers side effects
-        dispatch(.startGame)
-
-        #if DEBUG
-        print("GameStore: After dispatch, phase is: \(state.currentPhase)")
-        #endif
-
-        // Reset preparing flag after a brief delay
-        Task {
-            try? await Task.sleep(for: .milliseconds(100))
-            isPreparingGame = false
+    /// Starts the next round through the store-owned round preparation pipeline.
+    func startNewRound() {
+        guard !isPreparingGame else {
+            return
         }
+
+        guard currentPhase == .summary else {
+            return
+        }
+
+        beginRoundPreparation(for: .nextRound)
     }
 
     // MARK: - Side Effects
@@ -199,24 +214,17 @@ final class GameStore {
     /// Handles any side effects that should occur after state changes
     private func handleSideEffects(for action: GameAction) {
         switch action {
-        case .startGame, .startNewRound:
-            // FEATURE 1: AI Word Generation (only when using custom prompt)
-            // Generates a RELATED word from the user's prompt
+        case .startGame, .startNewRound, .startGameWithPreparedRound, .startNewRoundWithPreparedRound:
             if state.settings.wordSource == .customPrompt,
                let prompt = state.settings.customWordPrompt,
                !prompt.isEmpty {
                 generateWordFromPrompt(prompt)
-            } else {
-                // For random pack mode, generate hint and image right away
-                if let word = state.roundState?.secretWord,
-                   let category = state.roundState?.categoryHint {
-                    // Generate imposter hint (if enabled)
-                    if state.settings.imposterHintEnabled {
-                        generateImposterHint(for: word, category: category)
-                    }
-                    // Generate image
-                    generateSecretImage(for: word, category: category)
+            } else if let word = state.roundState?.secretWord,
+                      let category = state.roundState?.categoryHint {
+                if state.settings.imposterHintEnabled {
+                    generateImposterHint(for: word, category: category)
                 }
+                generateSecretImage(for: word, category: category)
             }
 
         default:
@@ -224,9 +232,135 @@ final class GameStore {
         }
     }
 
+    // MARK: - Round Preparation
+
+    private enum PreparedRoundAction {
+        case newGame
+        case nextRound
+
+        var expectedPhase: GamePhase {
+            switch self {
+            case .newGame:
+                return .setup
+            case .nextRound:
+                return .summary
+            }
+        }
+    }
+
+    private func beginRoundPreparation(for action: PreparedRoundAction) {
+        isPreparingGame = true
+
+        let players = state.players
+        let settings = state.settings
+
+        Task { @MainActor in
+            let preparedRound = await prepareRoundState(players: players, settings: settings)
+
+            defer {
+                self.isPreparingGame = false
+            }
+
+            guard self.state.currentPhase == action.expectedPhase else {
+                self.logger.debug("Skipping prepared round dispatch because the phase changed during preparation")
+                return
+            }
+
+            switch action {
+            case .newGame:
+                self.dispatch(.startGameWithPreparedRound(preparedRound))
+            case .nextRound:
+                self.dispatch(.startNewRoundWithPreparedRound(preparedRound))
+            }
+        }
+    }
+
+    private func prepareRoundState(players: [Player], settings: GameSettings) async -> RoundState {
+        let secretWord: String
+        let imposterWord: String?
+        let categoryHint = categoryHint(for: settings)
+
+        if settings.wordSource == .customPrompt {
+            secretWord = "GENERATING..."
+            imposterWord = nil
+        } else {
+            secretWord = await selectRandomWord(using: settings)
+
+            if settings.gameMode == .hidden {
+                imposterWord = await selectAlternateImposterWord(
+                    using: settings,
+                    excluding: secretWord
+                )
+            } else {
+                imposterWord = nil
+            }
+        }
+
+        guard let imposter = players.randomElement() else {
+            return RoundState(
+                secretWord: secretWord,
+                imposterWord: imposterWord,
+                categoryHint: categoryHint,
+                imposterID: UUID(),
+                firstPlayerIndex: 0
+            )
+        }
+
+        let nonImposterIndices = players.indices.filter { players[$0].id != imposter.id }
+        let firstPlayerIndex = nonImposterIndices.randomElement() ?? 0
+
+        return RoundState(
+            secretWord: secretWord,
+            imposterWord: imposterWord,
+            categoryHint: categoryHint,
+            imposterID: imposter.id,
+            firstPlayerIndex: firstPlayerIndex
+        )
+    }
+
+    private func categoryHint(for settings: GameSettings) -> String {
+        if settings.wordSource == .customPrompt {
+            return settings.customWordPrompt ?? "Custom"
+        }
+
+        if let categories = settings.selectedCategories, !categories.isEmpty {
+            return categories.joined(separator: ", ")
+        }
+
+        return "Mixed"
+    }
+
+    private func selectRandomWord(using settings: GameSettings) async -> String {
+        do {
+            return try await wordService.selectWord(
+                from: settings.selectedCategories,
+                difficulty: settings.wordPackDifficulty
+            )
+        } catch {
+            logger.error("Failed to select a round word: \(error.localizedDescription)")
+            showError("Couldn't prepare the round word. Using a fallback.")
+            return "UNKNOWN"
+        }
+    }
+
+    private func selectAlternateImposterWord(
+        using settings: GameSettings,
+        excluding secretWord: String
+    ) async -> String? {
+        for _ in 0..<10 {
+            let candidate = await selectRandomWord(using: settings)
+            if candidate.caseInsensitiveCompare(secretWord) != .orderedSame {
+                return candidate
+            }
+        }
+
+        logger.error("Failed to prepare a distinct hidden-mode imposter word")
+        return nil
+    }
+
     // MARK: - AI Word Generation
 
-    /// Generates a word from the prompt using Foundation Models
+    /// Generates a word from the prompt using the injected word service.
     private func generateWordFromPrompt(_ prompt: String) {
         guard !isGeneratingWord else { return }
         isGeneratingWord = true
@@ -236,53 +370,43 @@ final class GameStore {
         }
     }
 
-    /// Performs word generation using Foundation Models with a 15-second timeout
+    /// Performs word generation using the injected word service with a 15-second timeout.
     private func performWordGeneration(from prompt: String) async {
         var finalWord: String
 
         do {
-            // Race word generation against a 15-second timeout
             finalWord = try await withThrowingTaskGroup(of: String.self) { group in
                 group.addTask {
-                    try await WordGenerator.generateWord(from: prompt)
+                    try await self.wordService.generateWord(from: prompt)
                 }
                 group.addTask {
                     try await Task.sleep(for: .seconds(15))
                     throw CancellationError()
                 }
-                // Return whichever finishes first
+
                 guard let result = try await group.next() else {
                     throw CancellationError()
                 }
+
                 group.cancelAll()
                 return result
             }
 
-            #if DEBUG
-            print("WordGenerator: Generated '\(finalWord)' from prompt '\(prompt)'")
-            #endif
-
+            logger.debug("Generated word '\(finalWord)' from prompt '\(prompt)'")
         } catch {
-            #if DEBUG
-            print("WordGenerator failed: \(error.localizedDescription)")
-            #endif
-
-            // Fallback: use the prompt itself as the word
+            logger.error("Word generation failed: \(error.localizedDescription)")
             finalWord = prompt.capitalized
             showError("Word generation timed out. Using fallback word.")
         }
 
-        // Update the secret word in the state
         dispatch(.setGeneratedWord(word: finalWord))
         isGeneratingWord = false
 
-        // Generate imposter hint (if enabled)
         let category = state.settings.customWordPrompt ?? "Custom"
         if state.settings.imposterHintEnabled {
             generateImposterHint(for: finalWord, category: category)
         }
 
-        // Generate image for the word (separate feature, runs independently)
         generateSecretImage(for: finalWord, category: category)
     }
 
@@ -295,29 +419,21 @@ final class GameStore {
         }
     }
 
-    /// Performs hint generation using Foundation Models
+    /// Performs hint generation using the injected hint service.
     private func performHintGeneration(for word: String, category: String) async {
         do {
-            let hint = try await HintGenerator.generateHint(for: word, category: category)
-
-            #if DEBUG
-            print("HintGenerator: Generated hint for '\(word)': \(hint)")
-            #endif
-
+            let hint = try await hintService.generateHint(for: word, category: category)
+            logger.debug("Generated imposter hint for '\(word)'")
             dispatch(.setImposterHint(hint: hint))
-
         } catch {
-            #if DEBUG
-            print("HintGenerator failed: \(error.localizedDescription)")
-            #endif
-            // No fallback - just use category as hint
+            logger.error("Hint generation failed: \(error.localizedDescription)")
             dispatch(.setImposterHint(hint: category))
         }
     }
 
     // MARK: - AI Image Generation
 
-    /// Generates an AI image for the secret word using ImagePlayground
+    /// Generates an AI image for the secret word using the injected image service.
     private func generateSecretImage(for word: String, category: String) {
         guard !isGeneratingImage else { return }
         isGeneratingImage = true
@@ -327,117 +443,29 @@ final class GameStore {
         }
     }
 
-    /// Performs the actual image generation off the main actor
-    private nonisolated func performImageGeneration(for word: String, category: String) async {
+    /// Performs the actual image generation using the injected service.
+    private func performImageGeneration(for word: String, category: String) async {
         do {
-            // Initialize the ImagePlayground image creator
-            // This may throw if the device doesn't support image generation
-            let creator = try await ImageCreator()
-
-            // Check available styles and select the best one for a party game
-            // Prefer animation style for fun, playful cartoon aesthetic
-            let style: ImagePlaygroundStyle
-            let availableStyles = creator.availableStyles
-
-            if availableStyles.contains(.animation) {
-                style = .animation
-            } else if availableStyles.contains(.illustration) {
-                style = .illustration
-            } else if availableStyles.contains(.sketch) {
-                style = .sketch
-            } else if let firstStyle = availableStyles.first {
-                style = firstStyle
-            } else {
-                #if DEBUG
-                print("ImagePlayground: No styles available")
-                #endif
-                await MainActor.run {
-                    self.isGeneratingImage = false
-                }
+            guard imageService.isAvailable else {
+                logger.debug("Skipping image generation because the service is unavailable: \(self.imageService.unavailabilityReason ?? "unknown")")
+                isGeneratingImage = false
                 return
             }
 
-            // Create concept from the secret word
-            // Use category-safe prompts to avoid people/IP restrictions
-            let imagePrompt = Self.safeImagePrompt(for: word, category: category)
-            let concepts: [ImagePlaygroundConcept] = [.text(imagePrompt)]
-
-            #if DEBUG
-            print("ImagePlayground: Generating image with prompt: '\(imagePrompt)'")
-            #endif
-
-            // Request images with the selected style
-            let imageSequence = creator.images(
-                for: concepts,
-                style: style,
-                limit: 1
+            let generatedImage = try await imageService.generateImage(
+                for: word,
+                category: category,
+                style: nil
             )
 
-            // Process the async sequence and get the first image
-            for try await generatedImage in imageSequence {
-                let uiImage = UIImage(cgImage: generatedImage.cgImage)
-
-                #if DEBUG
-                print("ImagePlayground: Successfully generated image")
-                #endif
-
-                // Update state on main actor - properly handle optional struct mutation
-                await MainActor.run { [uiImage] in
-                    if var roundState = self.state.roundState {
-                        roundState.generatedImage = uiImage
-                        self.state.roundState = roundState
-                    }
-                    self.isGeneratingImage = false
-                }
-
-                // Only need the first image
-                return
-            }
-
-            // If no images were generated, clear the loading state
-            await MainActor.run {
-                #if DEBUG
-                print("ImagePlayground: No images generated")
-                #endif
-                self.isGeneratingImage = false
+            if let generatedImage {
+                dispatch(.setGeneratedImage(generatedImage))
             }
         } catch {
-            // Log error but don't crash - game continues without image
-            #if DEBUG
-            print("ImagePlayground generation failed: \(error.localizedDescription)")
-            #endif
-
-            await MainActor.run {
-                self.isGeneratingImage = false
-            }
-        }
-    }
-
-    /// Creates a safe image prompt that avoids people/IP restrictions
-    /// Falls back to category-themed abstract imagery if needed
-    /// Uses animation-friendly prompts for playful cartoon aesthetic
-    private nonisolated static func safeImagePrompt(for word: String, category: String) -> String {
-        // Categories that might have people or IP issues
-        let sensitiveCategories = ["People", "Movies", "Music", "Sports"]
-
-        if sensitiveCategories.contains(category) {
-            // Use abstract/symbolic imagery with animation-friendly style
-            switch category {
-            case "People":
-                return "A friendly cartoon character silhouette with sparkles and colorful aura, cute animated style"
-            case "Movies":
-                return "A cute cartoon movie camera with film reels, sparkly cinema lights, happy popcorn character"
-            case "Music":
-                return "Happy musical notes dancing in colorful rainbow waves, cute cartoon instruments with faces"
-            case "Sports":
-                return "Playful cartoon sports equipment bouncing around, dynamic motion lines, bright cheerful colors"
-            default:
-                return "Cute colorful cartoon shapes representing: \(category)"
-            }
+            logger.error("Image generation failed: \(error.localizedDescription)")
         }
 
-        // Safe categories - use the actual word with animation-friendly prompt
-        return "A cute, playful cartoon of: \(word), bright colors, friendly animated style"
+        isGeneratingImage = false
     }
 
     // MARK: - Derived Properties
@@ -549,9 +577,9 @@ final class GameStore {
 extension GameStore {
     /// Creates a store with sample data for previews
     static var preview: GameStore {
-        let store = GameStore()
+        let environment = AppEnvironment.preview()
+        let store = environment.makeGameStore()
 
-        // Add sample players
         store.dispatch(.addPlayer(name: "Alice", color: .crimson))
         store.dispatch(.addPlayer(name: "Bob", color: .azure))
         store.dispatch(.addPlayer(name: "Charlie", color: .emerald))
@@ -563,7 +591,7 @@ extension GameStore {
     /// Creates a store in the clue round phase for previews
     static var previewInGame: GameStore {
         let store = preview
-        store.dispatch(.startGame)
+        store.startGame()
         store.dispatch(.completeRoleReveal)
         return store
     }

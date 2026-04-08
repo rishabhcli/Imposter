@@ -273,7 +273,8 @@ struct RoleCardView: View {
             }
         }
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("The secret word is \(word). You are not the Imposter.")
+        .accessibilityLabel("Private role card for \(playerName). Spoken feedback will not read the secret word.")
+        .accessibilityHint("Sensitive game information stays hidden during pass and play.")
     }
 
     // MARK: - Imposter Content
@@ -352,7 +353,8 @@ struct RoleCardView: View {
             .padding(.top, 40) // Account for banner
         }
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("You are the Imposter! Your hint is: \(hint).")
+        .accessibilityLabel("Private role card for \(playerName). Spoken feedback will not read the role hint.")
+        .accessibilityHint("Sensitive game information stays hidden during pass and play.")
     }
 
     // MARK: - Hidden Imposter Content
@@ -416,7 +418,8 @@ struct RoleCardView: View {
             }
         }
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("The secret word is \(word). You are not the Imposter.")
+        .accessibilityLabel("Private role card for \(playerName). Spoken feedback will not read the secret word.")
+        .accessibilityHint("Sensitive game information stays hidden during pass and play.")
     }
 
     // MARK: - Styling

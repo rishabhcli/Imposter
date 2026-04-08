@@ -159,7 +159,7 @@ struct SummaryView: View {
         VStack(spacing: LGSpacing.medium) {
             if !isGameOver {
                 Button {
-                    store.dispatch(.startNewRound)
+                    store.startNewRound()
                     HapticManager.buttonTap()
                 } label: {
                     HStack(spacing: LGSpacing.small) {

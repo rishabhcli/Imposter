@@ -11,117 +11,134 @@ import Foundation
 
 /// Constants for accessibility identifiers used in UI testing.
 /// Apply to views using `.accessibilityIdentifier(AccessibilityIDs.xxx)`
-enum AccessibilityIDs {
+public enum AccessibilityIDs {
 
     // MARK: - Home Screen
 
     /// New Game button on home screen
-    static let newGameButton = "NewGameButton"
+    public static let newGameButton = "newGameButton"
 
     /// How to Play button on home screen
-    static let howToPlayButton = "HowToPlayButton"
+    public static let howToPlayButton = "howToPlayButton"
 
     /// Settings button on home screen
-    static let settingsButton = "SettingsButton"
+    public static let settingsButton = "settingsButton"
+
+    /// Main home title
+    public static let homeTitle = "homeTitle"
 
     // MARK: - Player Setup
 
     /// Add player button
-    static let addPlayerButton = "AddPlayerButton"
+    public static let addPlayerButton = "addPlayerButton"
 
     /// Start game button
-    static let startGameButton = "StartGameButton"
+    public static let startGameButton = "startGameButton"
 
-    /// Player name text field (append index for uniqueness)
-    static func playerNameField(at index: Int) -> String {
-        "PlayerNameField_\(index)"
+    /// Player name text field (use the player UUID for uniqueness)
+    public static func playerNameField(for playerID: UUID) -> String {
+        "playerNameField_\(playerID.uuidString)"
     }
 
     /// Player color picker (append index for uniqueness)
-    static func playerColorPicker(at index: Int) -> String {
-        "PlayerColorPicker_\(index)"
+    public static func playerColorPicker(for playerID: UUID) -> String {
+        "playerColorPicker_\(playerID.uuidString)"
     }
 
     /// Remove player button (append index for uniqueness)
-    static func removePlayerButton(at index: Int) -> String {
-        "RemovePlayerButton_\(index)"
+    public static func removePlayerButton(for playerID: UUID) -> String {
+        "removePlayerButton_\(playerID.uuidString)"
+    }
+
+    /// Back button in category selection
+    public static let categoryBackButton = "categoryBackButton"
+
+    /// Continue button in category selection
+    public static let categoryContinueButton = "categoryContinueButton"
+
+    /// Custom prompt text field in category selection
+    public static let customPromptField = "customPromptField"
+
+    /// Category tile (append category title)
+    public static func categoryTile(_ title: String) -> String {
+        "categoryTile_\(title)"
     }
 
     // MARK: - Role Reveal
 
     /// Reveal role button
-    static let revealRoleButton = "RevealRoleButton"
+    public static let revealRoleButton = "revealRoleButton"
 
     /// Role card container
-    static let roleCard = "RoleCard"
+    public static let roleCard = "roleCard"
 
     /// Secret word display
-    static let secretWordDisplay = "SecretWordDisplay"
+    public static let secretWordDisplay = "secretWordDisplay"
 
     // MARK: - Clue Round
 
     /// Clue input text field
-    static let clueInputField = "ClueInputField"
+    public static let clueInputField = "clueInputField"
 
     /// Submit clue button
-    static let submitClueButton = "SubmitClueButton"
+    public static let submitClueButton = "submitClueButton"
 
     /// Clue history list
-    static let clueHistoryList = "ClueHistoryList"
+    public static let clueHistoryList = "clueHistoryList"
 
     // MARK: - Discussion
 
     /// Discussion timer display
-    static let discussionTimer = "DiscussionTimer"
+    public static let discussionTimer = "discussionTimer"
 
     /// Start voting button
-    static let startVotingButton = "StartVotingButton"
+    public static let startVotingButton = "startVotingButton"
 
     // MARK: - Voting
 
     /// Player vote card (append player ID for uniqueness)
-    static func voteCard(for playerID: String) -> String {
-        "VoteCard_\(playerID)"
+    public static func voteCard(for playerID: String) -> String {
+        "voteCard_\(playerID)"
     }
 
     /// Vote confirmation display
-    static let voteConfirmation = "VoteConfirmation"
+    public static let voteConfirmation = "voteConfirmation"
 
     // MARK: - Reveal
 
     /// Reveal animation container
-    static let revealAnimation = "RevealAnimation"
+    public static let revealAnimation = "revealAnimation"
 
     /// Imposter word guess input
-    static let imposterGuessField = "ImposterGuessField"
+    public static let imposterGuessField = "imposterGuessField"
 
     /// Submit guess button
-    static let submitGuessButton = "SubmitGuessButton"
+    public static let submitGuessButton = "submitGuessButton"
 
     /// Continue to summary button
-    static let continueToSummaryButton = "ContinueToSummaryButton"
+    public static let continueToSummaryButton = "continueToSummaryButton"
 
     // MARK: - Summary
 
     /// Scoreboard container
-    static let scoreboard = "Scoreboard"
+    public static let scoreboard = "scoreboard"
 
     /// Play again button
-    static let playAgainButton = "PlayAgainButton"
+    public static let playAgainButton = "playAgainButton"
 
     /// Main menu button
-    static let mainMenuButton = "MainMenuButton"
+    public static let mainMenuButton = "mainMenuButton"
 
     /// Scoreboard row (append player ID for uniqueness)
-    static func scoreboardRow(for playerID: String) -> String {
-        "ScoreboardRow_\(playerID)"
+    public static func scoreboardRow(for playerID: String) -> String {
+        "scoreboardRow_\(playerID)"
     }
 
     // MARK: - Common
 
     /// Back button
-    static let backButton = "BackButton"
+    public static let backButton = "backButton"
 
     /// Close button (for sheets)
-    static let closeButton = "CloseButton"
+    public static let closeButton = "closeButton"
 }

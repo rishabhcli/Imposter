@@ -81,6 +81,13 @@ enum GameReducer {
             newState.currentPhase = .roleReveal
             newState.roundState = createNewRound(players: newState.players, settings: newState.settings)
 
+        case .startGameWithPreparedRound(let roundState):
+            guard newState.currentPhase == .setup else { return state }
+            guard newState.players.count >= 3 else { return state }
+            newState.roundNumber += 1
+            newState.currentPhase = .roleReveal
+            newState.roundState = roundState
+
         // MARK: Role Reveal Actions
 
         case .revealRoleToPlayer(_):
@@ -215,6 +222,12 @@ enum GameReducer {
             newState.roundNumber += 1
             newState.currentPhase = .roleReveal
             newState.roundState = createNewRound(players: newState.players, settings: newState.settings)
+
+        case .startNewRoundWithPreparedRound(let roundState):
+            guard newState.currentPhase == .summary else { return state }
+            newState.roundNumber += 1
+            newState.currentPhase = .roleReveal
+            newState.roundState = roundState
 
         case .endGame:
             guard newState.currentPhase == .summary else { return state }

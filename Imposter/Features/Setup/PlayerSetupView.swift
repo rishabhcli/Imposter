@@ -108,7 +108,7 @@ struct PlayerSetupView: View {
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, LGSpacing.small)
                     }
-                    .accessibilityIdentifier("addPlayerButton")
+                    .accessibilityIdentifier(AccessibilityIDs.addPlayerButton)
                 }
             }
         }
@@ -180,12 +180,12 @@ struct PlayerSetupView: View {
         LGLargeButton(
             "Start Game",
             icon: "play.fill",
-            isDisabled: !store.canStartGame
+            isDisabled: !store.canStartGame || store.isPreparingGame
         ) {
-            store.dispatch(.startGame)
+            store.startGame()
         }
         .padding(.top, LGSpacing.medium)
-        .accessibilityIdentifier("startGameButton")
+        .accessibilityIdentifier(AccessibilityIDs.startGameButton)
     }
 
     // MARK: - Helpers
