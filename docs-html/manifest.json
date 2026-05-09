@@ -1,0 +1,34 @@
+{
+  "repo": "Imposter",
+  "generatedAt": "2026-05-09T19:44:58.846735+00:00",
+  "eligibleMarkdown": [
+    "README.md",
+    "prompts/phase-0-foundation.md",
+    "prompts/phase-1-domain.md",
+    "prompts/phase-2-design-system.md",
+    "prompts/phase-3-core-flow.md",
+    "prompts/phase-4-role-reveal.md",
+    "prompts/phase-5-gameplay.md",
+    "prompts/phase-6-ai.md",
+    "prompts/phase-7-polish.md",
+    "prompts/phase-8-testing.md",
+    "prompts/phase-9-release.md"
+  ],
+  "protectedMarkdown": [
+    "AGENTS.md",
+    "CLAUDE.md"
+  ],
+  "htmlPages": [
+    "docs-html/pages/README.html",
+    "docs-html/pages/prompts/phase-0-foundation.html",
+    "docs-html/pages/prompts/phase-1-domain.html",
+    "docs-html/pages/prompts/phase-2-design-system.html",
+    "docs-html/pages/prompts/phase-3-core-flow.html",
+    "docs-html/pages/prompts/phase-4-role-reveal.html",
+    "docs-html/pages/prompts/phase-5-gameplay.html",
+    "docs-html/pages/prompts/phase-6-ai.html",
+    "docs-html/pages/prompts/phase-7-polish.html",
+    "docs-html/pages/prompts/phase-8-testing.html",
+    "docs-html/pages/prompts/phase-9-release.html"
+  ]
+}
