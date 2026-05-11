@@ -97,6 +97,7 @@ struct VotingView: View {
             Text("Voting")
                 .font(LGTypography.headlineMedium)
                 .foregroundStyle(.white)
+                .accessibilityIdentifier(AccessibilityIDs.votingScreen)
 
             // Progress bar
             VotingProgressBar(
@@ -193,6 +194,7 @@ struct VotingView: View {
                 Text("Vote Recorded!")
                     .font(LGTypography.headlineMedium)
                     .foregroundStyle(.white)
+                    .accessibilityIdentifier(AccessibilityIDs.voteHandoffPrompt)
 
                 if currentVoterIndex < store.players.count - 1 {
                     Text("Pass the device to \(nextVoterName)")
@@ -338,16 +340,29 @@ struct VotingProgressBar: View {
 // MARK: - Pulsing Opacity Modifier
 
 struct PulsingOpacityModifier: ViewModifier {
+    @Environment(\.accessibilityReduceMotion) private var systemReduceMotion
+    @Environment(\.imposterAccessibilityPreferences) private var accessibilityPreferences
     @State private var isPulsing = false
     
     func body(content: Content) -> some View {
         content
-            .opacity(isPulsing ? 0.3 : 1.0)
+            .opacity(!reduceMotion && isPulsing ? 0.3 : 1.0)
             .onAppear {
+                guard !reduceMotion else { return }
+
                 withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
                     isPulsing = true
                 }
             }
+            .onChange(of: reduceMotion) { _, isReduced in
+                if isReduced {
+                    isPulsing = false
+                }
+            }
+    }
+
+    private var reduceMotion: Bool {
+        systemReduceMotion || accessibilityPreferences.forceReduceMotion
     }
 }
 

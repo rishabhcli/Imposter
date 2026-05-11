@@ -31,6 +31,9 @@ struct RoleCardView: View {
     
     @State private var motionManager = MotionManager.shared
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.accessibilityReduceMotion) private var systemReduceMotion
+    @Environment(\.accessibilityReduceTransparency) private var systemReduceTransparency
+    @Environment(\.imposterAccessibilityPreferences) private var accessibilityPreferences
 
     var body: some View {
         GeometryReader { geometry in
@@ -50,14 +53,28 @@ struct RoleCardView: View {
     private func premiumLiquidGlassCard(size: CGSize) -> some View {
         let width = cardWidth(for: size)
         let height = cardHeight(for: size)
-        let hasImage = generatedImage != nil && !isImposterRole
+        let hasImage = generatedImage != nil && !isImposterRole && !reduceTransparency
         
-        return cardContent
+        return ZStack {
+            cardContent
+                .accessibilityHidden(true)
+
+            Rectangle()
+                .fill(.clear)
+                .contentShape(Rectangle())
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(privateRoleCardAccessibilityLabel)
+                .accessibilityHint("Sensitive role details are shown visually and hidden from spoken feedback for pass-and-play privacy.")
+                .accessibilityIdentifier(AccessibilityIDs.roleCard)
+        }
             .frame(width: width, height: height)
             .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
             .background {
                 // Glass effect for cards without image
-                if !hasImage {
+                if reduceTransparency {
+                    RoundedRectangle(cornerRadius: 24, style: .continuous)
+                        .fill(reducedTransparencyCardFill)
+                } else if !hasImage {
                     RoundedRectangle(cornerRadius: 24, style: .continuous)
                         .fill(.clear)
                         .glassEffect(
@@ -116,13 +133,19 @@ struct RoleCardView: View {
         VStack(spacing: LGSpacing.small) {
             // Large emoji avatar with glass effect
             ZStack {
-                Circle()
-                    .fill(.clear)
-                    .glassEffect(
-                        .regular.tint(LGColors.playerColor(playerColor).opacity(0.3)),
-                        in: .circle
-                    )
-                    .frame(width: 90, height: 90)
+                if reduceTransparency {
+                    Circle()
+                        .fill(LGColors.playerColor(playerColor).opacity(0.35))
+                        .frame(width: 90, height: 90)
+                } else {
+                    Circle()
+                        .fill(.clear)
+                        .glassEffect(
+                            .regular.tint(LGColors.playerColor(playerColor).opacity(0.3)),
+                            in: .circle
+                        )
+                        .frame(width: 90, height: 90)
+                }
 
                 Text(playerEmoji)
                     .font(.system(size: 50))
@@ -136,8 +159,8 @@ struct RoleCardView: View {
                                 Color.white.opacity(0.2),
                                 Color.white.opacity(0.4)
                             ],
-                            startPoint: UnitPoint(x: 0.5 - motionManager.roll * 0.3, y: 0),
-                            endPoint: UnitPoint(x: 0.5 + motionManager.roll * 0.3, y: 1)
+                            startPoint: reduceMotion ? .topLeading : UnitPoint(x: 0.5 - motionManager.roll * 0.3, y: 0),
+                            endPoint: reduceMotion ? .bottomTrailing : UnitPoint(x: 0.5 + motionManager.roll * 0.3, y: 1)
                         ),
                         lineWidth: 2
                     )
@@ -187,6 +210,8 @@ struct RoleCardView: View {
                 .fontWeight(.bold)
                 .tracking(3)
                 .foregroundStyle(roleTitleColor)
+                .accessibilityLabel("Private role title hidden")
+                .accessibilityHidden(true)
             Spacer()
         }
         .padding(.vertical, LGSpacing.small)
@@ -207,7 +232,7 @@ struct RoleCardView: View {
     private func informedContent(word: String) -> some View {
         ZStack {
             // Layer 1: Blurred image fills entire card as seamless background
-            if let image = generatedImage {
+            if let image = generatedImage, !reduceTransparency {
                 Image(uiImage: image)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
@@ -245,6 +270,8 @@ struct RoleCardView: View {
                         .font(.system(size: 10, weight: .bold, design: .rounded))
                         .tracking(2)
                         .foregroundStyle(.white.opacity(0.7))
+                        .accessibilityLabel("Private word caption hidden")
+                        .accessibilityHidden(true)
 
                     Text(word)
                         .font(.system(size: 28, weight: .bold, design: .rounded))
@@ -253,6 +280,9 @@ struct RoleCardView: View {
                         .foregroundStyle(.white)
                         .multilineTextAlignment(.center)
                         .shadow(color: .black.opacity(0.5), radius: 8)
+                        .privacySensitive()
+                        .accessibilityLabel("Sensitive word hidden")
+                        .accessibilityHidden(true)
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 16)
@@ -319,6 +349,8 @@ struct RoleCardView: View {
                     .tracking(4)
                     .foregroundStyle(.white)
                     .shadow(color: LGColors.imposter, radius: 10)
+                    .accessibilityLabel("Sensitive role hidden")
+                    .accessibilityHidden(true)
 
                 Spacer()
 
@@ -328,6 +360,8 @@ struct RoleCardView: View {
                         .font(.system(size: 10, weight: .bold, design: .rounded))
                         .tracking(2)
                         .foregroundStyle(.white.opacity(0.5))
+                        .accessibilityLabel("Private hint caption hidden")
+                        .accessibilityHidden(true)
 
                     Text(hint)
                         .font(.system(size: 22, weight: .semibold, design: .rounded))
@@ -335,6 +369,9 @@ struct RoleCardView: View {
                         .multilineTextAlignment(.center)
                         .minimumScaleFactor(0.7)
                         .lineLimit(2)
+                        .privacySensitive()
+                        .accessibilityLabel("Sensitive role hint hidden")
+                        .accessibilityHidden(true)
                 }
                 .padding(.horizontal, LGSpacing.large)
                 .padding(.vertical, LGSpacing.medium)
@@ -390,6 +427,8 @@ struct RoleCardView: View {
                         .font(.system(size: 10, weight: .bold, design: .rounded))
                         .tracking(2)
                         .foregroundStyle(.white.opacity(0.7))
+                        .accessibilityLabel("Private word caption hidden")
+                        .accessibilityHidden(true)
 
                     Text(word)
                         .font(.system(size: 28, weight: .bold, design: .rounded))
@@ -398,6 +437,9 @@ struct RoleCardView: View {
                         .foregroundStyle(.white)
                         .multilineTextAlignment(.center)
                         .shadow(color: .black.opacity(0.5), radius: 8)
+                        .privacySensitive()
+                        .accessibilityLabel("Sensitive word hidden")
+                        .accessibilityHidden(true)
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 16)
@@ -432,6 +474,10 @@ struct RoleCardView: View {
         }
     }
 
+    private var privateRoleCardAccessibilityLabel: String {
+        "Private role card for \(playerName). Sensitive role details are hidden from spoken feedback."
+    }
+
     private var roleTitleColor: Color {
         switch role {
         case .informed: return LGColors.success
@@ -459,6 +505,23 @@ struct RoleCardView: View {
         case .imposter: return LGColors.imposter
         case .hiddenImposter: return LGColors.accentPrimary // Same as informed
         }
+    }
+
+    private var reducedTransparencyCardFill: Color {
+        switch role {
+        case .informed, .hiddenImposter:
+            return Color(red: 0.02, green: 0.09, blue: 0.11)
+        case .imposter:
+            return Color(red: 0.18, green: 0.03, blue: 0.04)
+        }
+    }
+
+    private var reduceMotion: Bool {
+        systemReduceMotion || accessibilityPreferences.forceReduceMotion
+    }
+
+    private var reduceTransparency: Bool {
+        systemReduceTransparency || accessibilityPreferences.forceReduceTransparency
     }
 }
 

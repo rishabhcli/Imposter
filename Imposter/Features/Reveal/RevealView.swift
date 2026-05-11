@@ -37,6 +37,7 @@ struct RevealView: View {
                         .scaleEffect(titleScale)
                         .opacity(showImposter ? 1 : 0)
                         .animation(.spring(response: 0.6, dampingFraction: 0.7), value: showImposter)
+                        .accessibilityIdentifier(AccessibilityIDs.revealScreen)
 
                     // Imposter reveal
                     if showImposter {
@@ -210,6 +211,7 @@ struct RevealView: View {
         .padding(.top, LGSpacing.medium)
         .offset(y: buttonOffset)
         .opacity(buttonOpacity)
+        .accessibilityIdentifier(AccessibilityIDs.continueToSummaryButton)
     }
 
     private var secretWordRevealCard: some View {
@@ -266,6 +268,8 @@ struct RevealView: View {
                         .foregroundStyle(.white)
                         .multilineTextAlignment(.center)
                         .shadow(color: .black.opacity(0.5), radius: 8)
+                        .privacySensitive()
+                        .accessibilityIdentifier(AccessibilityIDs.secretWordDisplay)
                     
                     // Word length indicator
                     if let word = store.secretWord {

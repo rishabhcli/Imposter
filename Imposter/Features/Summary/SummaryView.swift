@@ -62,6 +62,7 @@ struct SummaryView: View {
                 .tracking(2)
                 .foregroundStyle(.white.opacity(0.5))
                 .textCase(.uppercase)
+                .accessibilityIdentifier(AccessibilityIDs.summaryView)
 
             if isGameOver {
                 Image(systemName: "trophy.fill")
@@ -83,6 +84,7 @@ struct SummaryView: View {
                 Text("The word was \"\(lastRound.secretWord)\"")
                     .font(LGTypography.bodyMedium)
                     .foregroundStyle(.white.opacity(0.7))
+                    .privacySensitive()
             }
         }
         .padding(.top, LGSpacing.large)
@@ -123,6 +125,7 @@ struct SummaryView: View {
             VStack(spacing: LGSpacing.small) {
                 detailRow(icon: "person.fill.questionmark", label: "Imposter", value: round.imposterName)
                 detailRow(icon: "textformat.abc", label: "Secret Word", value: round.secretWord)
+                    .privacySensitive()
                 detailRow(
                     icon: round.wasImposterCaught ? "checkmark.circle.fill" : "xmark.circle.fill",
                     label: "Result",
@@ -173,6 +176,7 @@ struct SummaryView: View {
                 }
                 .buttonStyle(.glassProminent)
                 .tint(LGColors.accentPrimary)
+                .accessibilityIdentifier(AccessibilityIDs.playAgainButton)
             }
 
             Button {
@@ -189,6 +193,7 @@ struct SummaryView: View {
                 .frame(height: 50)
             }
             .buttonStyle(.glass)
+            .accessibilityIdentifier(AccessibilityIDs.mainMenuButton)
         }
         .padding(.bottom, LGSpacing.extraLarge)
     }

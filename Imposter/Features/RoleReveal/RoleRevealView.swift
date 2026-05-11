@@ -12,6 +12,9 @@ import SwiftUI
 /// Handles the pass-and-play role reveal sequence for all players
 struct RoleRevealView: View {
     @Environment(GameStore.self) private var store
+    @Environment(\.accessibilityReduceMotion) private var systemReduceMotion
+    @Environment(\.accessibilityReduceTransparency) private var systemReduceTransparency
+    @Environment(\.imposterAccessibilityPreferences) private var accessibilityPreferences
 
     @State private var currentRevealIndex = 0
     @State private var voiceOverRunning = UIAccessibility.isVoiceOverRunning
@@ -40,7 +43,7 @@ struct RoleRevealView: View {
                 } else if !roleRevealed {
                     // Pass device prompt
                     passDevicePrompt
-                        .transition(.opacity.combined(with: .scale(scale: 0.95)))
+                        .transition(reduceMotion ? .identity : .opacity.combined(with: .scale(scale: 0.95)))
                 } else {
                     // Role card
                     roleCardSection
@@ -77,6 +80,7 @@ struct RoleRevealView: View {
             Text("Role Reveal")
                 .font(LGTypography.headlineSmall)
                 .foregroundStyle(.white.opacity(0.7))
+                .accessibilityIdentifier(AccessibilityIDs.roleRevealScreen)
 
             // Progress bar instead of dots for better accessibility
             RoleRevealProgressBar(
@@ -95,13 +99,19 @@ struct RoleRevealView: View {
         VStack(spacing: LGSpacing.extraLarge) {
             // Player emoji avatar - large display with glass effect
             ZStack {
-                Circle()
-                    .fill(.clear)
-                    .glassEffect(
-                        .regular.tint(playerColor.opacity(0.3)),
-                        in: .circle
-                    )
-                    .frame(width: 120, height: 120)
+                if reduceTransparency {
+                    Circle()
+                        .fill(playerColor.opacity(0.35))
+                        .frame(width: 120, height: 120)
+                } else {
+                    Circle()
+                        .fill(.clear)
+                        .glassEffect(
+                            .regular.tint(playerColor.opacity(0.3)),
+                            in: .circle
+                        )
+                        .frame(width: 120, height: 120)
+                }
 
                 Text(currentPlayer.emoji)
                     .font(.system(size: 70))
@@ -130,6 +140,7 @@ struct RoleRevealView: View {
                 Text("Pass the device to")
                     .font(LGTypography.bodyLarge)
                     .foregroundStyle(.white.opacity(0.7))
+                    .accessibilityIdentifier(AccessibilityIDs.roleHandoffPrompt)
 
                 // Player name - hidden from VoiceOver for privacy
                 Text(currentPlayer.name)
@@ -155,13 +166,13 @@ struct RoleRevealView: View {
                 playerColor: playerColor,
                 onReveal: {
                     HapticManager.roleRevealed()
-                    withAnimation(LGMaterials.springAnimation) {
+                    animateForAccessibility(LGMaterials.springAnimation) {
                         roleRevealed = true
                     }
                     // Show continue hint after delay
                     Task { @MainActor in
                         try? await Task.sleep(for: .milliseconds(1500))
-                        withAnimation {
+                        animateForAccessibility(.easeInOut(duration: 0.2)) {
                             showContinueHint = true
                         }
                     }
@@ -184,14 +195,14 @@ struct RoleRevealView: View {
                 generatedImage: store.state.roundState?.generatedImage,
                 isGeneratingImage: store.isGeneratingImage
             )
-            .transition(.scale.combined(with: .opacity))
+            .transition(reduceMotion ? .identity : .scale.combined(with: .opacity))
 
             // Continue hint with pulsing animation
             if showContinueHint {
                 Text("Tap anywhere to continue")
                     .font(LGTypography.bodyMedium)
                     .foregroundStyle(.white.opacity(0.5))
-                    .transition(.opacity)
+                    .transition(reduceMotion ? .identity : .opacity)
                     .modifier(PulsingOpacityModifier())
             }
         }
@@ -258,7 +269,7 @@ struct RoleRevealView: View {
         HapticManager.buttonTap()
 
         // Phase 1: Hide the current role card
-        withAnimation(.easeOut(duration: 0.2)) {
+        animateForAccessibility(.easeOut(duration: 0.2)) {
             isTransitioning = true
             roleRevealed = false
             showContinueHint = false
@@ -276,17 +287,39 @@ struct RoleRevealView: View {
                 store.dispatch(.completeRoleReveal)
             } else {
                 // Show the next player's prompt
-                withAnimation(.easeIn(duration: 0.25)) {
+                animateForAccessibility(.easeIn(duration: 0.25)) {
                     isTransitioning = false
                 }
             }
         }
+    }
+
+    private func animateForAccessibility(
+        _ animation: Animation?,
+        _ updates: @escaping () -> Void
+    ) {
+        if reduceMotion {
+            updates()
+        } else {
+            withAnimation(animation, updates)
+        }
+    }
+
+    private var reduceMotion: Bool {
+        systemReduceMotion || accessibilityPreferences.forceReduceMotion
+    }
+
+    private var reduceTransparency: Bool {
+        systemReduceTransparency || accessibilityPreferences.forceReduceTransparency
     }
 }
 
 // MARK: - Role Reveal Progress Bar
 
 struct RoleRevealProgressBar: View {
+    @Environment(\.accessibilityReduceMotion) private var systemReduceMotion
+    @Environment(\.imposterAccessibilityPreferences) private var accessibilityPreferences
+
     let current: Int
     let total: Int
     
@@ -307,12 +340,16 @@ struct RoleRevealProgressBar: View {
                 RoundedRectangle(cornerRadius: 4)
                     .fill(LGColors.accentPrimary)
                     .frame(width: geometry.size.width * progress, height: 8)
-                    .animation(.spring(response: 0.4), value: progress)
+                    .animation(reduceMotion ? nil : .spring(response: 0.4), value: progress)
             }
         }
         .frame(height: 8)
         .accessibilityLabel("Role reveal progress")
         .accessibilityValue("\(current) of \(total) players have seen their role")
+    }
+
+    private var reduceMotion: Bool {
+        systemReduceMotion || accessibilityPreferences.forceReduceMotion
     }
 }
 
@@ -320,6 +357,10 @@ struct RoleRevealProgressBar: View {
 
 /// Liquid glass button that requires hold gesture to reveal role - uses proper iOS 26 glass APIs
 struct HoldToRevealButton: View {
+    @Environment(\.accessibilityReduceMotion) private var systemReduceMotion
+    @Environment(\.accessibilityReduceTransparency) private var systemReduceTransparency
+    @Environment(\.imposterAccessibilityPreferences) private var accessibilityPreferences
+
     let playerColor: Color
     let onReveal: () -> Void
     
@@ -336,13 +377,13 @@ struct HoldToRevealButton: View {
                 RoundedRectangle(cornerRadius: 22, style: .continuous)
                     .fill(LGColors.accentPrimary.opacity(0.4))
                     .frame(width: geometry.size.width * holdProgress)
-                    .animation(.linear(duration: 0.05), value: holdProgress)
+                    .animation(reduceMotion ? nil : .linear(duration: 0.05), value: holdProgress)
                 
                 // Content with glass effect and interactive
                 HStack(spacing: LGSpacing.medium) {
                     Image(systemName: "hand.tap.fill")
                         .font(.system(size: 20, weight: .bold))
-                        .symbolEffect(.pulse, options: .repeating, isActive: !isHolding && !hasRevealed)
+                        .symbolEffect(.pulse, options: .repeating, isActive: !reduceMotion && !isHolding && !hasRevealed)
                     
                     Text(isHolding ? "Keep Holding..." : "Hold to Reveal")
                         .font(.system(size: 18, weight: .semibold, design: .rounded))
@@ -353,32 +394,47 @@ struct HoldToRevealButton: View {
                 .frame(height: 56)
             }
             .frame(height: 56)
-            .glassEffect(
-                .regular.tint(LGColors.accentPrimary.opacity(0.3)).interactive(),
-                in: .rect(cornerRadius: 22)
-            )
+            .background {
+                RoundedRectangle(cornerRadius: 22, style: .continuous)
+                    .fill(reduceTransparency ? LGColors.accentPrimary.opacity(0.85) : .clear)
+                    .if(!reduceTransparency) { view in
+                        view.glassEffect(
+                            .regular.tint(LGColors.accentPrimary.opacity(0.3)).interactive(),
+                            in: .rect(cornerRadius: 22)
+                        )
+                    }
+            }
         }
         .frame(height: 56)
         .scaleEffect(isHolding ? 0.97 : 1.0)
-        .animation(.spring(response: 0.2), value: isHolding)
-        .gesture(
-            DragGesture(minimumDistance: 0)
-                .onChanged { _ in
-                    guard !hasRevealed else { return }
-                    if !isHolding {
-                        isHolding = true
-                        HapticManager.buttonTap()
-                        startHoldTimer()
-                    }
+        .animation(reduceMotion ? nil : .spring(response: 0.2), value: isHolding)
+        .onLongPressGesture(
+            minimumDuration: holdDuration,
+            maximumDistance: 44,
+            perform: completeReveal,
+            onPressingChanged: { pressing in
+                if pressing {
+                    beginHold()
+                } else if !hasRevealed {
+                    cancelHold()
                 }
-                .onEnded { _ in
-                    if !hasRevealed {
-                        cancelHold()
-                    }
-                }
+            }
         )
         .accessibilityLabel("Hold to Reveal My Role")
         .accessibilityHint("Press and hold to see your secret role")
+        .accessibilityElement(children: .ignore)
+        .accessibilityAddTraits(.isButton)
+        .accessibilityAction {
+            completeReveal()
+        }
+        .accessibilityIdentifier(AccessibilityIDs.revealRoleButton)
+    }
+
+    private func beginHold() {
+        guard !hasRevealed, !isHolding else { return }
+        isHolding = true
+        HapticManager.buttonTap()
+        startHoldTimer()
     }
     
     private func startHoldTimer() {
@@ -398,18 +454,37 @@ struct HoldToRevealButton: View {
             }
             
             if isHolding && !hasRevealed {
-                hasRevealed = true
-                HapticManager.imposterCaught()
-                onReveal()
+                completeReveal()
             }
         }
+    }
+
+    private func completeReveal() {
+        guard !hasRevealed else { return }
+        isHolding = false
+        holdProgress = 1
+        hasRevealed = true
+        HapticManager.imposterCaught()
+        onReveal()
     }
     
     private func cancelHold() {
         isHolding = false
-        withAnimation(.spring(response: 0.3)) {
+        if reduceMotion {
             holdProgress = 0
+        } else {
+            withAnimation(.spring(response: 0.3)) {
+                holdProgress = 0
+            }
         }
+    }
+
+    private var reduceMotion: Bool {
+        systemReduceMotion || accessibilityPreferences.forceReduceMotion
+    }
+
+    private var reduceTransparency: Bool {
+        systemReduceTransparency || accessibilityPreferences.forceReduceTransparency
     }
 }
 

@@ -27,6 +27,9 @@ struct FloatingParticle: Identifiable {
 /// Animated background with floating particles and gradient
 struct AnimatedBackground: View {
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.accessibilityReduceMotion) private var systemReduceMotion
+    @Environment(\.accessibilityReduceTransparency) private var systemReduceTransparency
+    @Environment(\.imposterAccessibilityPreferences) private var accessibilityPreferences
     @State private var particles: [FloatingParticle] = []
     @State private var animationPhase: CGFloat = 0
 
@@ -46,23 +49,32 @@ struct AnimatedBackground: View {
                 // Base gradient
                 baseGradient
 
-                // Mesh gradient layer (iOS 18+)
-                meshGradientLayer
+                if !reduceTransparency {
+                    // Mesh gradient layer (iOS 18+)
+                    meshGradientLayer
 
-                // Floating particles
-                particleLayer(in: geometry.size)
+                    // Floating particles
+                    particleLayer(in: geometry.size)
 
-                // Ambient glow orbs
-                glowOrbsLayer(in: geometry.size)
+                    // Ambient glow orbs
+                    glowOrbsLayer(in: geometry.size)
 
-                // Noise texture overlay for depth
-                noiseOverlay
+                    // Noise texture overlay for depth
+                    noiseOverlay
+                }
             }
         }
         .ignoresSafeArea()
         .onAppear {
             generateParticles()
             startAnimation()
+        }
+        .onChange(of: reduceMotion) { _, isReduced in
+            if isReduced {
+                animationPhase = 0
+            } else {
+                startAnimation()
+            }
         }
     }
 
@@ -124,8 +136,8 @@ struct AnimatedBackground: View {
     @ViewBuilder
     private var meshGradientLayer: some View {
         let isDark = colorScheme == .dark
-        let centerX: Float = 0.5 + Float(sin(animationPhase) * 0.1)
-        let centerY: Float = 0.5 + Float(cos(animationPhase) * 0.1)
+        let centerX: Float = reduceMotion ? 0.5 : 0.5 + Float(sin(animationPhase) * 0.1)
+        let centerY: Float = reduceMotion ? 0.5 : 0.5 + Float(cos(animationPhase) * 0.1)
         let colors = meshGradientColors(isDark: isDark)
 
         MeshGradient(
@@ -159,9 +171,14 @@ struct AnimatedBackground: View {
                 .opacity(particle.opacity)
                 .position(
                     x: particle.x * size.width,
-                    y: (particle.y + sin(animationPhase * particle.speed + particle.phase) * 0.02) * size.height
+                    y: (particle.y + particleWaveOffset(particle)) * size.height
                 )
         }
+    }
+
+    private func particleWaveOffset(_ particle: FloatingParticle) -> CGFloat {
+        guard !reduceMotion else { return 0 }
+        return sin(animationPhase * particle.speed + particle.phase) * 0.02
     }
 
     // MARK: - Glow Orbs
@@ -173,8 +190,8 @@ struct AnimatedBackground: View {
 
         ForEach(0..<orbColors.count, id: \.self) { index in
             let progress = CGFloat(index) / CGFloat(orbColors.count)
-            let xOffset = sin(animationPhase * 0.3 + progress * .pi * 2) * 0.1
-            let yOffset = cos(animationPhase * 0.2 + progress * .pi * 2) * 0.05
+            let xOffset = reduceMotion ? 0 : sin(animationPhase * 0.3 + progress * .pi * 2) * 0.1
+            let yOffset = reduceMotion ? 0 : cos(animationPhase * 0.2 + progress * .pi * 2) * 0.05
 
             Circle()
                 .fill(
@@ -237,9 +254,22 @@ struct AnimatedBackground: View {
     }
 
     private func startAnimation() {
+        guard !reduceMotion else {
+            animationPhase = 0
+            return
+        }
+
         withAnimation(.linear(duration: 20).repeatForever(autoreverses: false)) {
             animationPhase = .pi * 2
         }
+    }
+
+    private var reduceMotion: Bool {
+        systemReduceMotion || accessibilityPreferences.forceReduceMotion
+    }
+
+    private var reduceTransparency: Bool {
+        systemReduceTransparency || accessibilityPreferences.forceReduceTransparency
     }
 }
 

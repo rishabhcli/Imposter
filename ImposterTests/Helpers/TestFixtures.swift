@@ -19,20 +19,19 @@ enum TestFixtures {
     // MARK: - Deterministic UUIDs
 
     /// Deterministic UUIDs for players (allows predictable testing)
-    /// Using nonisolated(unsafe) since these are constant values initialized once
     enum PlayerIDs {
         // swiftlint:disable force_unwrapping
         // These UUIDs are compile-time constants that will never fail to parse
-        nonisolated(unsafe) static let alice = UUID(uuidString: "00000000-0000-0000-0000-000000000001") ?? UUID()
-        nonisolated(unsafe) static let bob = UUID(uuidString: "00000000-0000-0000-0000-000000000002") ?? UUID()
-        nonisolated(unsafe) static let carol = UUID(uuidString: "00000000-0000-0000-0000-000000000003") ?? UUID()
-        nonisolated(unsafe) static let dave = UUID(uuidString: "00000000-0000-0000-0000-000000000004") ?? UUID()
-        nonisolated(unsafe) static let eve = UUID(uuidString: "00000000-0000-0000-0000-000000000005") ?? UUID()
-        nonisolated(unsafe) static let frank = UUID(uuidString: "00000000-0000-0000-0000-000000000006") ?? UUID()
-        nonisolated(unsafe) static let grace = UUID(uuidString: "00000000-0000-0000-0000-000000000007") ?? UUID()
-        nonisolated(unsafe) static let hank = UUID(uuidString: "00000000-0000-0000-0000-000000000008") ?? UUID()
-        nonisolated(unsafe) static let ivy = UUID(uuidString: "00000000-0000-0000-0000-000000000009") ?? UUID()
-        nonisolated(unsafe) static let jack = UUID(uuidString: "00000000-0000-0000-0000-00000000000A") ?? UUID()
+        static let alice = UUID(uuidString: "00000000-0000-0000-0000-000000000001") ?? UUID()
+        static let bob = UUID(uuidString: "00000000-0000-0000-0000-000000000002") ?? UUID()
+        static let carol = UUID(uuidString: "00000000-0000-0000-0000-000000000003") ?? UUID()
+        static let dave = UUID(uuidString: "00000000-0000-0000-0000-000000000004") ?? UUID()
+        static let eve = UUID(uuidString: "00000000-0000-0000-0000-000000000005") ?? UUID()
+        static let frank = UUID(uuidString: "00000000-0000-0000-0000-000000000006") ?? UUID()
+        static let grace = UUID(uuidString: "00000000-0000-0000-0000-000000000007") ?? UUID()
+        static let hank = UUID(uuidString: "00000000-0000-0000-0000-000000000008") ?? UUID()
+        static let ivy = UUID(uuidString: "00000000-0000-0000-0000-000000000009") ?? UUID()
+        static let jack = UUID(uuidString: "00000000-0000-0000-0000-00000000000A") ?? UUID()
         // swiftlint:enable force_unwrapping
     }
 
@@ -120,11 +119,15 @@ enum TestFixtures {
 
     /// Creates a game state with default configuration
     static func gameState(
-        players: [Player] = standardPlayers,
+        players: [Player]? = nil,
         phase: GamePhase = .setup,
-        settings: GameSettings = .default
+        settings: GameSettings? = nil
     ) -> GameState {
-        GameState(players: players, settings: settings, currentPhase: phase)
+        GameState(
+            players: players ?? standardPlayers,
+            settings: settings ?? .default,
+            currentPhase: phase
+        )
     }
 
     /// Game state ready to start (3+ players in setup phase)

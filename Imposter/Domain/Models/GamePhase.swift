@@ -48,10 +48,8 @@ enum GamePhase: String, Codable, CaseIterable, Sendable {
         case (.roleReveal, .clueRound):
             return true
 
-        // Clue round can go to discussion, voting, or directly to reveal
-        case (.clueRound, .discussion),
-             (.clueRound, .voting),
-             (.clueRound, .reveal):
+        // Clue rounds always pass through the hosted discussion phase.
+        case (.clueRound, .discussion):
             return true
 
         // Discussion to voting

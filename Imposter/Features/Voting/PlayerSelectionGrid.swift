@@ -125,6 +125,7 @@ struct PlayerVoteCard: View {
         .accessibilityLabel("Vote for \(player.name)")
         .accessibilityHint("Double tap to cast your vote")
         .accessibilityAddTraits(isSelected ? .isSelected : [])
+        .accessibilityIdentifier(AccessibilityIDs.voteCard(for: player.id.uuidString))
     }
     
     private var playerAvatar: some View {

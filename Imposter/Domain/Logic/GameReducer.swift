@@ -118,15 +118,10 @@ enum GameReducer {
             round.currentClueIndex += 1
             newState.roundState = round
 
-            // Check if all clues have been given
+            // Check if all clues have been given.
             let totalCluesNeeded = newState.players.count * newState.settings.numberOfClueRounds
             if round.currentClueIndex >= totalCluesNeeded {
-                // Move to discussion or voting
-                if newState.settings.discussionTimerEnabled {
-                    newState.currentPhase = .discussion
-                } else {
-                    newState.currentPhase = .voting
-                }
+                newState.currentPhase = .discussion
             }
 
         case .advanceToNextClue:
@@ -135,11 +130,7 @@ enum GameReducer {
 
         case .completeClueRounds:
             guard newState.currentPhase == .clueRound else { return state }
-            if newState.settings.discussionTimerEnabled {
-                newState.currentPhase = .discussion
-            } else {
-                newState.currentPhase = .voting
-            }
+            newState.currentPhase = .discussion
 
         // MARK: Discussion & Voting Actions
 
@@ -161,6 +152,7 @@ enum GameReducer {
             // Verify voter and suspect are valid players
             guard newState.players.contains(where: { $0.id == voterID }) else { return state }
             guard newState.players.contains(where: { $0.id == suspectID }) else { return state }
+            guard voterID != suspectID else { return state }
 
             round.votes[voterID] = suspectID
             newState.roundState = round
@@ -171,8 +163,9 @@ enum GameReducer {
             }
 
         case .completeVoting:
-            // Allow ending game from clueRound or voting phase
-            guard newState.currentPhase == .voting || newState.currentPhase == .clueRound else { return state }
+            guard newState.currentPhase == .voting else { return state }
+            guard let round = newState.roundState else { return state }
+            guard round.votes.count >= newState.players.count else { return state }
             newState.currentPhase = .reveal
 
         // MARK: Reveal Actions
@@ -199,7 +192,8 @@ enum GameReducer {
             newState.players = ScoringEngine.applyScores(scores, to: newState.players)
 
             // Archive the completed round
-            let votingResult = Self.calculateVotingResult(roundState: roundState)
+            var votingResult = Self.calculateVotingResult(roundState: roundState)
+            votingResult.imposterGuessedCorrectly = imposterGuessedCorrectly
             let imposterName = newState.players.first { $0.id == roundState.imposterID }?.name ?? "Unknown"
             let completedRound = CompletedRound(
                 from: roundState,

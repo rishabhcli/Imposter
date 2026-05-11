@@ -33,8 +33,19 @@ final class GameFlowIntegrationTests: XCTestCase {
         state = GameReducer.reduce(state: state, action: .completeRoleReveal)
         XCTAssertEqual(state.currentPhase, .clueRound)
 
-        // Complete voting (skip clue round)
-        state = GameReducer.reduce(state: state, action: .completeVoting)
+        // Complete hosted discussion before voting/reveal.
+        state = GameReducer.reduce(state: state, action: .completeClueRounds)
+        XCTAssertEqual(state.currentPhase, .discussion)
+        state = GameReducer.reduce(state: state, action: .startVoting)
+        XCTAssertEqual(state.currentPhase, .voting)
+
+        let imposterID = state.roundState!.imposterID
+        for player in state.players {
+            let suspect = player.id == imposterID
+                ? state.players.first { $0.id != imposterID }!.id
+                : imposterID
+            state = GameReducer.reduce(state: state, action: .castVote(voterID: player.id, suspectID: suspect))
+        }
         XCTAssertEqual(state.currentPhase, .reveal)
 
         // Complete round
@@ -58,12 +69,20 @@ final class GameFlowIntegrationTests: XCTestCase {
         state = GameReducer.reduce(state: state, action: .startGame)
         let imposterID1 = state.roundState!.imposterID
         state = GameReducer.reduce(state: state, action: .completeRoleReveal)
-        state = GameReducer.reduce(state: state, action: .completeVoting)
+        state = GameReducer.reduce(state: state, action: .completeClueRounds)
+        XCTAssertEqual(state.currentPhase, .discussion)
+        state = GameReducer.reduce(state: state, action: .startVoting)
+        XCTAssertEqual(state.currentPhase, .voting)
 
-        // Vote for imposter so someone gets points
-        for player in state.players where player.id != imposterID1 {
-            state = GameReducer.reduce(state: state, action: .castVote(voterID: player.id, suspectID: imposterID1))
+        // Vote for imposter so someone gets points.
+        for player in state.players {
+            let suspect = player.id == imposterID1
+                ? state.players.first { $0.id != imposterID1 }!.id
+                : imposterID1
+            state = GameReducer.reduce(state: state, action: .castVote(voterID: player.id, suspectID: suspect))
         }
+
+        XCTAssertEqual(state.currentPhase, .reveal)
 
         state = GameReducer.reduce(state: state, action: .completeRound(imposterGuessedCorrectly: false))
         XCTAssertEqual(state.currentPhase, .summary)
@@ -91,7 +110,15 @@ final class GameFlowIntegrationTests: XCTestCase {
         // Play a round
         state = GameReducer.reduce(state: state, action: .startGame)
         state = GameReducer.reduce(state: state, action: .completeRoleReveal)
-        state = GameReducer.reduce(state: state, action: .completeVoting)
+        state = GameReducer.reduce(state: state, action: .completeClueRounds)
+        state = GameReducer.reduce(state: state, action: .startVoting)
+        let imposterID = state.roundState!.imposterID
+        for player in state.players {
+            let suspect = player.id == imposterID
+                ? state.players.first { $0.id != imposterID }!.id
+                : imposterID
+            state = GameReducer.reduce(state: state, action: .castVote(voterID: player.id, suspectID: suspect))
+        }
         state = GameReducer.reduce(state: state, action: .completeRound(imposterGuessedCorrectly: false))
 
         // Return to home
@@ -175,10 +202,10 @@ final class GameFlowIntegrationTests: XCTestCase {
 
         state = GameReducer.reduce(state: state, action: .completeRoleReveal)
 
-        // Cast votes before completing voting (must be in voting phase)
-        // completeVoting transitions from clueRound -> reveal, so we need to cast votes
-        // while in voting. Use completeClueRounds to get to voting first.
         state = GameReducer.reduce(state: state, action: .completeClueRounds)
+        XCTAssertEqual(state.currentPhase, .discussion)
+        state = GameReducer.reduce(state: state, action: .startVoting)
+        XCTAssertEqual(state.currentPhase, .voting)
 
         // Now in voting phase - everyone votes for the imposter
         // The imposter also votes (for someone else) so all players have voted

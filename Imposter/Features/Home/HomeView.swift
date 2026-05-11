@@ -320,6 +320,7 @@ struct HomeView: View {
             Text(subtitleText)
                 .font(.system(size: 13, weight: .medium, design: .rounded))
                 .foregroundStyle(.white.opacity(0.5))
+                .accessibilityIdentifier(AccessibilityIDs.setupSubtitle)
         }
         .padding(.top, LGSpacing.large)
         .padding(.bottom, LGSpacing.medium)
@@ -631,6 +632,7 @@ struct HomeView: View {
                 }
             }
             .buttonStyle(.glass)
+            .accessibilityIdentifier(AccessibilityIDs.addPlayerButton)
         }
         .padding(LGSpacing.medium)
         .glassEffect(.regular, in: .rect(cornerRadius: 16))

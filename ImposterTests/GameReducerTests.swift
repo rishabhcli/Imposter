@@ -147,6 +147,45 @@ struct GameReducerTests {
         #expect(state.roundState?.clues.first?.text == "hello")
     }
 
+    @Test func finalSubmittedClueTransitionsToDiscussion() {
+        var state = createGameInClueRound()
+        let totalClues = state.players.count * state.settings.numberOfClueRounds
+
+        for i in 0..<totalClues {
+            let playerIndex = i % state.players.count
+            state = GameReducer.reduce(
+                state: state,
+                action: .submitClue(playerID: state.players[playerIndex].id, text: "clue \(i)")
+            )
+        }
+
+        #expect(state.currentPhase == .discussion)
+    }
+
+    @Test func completeClueRoundsTransitionsToDiscussion() {
+        var state = createGameInClueRound()
+
+        state = GameReducer.reduce(state: state, action: .completeClueRounds)
+
+        #expect(state.currentPhase == .discussion)
+    }
+
+    @Test func startVotingIsIgnoredDuringClueRound() {
+        let state = createGameInClueRound()
+
+        let newState = GameReducer.reduce(state: state, action: .startVoting)
+
+        #expect(newState.currentPhase == .clueRound)
+    }
+
+    @Test func completeVotingIsIgnoredDuringClueRound() {
+        let state = createGameInClueRound()
+
+        let newState = GameReducer.reduce(state: state, action: .completeVoting)
+
+        #expect(newState.currentPhase == .clueRound)
+    }
+
     // MARK: - Voting Tests
 
     @Test func castVoteRecordsCorrectly() {
@@ -169,6 +208,28 @@ struct GameReducerTests {
         state = GameReducer.reduce(state: state, action: .castVote(voterID: invalidID, suspectID: suspectID))
 
         #expect(state.roundState?.votes.count == initialVoteCount)
+    }
+
+    @Test func castVoteRejectsSelfVote() {
+        var state = createGameInVotingPhase()
+        let initialVoteCount = state.roundState?.votes.count ?? 0
+
+        let voterID = state.players[0].id
+        state = GameReducer.reduce(state: state, action: .castVote(voterID: voterID, suspectID: voterID))
+
+        #expect(state.roundState?.votes.count == initialVoteCount)
+    }
+
+    @Test func completeVotingRequiresAllPlayersToVote() {
+        var state = createGameInVotingPhase()
+        state = GameReducer.reduce(
+            state: state,
+            action: .castVote(voterID: state.players[0].id, suspectID: state.players[1].id)
+        )
+
+        state = GameReducer.reduce(state: state, action: .completeVoting)
+
+        #expect(state.currentPhase == .voting)
     }
 
     @Test func allVotesTransitionsToReveal() {
@@ -217,7 +278,7 @@ struct GameReducerTests {
             state = GameReducer.reduce(state: state, action: .submitClue(playerID: state.players[playerIndex].id, text: "clue \(i)"))
         }
 
-        // Skip discussion if enabled
+        // The hosted discussion phase is mandatory before voting.
         if state.currentPhase == .discussion {
             state = GameReducer.reduce(state: state, action: .startVoting)
         }

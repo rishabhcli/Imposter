@@ -2,14 +2,14 @@
 //  ClueRoundView.swift
 //  Imposter
 //
-//  Discussion phase view - players discuss and try to identify the imposter.
+//  Clue round view - hosts the clue handoff before discussion starts.
 //
 
 import SwiftUI
 
 // MARK: - ClueRoundView
 
-/// Simple discussion view - shows first player and slide-to-end control
+/// Simple clue round view - shows first player and slide-to-discussion control.
 struct ClueRoundView: View {
     @Environment(GameStore.self) private var store
     @State private var currentPlayerScale: CGFloat = 1.0
@@ -37,7 +37,7 @@ struct ClueRoundView: View {
                 // Slide to end control
                 SlideToEndControl {
                     HapticManager.roundCompleted()
-                    store.dispatch(.completeVoting)
+                    store.dispatch(.completeClueRounds)
                 }
                 .padding(.horizontal, LGSpacing.large)
                 .padding(.bottom, LGSpacing.extraLarge)
@@ -54,6 +54,7 @@ struct ClueRoundView: View {
                 .font(.system(size: 14, weight: .black, design: .rounded))
                 .tracking(4)
                 .foregroundStyle(.white.opacity(0.5))
+                .accessibilityIdentifier(AccessibilityIDs.clueRoundScreen)
             
             Text("Find the Imposter")
                 .font(.system(size: 32, weight: .bold, design: .rounded))
@@ -263,7 +264,7 @@ struct SlideToEndControl: View {
                                 .opacity(0.8)
                         }
                         
-                        Text("Slide to Vote")
+                        Text("Slide to Discuss")
                             .font(.system(size: 17, weight: .bold, design: .rounded))
                         
                         HStack(spacing: 2) {
@@ -332,8 +333,9 @@ struct SlideToEndControl: View {
         }
         .frame(height: trackHeight)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Slide to start voting")
-        .accessibilityHint("Swipe right to end discussion and vote")
+        .accessibilityLabel("Slide to start discussion")
+        .accessibilityHint("Swipe right after clues are complete to begin the discussion phase")
+        .accessibilityIdentifier(AccessibilityIDs.startDiscussionSlider)
     }
 }
 

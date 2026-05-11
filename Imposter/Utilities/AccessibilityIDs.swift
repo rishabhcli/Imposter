@@ -27,6 +27,35 @@ public enum AccessibilityIDs {
     /// Main home title
     public static let homeTitle = "homeTitle"
 
+    /// Setup subtitle, including the player count during player setup
+    public static let setupSubtitle = "setupSubtitle"
+
+    // MARK: - Phase Screens
+
+    /// Root role reveal screen
+    public static let roleRevealScreen = "roleRevealScreen"
+
+    /// Root clue round screen
+    public static let clueRoundScreen = "clueRoundScreen"
+
+    /// Root discussion screen
+    public static let discussionScreen = "discussionScreen"
+
+    /// Root voting screen
+    public static let votingScreen = "votingScreen"
+
+    /// Root reveal screen
+    public static let revealScreen = "revealScreen"
+
+    /// Root summary screen
+    public static let summaryView = "summaryView"
+
+    /// App-level shield shown while a private game is inactive/backgrounded
+    public static let privacyShield = "privacyShield"
+
+    /// Test-only marker exposing forced accessibility environment preferences
+    public static let accessibilityPreferencesStatus = "accessibilityPreferencesStatus"
+
     // MARK: - Player Setup
 
     /// Add player button
@@ -69,6 +98,9 @@ public enum AccessibilityIDs {
     /// Reveal role button
     public static let revealRoleButton = "revealRoleButton"
 
+    /// Role handoff prompt before sensitive card content appears
+    public static let roleHandoffPrompt = "roleHandoffPrompt"
+
     /// Role card container
     public static let roleCard = "roleCard"
 
@@ -85,6 +117,9 @@ public enum AccessibilityIDs {
 
     /// Clue history list
     public static let clueHistoryList = "clueHistoryList"
+
+    /// Slider that advances completed clues into discussion
+    public static let startDiscussionSlider = "startDiscussionSlider"
 
     // MARK: - Discussion
 
@@ -103,6 +138,9 @@ public enum AccessibilityIDs {
 
     /// Vote confirmation display
     public static let voteConfirmation = "voteConfirmation"
+
+    /// Vote handoff prompt after one player votes and before the next player sees options
+    public static let voteHandoffPrompt = "voteHandoffPrompt"
 
     // MARK: - Reveal
 

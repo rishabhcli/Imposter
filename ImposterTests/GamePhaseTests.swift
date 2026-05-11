@@ -26,8 +26,12 @@ struct GamePhaseTests {
         #expect(GamePhase.clueRound.canTransition(to: .discussion))
     }
 
-    @Test func clueRoundCanTransitionToVoting() {
-        #expect(GamePhase.clueRound.canTransition(to: .voting))
+    @Test func clueRoundCannotTransitionToVoting() {
+        #expect(!GamePhase.clueRound.canTransition(to: .voting))
+    }
+
+    @Test func clueRoundCannotTransitionToReveal() {
+        #expect(!GamePhase.clueRound.canTransition(to: .reveal))
     }
 
     @Test func discussionCanTransitionToVoting() {
@@ -84,17 +88,6 @@ struct GamePhaseTests {
 
     @Test func allPhasesHaveValidPath() {
         // Test complete game flow path
-        let phases: [GamePhase] = [.setup, .roleReveal, .clueRound, .voting, .reveal, .summary]
-
-        for i in 0..<(phases.count - 1) {
-            let current = phases[i]
-            let next = phases[i + 1]
-            #expect(current.canTransition(to: next), "Expected \(current) to transition to \(next)")
-        }
-    }
-
-    @Test func gameFlowWithDiscussion() {
-        // Test flow that includes discussion phase
         let phases: [GamePhase] = [.setup, .roleReveal, .clueRound, .discussion, .voting, .reveal, .summary]
 
         for i in 0..<(phases.count - 1) {

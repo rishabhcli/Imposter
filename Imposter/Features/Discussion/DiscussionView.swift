@@ -47,6 +47,7 @@ struct DiscussionView: View {
                 Text("Discussion Time")
                     .font(LGTypography.displayMedium)
                     .foregroundStyle(.white)
+                    .accessibilityIdentifier(AccessibilityIDs.discussionScreen)
 
                 // Timer (if enabled)
                 if store.settings.discussionTimerEnabled {
@@ -66,6 +67,7 @@ struct DiscussionView: View {
                 LGLargeButton("Start Voting", icon: "hand.raised.fill") {
                     store.dispatch(.startVoting)
                 }
+                .accessibilityIdentifier(AccessibilityIDs.startVotingButton)
                 .padding(.horizontal, LGSpacing.large)
                 .padding(.bottom, LGSpacing.extraLarge)
             }

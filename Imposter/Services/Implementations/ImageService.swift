@@ -438,7 +438,7 @@ final class ImageService: ImageServiceProtocol, @unchecked Sendable {
             let creator = try await ImageCreator()
 
             // Update availability info
-            await updateAvailability(from: creator)
+            updateAvailability(from: creator)
 
             guard !creator.availableStyles.isEmpty else {
                 logger.warning("No image styles available")
