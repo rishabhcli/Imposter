@@ -57,6 +57,9 @@ final class MotionManager {
 
 /// A holographic shimmer overlay that responds to device tilt
 struct GyroShimmerOverlay: View {
+    @Environment(\.accessibilityReduceMotion) private var systemReduceMotion
+    @Environment(\.imposterAccessibilityPreferences) private var accessibilityPreferences
+
     @State private var motionManager = MotionManager.shared
     let intensity: Double
     let colors: [Color]
@@ -80,8 +83,8 @@ struct GyroShimmerOverlay: View {
 
     var body: some View {
         GeometryReader { geometry in
-            let offsetX = motionManager.roll * geometry.size.width * intensity
-            let offsetY = motionManager.pitch * geometry.size.height * intensity
+            let offsetX = motionRoll * geometry.size.width * intensity
+            let offsetY = motionPitch * geometry.size.height * intensity
 
             LinearGradient(
                 colors: colors,
@@ -98,12 +101,27 @@ struct GyroShimmerOverlay: View {
         }
         .allowsHitTesting(false)
     }
+
+    private var reduceMotion: Bool {
+        systemReduceMotion || accessibilityPreferences.forceReduceMotion
+    }
+
+    private var motionPitch: Double {
+        reduceMotion ? 0 : motionManager.pitch
+    }
+
+    private var motionRoll: Double {
+        reduceMotion ? 0 : motionManager.roll
+    }
 }
 
 // MARK: - Rainbow Shimmer (for special reveals)
 
 /// A more dramatic rainbow holographic effect
 struct RainbowShimmerOverlay: View {
+    @Environment(\.accessibilityReduceMotion) private var systemReduceMotion
+    @Environment(\.imposterAccessibilityPreferences) private var accessibilityPreferences
+
     @State private var motionManager = MotionManager.shared
     let intensity: Double
 
@@ -113,8 +131,8 @@ struct RainbowShimmerOverlay: View {
 
     var body: some View {
         GeometryReader { geometry in
-            let offsetX = motionManager.roll * intensity
-            let offsetY = motionManager.pitch * intensity
+            let offsetX = motionRoll * intensity
+            let offsetY = motionPitch * intensity
 
             AngularGradient(
                 colors: [
@@ -136,12 +154,27 @@ struct RainbowShimmerOverlay: View {
         }
         .allowsHitTesting(false)
     }
+
+    private var reduceMotion: Bool {
+        systemReduceMotion || accessibilityPreferences.forceReduceMotion
+    }
+
+    private var motionPitch: Double {
+        reduceMotion ? 0 : motionManager.pitch
+    }
+
+    private var motionRoll: Double {
+        reduceMotion ? 0 : motionManager.roll
+    }
 }
 
 // MARK: - Spotlight Shimmer
 
 /// A moving spotlight effect based on device tilt
 struct SpotlightShimmerOverlay: View {
+    @Environment(\.accessibilityReduceMotion) private var systemReduceMotion
+    @Environment(\.imposterAccessibilityPreferences) private var accessibilityPreferences
+
     @State private var motionManager = MotionManager.shared
     let color: Color
     let intensity: Double
@@ -153,8 +186,8 @@ struct SpotlightShimmerOverlay: View {
 
     var body: some View {
         GeometryReader { geometry in
-            let centerX = 0.5 + (motionManager.roll * intensity)
-            let centerY = 0.5 + (motionManager.pitch * intensity)
+            let centerX = 0.5 + (motionRoll * intensity)
+            let centerY = 0.5 + (motionPitch * intensity)
 
             RadialGradient(
                 colors: [
@@ -169,6 +202,18 @@ struct SpotlightShimmerOverlay: View {
             .blendMode(.overlay)
         }
         .allowsHitTesting(false)
+    }
+
+    private var reduceMotion: Bool {
+        systemReduceMotion || accessibilityPreferences.forceReduceMotion
+    }
+
+    private var motionPitch: Double {
+        reduceMotion ? 0 : motionManager.pitch
+    }
+
+    private var motionRoll: Double {
+        reduceMotion ? 0 : motionManager.roll
     }
 }
 

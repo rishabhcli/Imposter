@@ -40,6 +40,9 @@ struct PlayerSelectionGrid: View {
 
 /// A premium gyro-reactive card representing a player that can be voted for
 struct PlayerVoteCard: View {
+    @Environment(\.accessibilityReduceMotion) private var systemReduceMotion
+    @Environment(\.imposterAccessibilityPreferences) private var accessibilityPreferences
+
     let player: Player
     let isSelected: Bool
     let action: () -> Void
@@ -82,8 +85,8 @@ struct PlayerVoteCard: View {
                     GyroCardHighlight(
                         cornerRadius: LGSpacing.cornerRadiusMedium,
                         color: LGColors.playerColor(player.color),
-                        pitch: motionManager.pitch,
-                        roll: motionManager.roll
+                        pitch: motionPitch,
+                        roll: motionRoll
                     )
                 }
             }
@@ -99,12 +102,12 @@ struct PlayerVoteCard: View {
         .buttonStyle(.plain)
         // Subtle 3D tilt effect
         .rotation3DEffect(
-            .degrees(isSelected ? motionManager.pitch * 4 : 0),
+            .degrees(isSelected ? motionPitch * 4 : 0),
             axis: (x: 1, y: 0, z: 0),
             perspective: 0.5
         )
         .rotation3DEffect(
-            .degrees(isSelected ? -motionManager.roll * 4 : 0),
+            .degrees(isSelected ? -motionRoll * 4 : 0),
             axis: (x: 0, y: 1, z: 0),
             perspective: 0.5
         )
@@ -113,8 +116,8 @@ struct PlayerVoteCard: View {
         .shadow(
             color: isSelected ? LGColors.playerColor(player.color).opacity(0.4) : .clear,
             radius: 15,
-            x: CGFloat(motionManager.roll * 5),
-            y: CGFloat(motionManager.pitch * 5) + 5
+            x: CGFloat(motionRoll * 5),
+            y: CGFloat(motionPitch * 5) + 5
         )
         .animation(LGMaterials.springAnimation, value: isSelected)
         .onLongPressGesture(minimumDuration: 0, pressing: { pressing in
@@ -160,13 +163,13 @@ struct PlayerVoteCard: View {
             Circle()
                 .strokeBorder(
                     LinearGradient(
-                        colors: [
-                            Color.white.opacity(0.6 + motionManager.pitch * 0.2),
+                            colors: [
+                            Color.white.opacity(0.6 + motionPitch * 0.2),
                             Color.white.opacity(0.2),
-                            Color.white.opacity(0.4 + motionManager.roll * 0.2)
+                            Color.white.opacity(0.4 + motionRoll * 0.2)
                         ],
-                        startPoint: UnitPoint(x: 0.5 - motionManager.roll * 0.3, y: 0),
-                        endPoint: UnitPoint(x: 0.5 + motionManager.roll * 0.3, y: 1)
+                        startPoint: UnitPoint(x: 0.5 - motionRoll * 0.3, y: 0),
+                        endPoint: UnitPoint(x: 0.5 + motionRoll * 0.3, y: 1)
                     ),
                     lineWidth: isSelected ? 2.5 : 1.5
                 )
@@ -180,8 +183,8 @@ struct PlayerVoteCard: View {
                 LGColors.playerColor(player.color).opacity(0.4),
                 Color.white.opacity(0.3)
             ],
-            startPoint: UnitPoint(x: 0.5 - motionManager.roll * 0.3, y: 0),
-            endPoint: UnitPoint(x: 0.5 + motionManager.roll * 0.3, y: 1)
+            startPoint: UnitPoint(x: 0.5 - motionRoll * 0.3, y: 0),
+            endPoint: UnitPoint(x: 0.5 + motionRoll * 0.3, y: 1)
         )
     }
     
@@ -194,6 +197,18 @@ struct PlayerVoteCard: View {
             startPoint: .top,
             endPoint: .bottom
         )
+    }
+
+    private var reduceMotion: Bool {
+        systemReduceMotion || accessibilityPreferences.forceReduceMotion
+    }
+
+    private var motionPitch: Double {
+        reduceMotion ? 0 : motionManager.pitch
+    }
+
+    private var motionRoll: Double {
+        reduceMotion ? 0 : motionManager.roll
     }
 }
 

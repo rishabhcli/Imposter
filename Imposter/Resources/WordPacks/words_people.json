@@ -1,170 +1,3004 @@
 {
-  "category": "Celebrities",
+  "category": "People",
   "words": [
-    {"word": "Taylor Swift", "difficulty": "easy"},
-    {"word": "Beyoncé", "difficulty": "easy"},
-    {"word": "Bad Bunny", "difficulty": "easy"},
-    {"word": "Drake", "difficulty": "easy"},
-    {"word": "Rihanna", "difficulty": "easy"},
-    {"word": "Sabrina Carpenter", "difficulty": "easy"},
-    {"word": "Chappell Roan", "difficulty": "easy"},
-    {"word": "Billie Eilish", "difficulty": "easy"},
-    {"word": "The Weeknd", "difficulty": "easy"},
-    {"word": "Kendrick Lamar", "difficulty": "easy"},
-    {"word": "Travis Scott", "difficulty": "easy"},
-    {"word": "Doja Cat", "difficulty": "easy"},
-    {"word": "Ice Spice", "difficulty": "easy"},
-    {"word": "Peso Pluma", "difficulty": "easy"},
-    {"word": "Feid", "difficulty": "easy"},
-    {"word": "Karol G", "difficulty": "easy"},
-    {"word": "Shakira", "difficulty": "easy"},
-    {"word": "Dua Lipa", "difficulty": "easy"},
-    {"word": "Ariana Grande", "difficulty": "easy"},
-    {"word": "Bruno Mars", "difficulty": "easy"},
-    {"word": "Lady Gaga", "difficulty": "easy"},
-    {"word": "Adele", "difficulty": "easy"},
-    {"word": "Ed Sheeran", "difficulty": "easy"},
-    {"word": "Justin Bieber", "difficulty": "easy"},
-    {"word": "Post Malone", "difficulty": "easy"},
-    {"word": "Olivia Rodrigo", "difficulty": "easy"},
-    {"word": "Gracie Abrams", "difficulty": "easy"},
-    {"word": "Tyla", "difficulty": "easy"},
-    {"word": "Central Cee", "difficulty": "easy"},
-    {"word": "21 Savage", "difficulty": "easy"},
-    {"word": "Timothée Chalamet", "difficulty": "easy"},
-    {"word": "Zendaya", "difficulty": "easy"},
-    {"word": "Sydney Sweeney", "difficulty": "easy"},
-    {"word": "Glen Powell", "difficulty": "easy"},
-    {"word": "Florence Pugh", "difficulty": "easy"},
-    {"word": "Austin Butler", "difficulty": "easy"},
-    {"word": "Pedro Pascal", "difficulty": "easy"},
-    {"word": "Jenna Ortega", "difficulty": "easy"},
-    {"word": "Barry Keoghan", "difficulty": "easy"},
-    {"word": "Tom Holland", "difficulty": "easy"},
-    {"word": "Ryan Gosling", "difficulty": "easy"},
-    {"word": "Margot Robbie", "difficulty": "easy"},
-    {"word": "Leonardo DiCaprio", "difficulty": "easy"},
-    {"word": "Dwayne Johnson", "difficulty": "easy"},
-    {"word": "Robert Downey Jr", "difficulty": "easy"},
-    {"word": "Keanu Reeves", "difficulty": "easy"},
-    {"word": "LeBron James", "difficulty": "easy"},
-    {"word": "Cristiano Ronaldo", "difficulty": "easy"},
-    {"word": "Lionel Messi", "difficulty": "easy"},
-    {"word": "Patrick Mahomes", "difficulty": "easy"},
-    {"word": "Travis Kelce", "difficulty": "easy"},
-    {"word": "Caitlin Clark", "difficulty": "easy"},
-    {"word": "Simone Biles", "difficulty": "easy"},
-    {"word": "Kim Kardashian", "difficulty": "easy"},
-    {"word": "Kylie Jenner", "difficulty": "easy"},
-    {"word": "MrBeast", "difficulty": "easy"},
-    {"word": "Kai Cenat", "difficulty": "easy"},
-    {"word": "IShowSpeed", "difficulty": "easy"},
-    {"word": "Elon Musk", "difficulty": "easy"},
-    {"word": "Charli XCX", "difficulty": "easy"},
-    {"word": "SZA", "difficulty": "medium"},
-    {"word": "Tyler the Creator", "difficulty": "medium"},
-    {"word": "Lana Del Rey", "difficulty": "medium"},
-    {"word": "Hozier", "difficulty": "medium"},
-    {"word": "Benson Boone", "difficulty": "medium"},
-    {"word": "Teddy Swims", "difficulty": "medium"},
-    {"word": "Tate McRae", "difficulty": "medium"},
-    {"word": "Dasha", "difficulty": "medium"},
-    {"word": "Tommy Richman", "difficulty": "medium"},
-    {"word": "Shaboozey", "difficulty": "medium"},
-    {"word": "Sexyy Red", "difficulty": "medium"},
-    {"word": "GloRilla", "difficulty": "medium"},
-    {"word": "Latto", "difficulty": "medium"},
-    {"word": "Cardi B", "difficulty": "medium"},
-    {"word": "Nicki Minaj", "difficulty": "medium"},
-    {"word": "Megan Thee Stallion", "difficulty": "medium"},
-    {"word": "Harry Styles", "difficulty": "medium"},
-    {"word": "Kanye West", "difficulty": "medium"},
-    {"word": "Jay-Z", "difficulty": "medium"},
-    {"word": "Eminem", "difficulty": "medium"},
-    {"word": "Snoop Dogg", "difficulty": "medium"},
-    {"word": "Miley Cyrus", "difficulty": "medium"},
-    {"word": "Anya Taylor-Joy", "difficulty": "medium"},
-    {"word": "Cillian Murphy", "difficulty": "medium"},
-    {"word": "Paul Mescal", "difficulty": "medium"},
-    {"word": "Jacob Elordi", "difficulty": "medium"},
-    {"word": "Emma Stone", "difficulty": "medium"},
-    {"word": "Jennifer Lawrence", "difficulty": "medium"},
-    {"word": "Brad Pitt", "difficulty": "medium"},
-    {"word": "Angelina Jolie", "difficulty": "medium"},
-    {"word": "George Clooney", "difficulty": "medium"},
-    {"word": "Matt Damon", "difficulty": "medium"},
-    {"word": "Scarlett Johansson", "difficulty": "medium"},
-    {"word": "Chris Hemsworth", "difficulty": "medium"},
-    {"word": "Ryan Reynolds", "difficulty": "medium"},
-    {"word": "Adam Sandler", "difficulty": "medium"},
-    {"word": "Jim Carrey", "difficulty": "medium"},
-    {"word": "Will Smith", "difficulty": "medium"},
-    {"word": "Tom Hanks", "difficulty": "medium"},
-    {"word": "Morgan Freeman", "difficulty": "medium"},
-    {"word": "Denzel Washington", "difficulty": "medium"},
-    {"word": "Samuel L Jackson", "difficulty": "medium"},
-    {"word": "Meryl Streep", "difficulty": "medium"},
-    {"word": "Kylian Mbappé", "difficulty": "medium"},
-    {"word": "Erling Haaland", "difficulty": "medium"},
-    {"word": "Jude Bellingham", "difficulty": "medium"},
-    {"word": "Neymar", "difficulty": "medium"},
-    {"word": "Stephen Curry", "difficulty": "medium"},
-    {"word": "Kevin Durant", "difficulty": "medium"},
-    {"word": "Giannis Antetokounmpo", "difficulty": "medium"},
-    {"word": "Luka Dončić", "difficulty": "medium"},
-    {"word": "Victor Wembanyama", "difficulty": "medium"},
-    {"word": "Shohei Ohtani", "difficulty": "medium"},
-    {"word": "Connor McDavid", "difficulty": "medium"},
-    {"word": "Tiger Woods", "difficulty": "medium"},
-    {"word": "Roger Federer", "difficulty": "medium"},
-    {"word": "Novak Djokovic", "difficulty": "medium"},
-    {"word": "Conor McGregor", "difficulty": "medium"},
-    {"word": "Logan Paul", "difficulty": "medium"},
-    {"word": "Jake Paul", "difficulty": "medium"},
-    {"word": "KSI", "difficulty": "medium"},
-    {"word": "Pokimane", "difficulty": "medium"},
-    {"word": "Addison Rae", "difficulty": "medium"},
-    {"word": "Charli D'Amelio", "difficulty": "medium"},
-    {"word": "Alix Earle", "difficulty": "medium"},
-    {"word": "Michael Jackson", "difficulty": "hard"},
-    {"word": "Prince", "difficulty": "hard"},
-    {"word": "Freddie Mercury", "difficulty": "hard"},
-    {"word": "David Bowie", "difficulty": "hard"},
-    {"word": "Whitney Houston", "difficulty": "hard"},
-    {"word": "Elvis Presley", "difficulty": "hard"},
-    {"word": "Bob Marley", "difficulty": "hard"},
-    {"word": "John Lennon", "difficulty": "hard"},
-    {"word": "Paul McCartney", "difficulty": "hard"},
-    {"word": "Elton John", "difficulty": "hard"},
-    {"word": "Madonna", "difficulty": "hard"},
-    {"word": "Britney Spears", "difficulty": "hard"},
-    {"word": "Mariah Carey", "difficulty": "hard"},
-    {"word": "Celine Dion", "difficulty": "hard"},
-    {"word": "Marlon Brando", "difficulty": "hard"},
-    {"word": "Al Pacino", "difficulty": "hard"},
-    {"word": "Robert De Niro", "difficulty": "hard"},
-    {"word": "Jack Nicholson", "difficulty": "hard"},
-    {"word": "Harrison Ford", "difficulty": "hard"},
-    {"word": "Arnold Schwarzenegger", "difficulty": "hard"},
-    {"word": "Tom Cruise", "difficulty": "hard"},
-    {"word": "Audrey Hepburn", "difficulty": "hard"},
-    {"word": "Marilyn Monroe", "difficulty": "hard"},
-    {"word": "Muhammad Ali", "difficulty": "hard"},
-    {"word": "Michael Jordan", "difficulty": "hard"},
-    {"word": "Pelé", "difficulty": "hard"},
-    {"word": "Kobe Bryant", "difficulty": "hard"},
-    {"word": "Serena Williams", "difficulty": "hard"},
-    {"word": "Tom Brady", "difficulty": "hard"},
-    {"word": "Usain Bolt", "difficulty": "hard"},
-    {"word": "Bill Gates", "difficulty": "hard"},
-    {"word": "Steve Jobs", "difficulty": "hard"},
-    {"word": "Mark Zuckerberg", "difficulty": "hard"},
-    {"word": "Jeff Bezos", "difficulty": "hard"},
-    {"word": "Oprah Winfrey", "difficulty": "hard"},
-    {"word": "Walt Disney", "difficulty": "hard"},
-    {"word": "Steven Spielberg", "difficulty": "hard"},
-    {"word": "Christopher Nolan", "difficulty": "hard"},
-    {"word": "Martin Scorsese", "difficulty": "hard"},
-    {"word": "Quentin Tarantino", "difficulty": "hard"}
+    {
+      "id": "people-taylor-swift",
+      "displayText": "Taylor Swift",
+      "word": "Taylor Swift",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "music",
+        "performer",
+        "pop",
+        "singer",
+        "songwriter",
+        "celebrity"
+      ],
+      "localizationKey": "word.people.taylor-swift",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-beyonce",
+      "displayText": "Beyoncé",
+      "word": "Beyoncé",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "music",
+        "performer",
+        "pop",
+        "singer",
+        "celebrity"
+      ],
+      "localizationKey": "word.people.beyonce",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-bad-bunny",
+      "displayText": "Bad Bunny",
+      "word": "Bad Bunny",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "music",
+        "performer",
+        "latin",
+        "singer",
+        "reggaeton",
+        "celebrity"
+      ],
+      "localizationKey": "word.people.bad-bunny",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-drake",
+      "displayText": "Drake",
+      "word": "Drake",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "music",
+        "performer",
+        "rap",
+        "hip-hop",
+        "singer",
+        "celebrity"
+      ],
+      "localizationKey": "word.people.drake",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-rihanna",
+      "displayText": "Rihanna",
+      "word": "Rihanna",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "music",
+        "performer",
+        "pop",
+        "singer",
+        "fashion",
+        "celebrity"
+      ],
+      "localizationKey": "word.people.rihanna",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-sabrina-carpenter",
+      "displayText": "Sabrina Carpenter",
+      "word": "Sabrina Carpenter",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "music",
+        "performer",
+        "pop",
+        "singer"
+      ],
+      "localizationKey": "word.people.sabrina-carpenter",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-chappell-roan",
+      "displayText": "Chappell Roan",
+      "word": "Chappell Roan",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "music",
+        "performer",
+        "pop",
+        "singer"
+      ],
+      "localizationKey": "word.people.chappell-roan",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-billie-eilish",
+      "displayText": "Billie Eilish",
+      "word": "Billie Eilish",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "music",
+        "performer",
+        "pop",
+        "singer"
+      ],
+      "localizationKey": "word.people.billie-eilish",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-the-weeknd",
+      "displayText": "The Weeknd",
+      "word": "The Weeknd",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "music",
+        "performer",
+        "pop",
+        "singer"
+      ],
+      "localizationKey": "word.people.the-weeknd",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-kendrick-lamar",
+      "displayText": "Kendrick Lamar",
+      "word": "Kendrick Lamar",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "music",
+        "performer",
+        "rap",
+        "hip-hop"
+      ],
+      "localizationKey": "word.people.kendrick-lamar",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-travis-scott",
+      "displayText": "Travis Scott",
+      "word": "Travis Scott",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "music",
+        "performer",
+        "rap",
+        "hip-hop"
+      ],
+      "localizationKey": "word.people.travis-scott",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-doja-cat",
+      "displayText": "Doja Cat",
+      "word": "Doja Cat",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "music",
+        "performer",
+        "rap",
+        "hip-hop"
+      ],
+      "localizationKey": "word.people.doja-cat",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-ice-spice",
+      "displayText": "Ice Spice",
+      "word": "Ice Spice",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "music",
+        "performer",
+        "rap",
+        "hip-hop"
+      ],
+      "localizationKey": "word.people.ice-spice",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-peso-pluma",
+      "displayText": "Peso Pluma",
+      "word": "Peso Pluma",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "music",
+        "performer",
+        "latin",
+        "singer"
+      ],
+      "localizationKey": "word.people.peso-pluma",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-feid",
+      "displayText": "Feid",
+      "word": "Feid",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "music",
+        "performer",
+        "latin",
+        "singer"
+      ],
+      "localizationKey": "word.people.feid",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-karol-g",
+      "displayText": "Karol G",
+      "word": "Karol G",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "music",
+        "performer",
+        "latin",
+        "singer"
+      ],
+      "localizationKey": "word.people.karol-g",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-shakira",
+      "displayText": "Shakira",
+      "word": "Shakira",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "music",
+        "performer",
+        "latin",
+        "singer"
+      ],
+      "localizationKey": "word.people.shakira",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-dua-lipa",
+      "displayText": "Dua Lipa",
+      "word": "Dua Lipa",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "music",
+        "performer",
+        "pop",
+        "singer"
+      ],
+      "localizationKey": "word.people.dua-lipa",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-ariana-grande",
+      "displayText": "Ariana Grande",
+      "word": "Ariana Grande",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "music",
+        "performer",
+        "pop",
+        "singer"
+      ],
+      "localizationKey": "word.people.ariana-grande",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-bruno-mars",
+      "displayText": "Bruno Mars",
+      "word": "Bruno Mars",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "music",
+        "performer",
+        "pop",
+        "singer"
+      ],
+      "localizationKey": "word.people.bruno-mars",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-lady-gaga",
+      "displayText": "Lady Gaga",
+      "word": "Lady Gaga",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "music",
+        "performer",
+        "pop",
+        "singer"
+      ],
+      "localizationKey": "word.people.lady-gaga",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-adele",
+      "displayText": "Adele",
+      "word": "Adele",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "music",
+        "performer",
+        "pop",
+        "singer"
+      ],
+      "localizationKey": "word.people.adele",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-ed-sheeran",
+      "displayText": "Ed Sheeran",
+      "word": "Ed Sheeran",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "music",
+        "performer",
+        "pop",
+        "singer"
+      ],
+      "localizationKey": "word.people.ed-sheeran",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-justin-bieber",
+      "displayText": "Justin Bieber",
+      "word": "Justin Bieber",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "music",
+        "performer",
+        "pop",
+        "singer"
+      ],
+      "localizationKey": "word.people.justin-bieber",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-post-malone",
+      "displayText": "Post Malone",
+      "word": "Post Malone",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "music",
+        "performer",
+        "pop",
+        "singer"
+      ],
+      "localizationKey": "word.people.post-malone",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-olivia-rodrigo",
+      "displayText": "Olivia Rodrigo",
+      "word": "Olivia Rodrigo",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "music",
+        "performer",
+        "pop",
+        "singer"
+      ],
+      "localizationKey": "word.people.olivia-rodrigo",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-gracie-abrams",
+      "displayText": "Gracie Abrams",
+      "word": "Gracie Abrams",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "music",
+        "performer",
+        "pop",
+        "singer"
+      ],
+      "localizationKey": "word.people.gracie-abrams",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-tyla",
+      "displayText": "Tyla",
+      "word": "Tyla",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "music",
+        "performer",
+        "pop",
+        "singer"
+      ],
+      "localizationKey": "word.people.tyla",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-central-cee",
+      "displayText": "Central Cee",
+      "word": "Central Cee",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "music",
+        "performer",
+        "rap",
+        "hip-hop"
+      ],
+      "localizationKey": "word.people.central-cee",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-21-savage",
+      "displayText": "21 Savage",
+      "word": "21 Savage",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "music",
+        "performer",
+        "rap",
+        "hip-hop"
+      ],
+      "localizationKey": "word.people.21-savage",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-timothee-chalamet",
+      "displayText": "Timothée Chalamet",
+      "word": "Timothée Chalamet",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.timothee-chalamet",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-zendaya",
+      "displayText": "Zendaya",
+      "word": "Zendaya",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.zendaya",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-sydney-sweeney",
+      "displayText": "Sydney Sweeney",
+      "word": "Sydney Sweeney",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.sydney-sweeney",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-glen-powell",
+      "displayText": "Glen Powell",
+      "word": "Glen Powell",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.glen-powell",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-florence-pugh",
+      "displayText": "Florence Pugh",
+      "word": "Florence Pugh",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.florence-pugh",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-austin-butler",
+      "displayText": "Austin Butler",
+      "word": "Austin Butler",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.austin-butler",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-pedro-pascal",
+      "displayText": "Pedro Pascal",
+      "word": "Pedro Pascal",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.pedro-pascal",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-jenna-ortega",
+      "displayText": "Jenna Ortega",
+      "word": "Jenna Ortega",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.jenna-ortega",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-barry-keoghan",
+      "displayText": "Barry Keoghan",
+      "word": "Barry Keoghan",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.barry-keoghan",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-tom-holland",
+      "displayText": "Tom Holland",
+      "word": "Tom Holland",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.tom-holland",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-ryan-gosling",
+      "displayText": "Ryan Gosling",
+      "word": "Ryan Gosling",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.ryan-gosling",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-margot-robbie",
+      "displayText": "Margot Robbie",
+      "word": "Margot Robbie",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.margot-robbie",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-leonardo-dicaprio",
+      "displayText": "Leonardo DiCaprio",
+      "word": "Leonardo DiCaprio",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.leonardo-dicaprio",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-dwayne-johnson",
+      "displayText": "Dwayne Johnson",
+      "word": "Dwayne Johnson",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.dwayne-johnson",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-robert-downey-jr",
+      "displayText": "Robert Downey Jr",
+      "word": "Robert Downey Jr",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.robert-downey-jr",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-keanu-reeves",
+      "displayText": "Keanu Reeves",
+      "word": "Keanu Reeves",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.keanu-reeves",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-lebron-james",
+      "displayText": "LeBron James",
+      "word": "LeBron James",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "athlete",
+        "sports",
+        "basketball"
+      ],
+      "localizationKey": "word.people.lebron-james",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-cristiano-ronaldo",
+      "displayText": "Cristiano Ronaldo",
+      "word": "Cristiano Ronaldo",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "athlete",
+        "sports",
+        "soccer"
+      ],
+      "localizationKey": "word.people.cristiano-ronaldo",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-lionel-messi",
+      "displayText": "Lionel Messi",
+      "word": "Lionel Messi",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "athlete",
+        "sports",
+        "soccer"
+      ],
+      "localizationKey": "word.people.lionel-messi",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-patrick-mahomes",
+      "displayText": "Patrick Mahomes",
+      "word": "Patrick Mahomes",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "athlete",
+        "sports",
+        "football"
+      ],
+      "localizationKey": "word.people.patrick-mahomes",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-travis-kelce",
+      "displayText": "Travis Kelce",
+      "word": "Travis Kelce",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "athlete",
+        "sports",
+        "football"
+      ],
+      "localizationKey": "word.people.travis-kelce",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-caitlin-clark",
+      "displayText": "Caitlin Clark",
+      "word": "Caitlin Clark",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "athlete",
+        "sports",
+        "basketball"
+      ],
+      "localizationKey": "word.people.caitlin-clark",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-simone-biles",
+      "displayText": "Simone Biles",
+      "word": "Simone Biles",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "athlete",
+        "sports"
+      ],
+      "localizationKey": "word.people.simone-biles",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-kim-kardashian",
+      "displayText": "Kim Kardashian",
+      "word": "Kim Kardashian",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "creator",
+        "internet"
+      ],
+      "localizationKey": "word.people.kim-kardashian",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-kylie-jenner",
+      "displayText": "Kylie Jenner",
+      "word": "Kylie Jenner",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "creator",
+        "internet"
+      ],
+      "localizationKey": "word.people.kylie-jenner",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-mrbeast",
+      "displayText": "MrBeast",
+      "word": "MrBeast",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "creator",
+        "internet"
+      ],
+      "localizationKey": "word.people.mrbeast",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-kai-cenat",
+      "displayText": "Kai Cenat",
+      "word": "Kai Cenat",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "creator",
+        "internet"
+      ],
+      "localizationKey": "word.people.kai-cenat",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-ishowspeed",
+      "displayText": "IShowSpeed",
+      "word": "IShowSpeed",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "creator",
+        "internet"
+      ],
+      "localizationKey": "word.people.ishowspeed",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-elon-musk",
+      "displayText": "Elon Musk",
+      "word": "Elon Musk",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "business",
+        "technology",
+        "celebrity",
+        "public-figure"
+      ],
+      "localizationKey": "word.people.elon-musk",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-charli-xcx",
+      "displayText": "Charli XCX",
+      "word": "Charli XCX",
+      "category": "People",
+      "difficulty": "easy",
+      "tags": [
+        "people",
+        "easy",
+        "music",
+        "performer",
+        "pop",
+        "singer"
+      ],
+      "localizationKey": "word.people.charli-xcx",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-sza",
+      "displayText": "SZA",
+      "word": "SZA",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "music",
+        "performer",
+        "pop",
+        "singer",
+        "r-and-b",
+        "songwriter",
+        "celebrity"
+      ],
+      "localizationKey": "word.people.sza",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-tyler-the-creator",
+      "displayText": "Tyler the Creator",
+      "word": "Tyler the Creator",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "music",
+        "performer",
+        "rap",
+        "hip-hop",
+        "producer",
+        "creative",
+        "celebrity"
+      ],
+      "localizationKey": "word.people.tyler-the-creator",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-lana-del-rey",
+      "displayText": "Lana Del Rey",
+      "word": "Lana Del Rey",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "music",
+        "performer",
+        "pop",
+        "singer",
+        "cinematic",
+        "celebrity"
+      ],
+      "localizationKey": "word.people.lana-del-rey",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-hozier",
+      "displayText": "Hozier",
+      "word": "Hozier",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "music",
+        "performer",
+        "pop",
+        "singer",
+        "folk",
+        "soul",
+        "songwriter"
+      ],
+      "localizationKey": "word.people.hozier",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-benson-boone",
+      "displayText": "Benson Boone",
+      "word": "Benson Boone",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "music",
+        "performer",
+        "pop",
+        "singer",
+        "songwriter",
+        "celebrity"
+      ],
+      "localizationKey": "word.people.benson-boone",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-teddy-swims",
+      "displayText": "Teddy Swims",
+      "word": "Teddy Swims",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "music",
+        "performer",
+        "pop",
+        "singer"
+      ],
+      "localizationKey": "word.people.teddy-swims",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-tate-mcrae",
+      "displayText": "Tate McRae",
+      "word": "Tate McRae",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "music",
+        "performer",
+        "pop",
+        "singer"
+      ],
+      "localizationKey": "word.people.tate-mcrae",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-dasha",
+      "displayText": "Dasha",
+      "word": "Dasha",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "music",
+        "performer",
+        "pop",
+        "singer"
+      ],
+      "localizationKey": "word.people.dasha",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-tommy-richman",
+      "displayText": "Tommy Richman",
+      "word": "Tommy Richman",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "music",
+        "performer",
+        "pop",
+        "singer"
+      ],
+      "localizationKey": "word.people.tommy-richman",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-shaboozey",
+      "displayText": "Shaboozey",
+      "word": "Shaboozey",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "music",
+        "performer",
+        "pop",
+        "singer"
+      ],
+      "localizationKey": "word.people.shaboozey",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-sexyy-red",
+      "displayText": "Sexyy Red",
+      "word": "Sexyy Red",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "music",
+        "performer",
+        "rap",
+        "hip-hop"
+      ],
+      "localizationKey": "word.people.sexyy-red",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-glorilla",
+      "displayText": "GloRilla",
+      "word": "GloRilla",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "music",
+        "performer",
+        "rap",
+        "hip-hop"
+      ],
+      "localizationKey": "word.people.glorilla",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-latto",
+      "displayText": "Latto",
+      "word": "Latto",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "music",
+        "performer",
+        "rap",
+        "hip-hop"
+      ],
+      "localizationKey": "word.people.latto",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-cardi-b",
+      "displayText": "Cardi B",
+      "word": "Cardi B",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "music",
+        "performer",
+        "rap",
+        "hip-hop"
+      ],
+      "localizationKey": "word.people.cardi-b",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-nicki-minaj",
+      "displayText": "Nicki Minaj",
+      "word": "Nicki Minaj",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "music",
+        "performer",
+        "rap",
+        "hip-hop"
+      ],
+      "localizationKey": "word.people.nicki-minaj",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-megan-thee-stallion",
+      "displayText": "Megan Thee Stallion",
+      "word": "Megan Thee Stallion",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "music",
+        "performer",
+        "rap",
+        "hip-hop"
+      ],
+      "localizationKey": "word.people.megan-thee-stallion",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-harry-styles",
+      "displayText": "Harry Styles",
+      "word": "Harry Styles",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "music",
+        "performer",
+        "pop",
+        "singer"
+      ],
+      "localizationKey": "word.people.harry-styles",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-kanye-west",
+      "displayText": "Kanye West",
+      "word": "Kanye West",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "music",
+        "performer",
+        "rap",
+        "hip-hop"
+      ],
+      "localizationKey": "word.people.kanye-west",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-jay-z",
+      "displayText": "Jay-Z",
+      "word": "Jay-Z",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "music",
+        "performer",
+        "rap",
+        "hip-hop"
+      ],
+      "localizationKey": "word.people.jay-z",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-eminem",
+      "displayText": "Eminem",
+      "word": "Eminem",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "music",
+        "performer",
+        "rap",
+        "hip-hop"
+      ],
+      "localizationKey": "word.people.eminem",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-snoop-dogg",
+      "displayText": "Snoop Dogg",
+      "word": "Snoop Dogg",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "music",
+        "performer",
+        "rap",
+        "hip-hop"
+      ],
+      "localizationKey": "word.people.snoop-dogg",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-miley-cyrus",
+      "displayText": "Miley Cyrus",
+      "word": "Miley Cyrus",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "music",
+        "performer",
+        "pop",
+        "singer"
+      ],
+      "localizationKey": "word.people.miley-cyrus",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-anya-taylor-joy",
+      "displayText": "Anya Taylor-Joy",
+      "word": "Anya Taylor-Joy",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.anya-taylor-joy",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-cillian-murphy",
+      "displayText": "Cillian Murphy",
+      "word": "Cillian Murphy",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.cillian-murphy",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-paul-mescal",
+      "displayText": "Paul Mescal",
+      "word": "Paul Mescal",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.paul-mescal",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-jacob-elordi",
+      "displayText": "Jacob Elordi",
+      "word": "Jacob Elordi",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.jacob-elordi",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-emma-stone",
+      "displayText": "Emma Stone",
+      "word": "Emma Stone",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.emma-stone",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-jennifer-lawrence",
+      "displayText": "Jennifer Lawrence",
+      "word": "Jennifer Lawrence",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.jennifer-lawrence",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-brad-pitt",
+      "displayText": "Brad Pitt",
+      "word": "Brad Pitt",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.brad-pitt",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-angelina-jolie",
+      "displayText": "Angelina Jolie",
+      "word": "Angelina Jolie",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.angelina-jolie",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-george-clooney",
+      "displayText": "George Clooney",
+      "word": "George Clooney",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.george-clooney",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-matt-damon",
+      "displayText": "Matt Damon",
+      "word": "Matt Damon",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.matt-damon",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-scarlett-johansson",
+      "displayText": "Scarlett Johansson",
+      "word": "Scarlett Johansson",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.scarlett-johansson",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-chris-hemsworth",
+      "displayText": "Chris Hemsworth",
+      "word": "Chris Hemsworth",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.chris-hemsworth",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-ryan-reynolds",
+      "displayText": "Ryan Reynolds",
+      "word": "Ryan Reynolds",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.ryan-reynolds",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-adam-sandler",
+      "displayText": "Adam Sandler",
+      "word": "Adam Sandler",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.adam-sandler",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-jim-carrey",
+      "displayText": "Jim Carrey",
+      "word": "Jim Carrey",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.jim-carrey",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-will-smith",
+      "displayText": "Will Smith",
+      "word": "Will Smith",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.will-smith",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-tom-hanks",
+      "displayText": "Tom Hanks",
+      "word": "Tom Hanks",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.tom-hanks",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-morgan-freeman",
+      "displayText": "Morgan Freeman",
+      "word": "Morgan Freeman",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.morgan-freeman",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-denzel-washington",
+      "displayText": "Denzel Washington",
+      "word": "Denzel Washington",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.denzel-washington",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-samuel-l-jackson",
+      "displayText": "Samuel L Jackson",
+      "word": "Samuel L Jackson",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.samuel-l-jackson",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-meryl-streep",
+      "displayText": "Meryl Streep",
+      "word": "Meryl Streep",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.meryl-streep",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-kylian-mbappe",
+      "displayText": "Kylian Mbappé",
+      "word": "Kylian Mbappé",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "athlete",
+        "sports",
+        "soccer"
+      ],
+      "localizationKey": "word.people.kylian-mbappe",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-erling-haaland",
+      "displayText": "Erling Haaland",
+      "word": "Erling Haaland",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "athlete",
+        "sports",
+        "soccer"
+      ],
+      "localizationKey": "word.people.erling-haaland",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-jude-bellingham",
+      "displayText": "Jude Bellingham",
+      "word": "Jude Bellingham",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "athlete",
+        "sports",
+        "soccer"
+      ],
+      "localizationKey": "word.people.jude-bellingham",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-neymar",
+      "displayText": "Neymar",
+      "word": "Neymar",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "athlete",
+        "sports",
+        "soccer"
+      ],
+      "localizationKey": "word.people.neymar",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-stephen-curry",
+      "displayText": "Stephen Curry",
+      "word": "Stephen Curry",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "athlete",
+        "sports",
+        "basketball"
+      ],
+      "localizationKey": "word.people.stephen-curry",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-kevin-durant",
+      "displayText": "Kevin Durant",
+      "word": "Kevin Durant",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "athlete",
+        "sports",
+        "basketball"
+      ],
+      "localizationKey": "word.people.kevin-durant",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-giannis-antetokounmpo",
+      "displayText": "Giannis Antetokounmpo",
+      "word": "Giannis Antetokounmpo",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "athlete",
+        "sports",
+        "basketball"
+      ],
+      "localizationKey": "word.people.giannis-antetokounmpo",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-luka-doncic",
+      "displayText": "Luka Dončić",
+      "word": "Luka Dončić",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "athlete",
+        "sports",
+        "basketball"
+      ],
+      "localizationKey": "word.people.luka-doncic",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-victor-wembanyama",
+      "displayText": "Victor Wembanyama",
+      "word": "Victor Wembanyama",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "athlete",
+        "sports",
+        "basketball"
+      ],
+      "localizationKey": "word.people.victor-wembanyama",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-shohei-ohtani",
+      "displayText": "Shohei Ohtani",
+      "word": "Shohei Ohtani",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "athlete",
+        "sports"
+      ],
+      "localizationKey": "word.people.shohei-ohtani",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-connor-mcdavid",
+      "displayText": "Connor McDavid",
+      "word": "Connor McDavid",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "athlete",
+        "sports"
+      ],
+      "localizationKey": "word.people.connor-mcdavid",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-tiger-woods",
+      "displayText": "Tiger Woods",
+      "word": "Tiger Woods",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "athlete",
+        "sports"
+      ],
+      "localizationKey": "word.people.tiger-woods",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-roger-federer",
+      "displayText": "Roger Federer",
+      "word": "Roger Federer",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "athlete",
+        "sports",
+        "tennis"
+      ],
+      "localizationKey": "word.people.roger-federer",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-novak-djokovic",
+      "displayText": "Novak Djokovic",
+      "word": "Novak Djokovic",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "athlete",
+        "sports",
+        "tennis"
+      ],
+      "localizationKey": "word.people.novak-djokovic",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-conor-mcgregor",
+      "displayText": "Conor McGregor",
+      "word": "Conor McGregor",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "athlete",
+        "sports"
+      ],
+      "localizationKey": "word.people.conor-mcgregor",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-logan-paul",
+      "displayText": "Logan Paul",
+      "word": "Logan Paul",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "creator",
+        "internet"
+      ],
+      "localizationKey": "word.people.logan-paul",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-jake-paul",
+      "displayText": "Jake Paul",
+      "word": "Jake Paul",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "creator",
+        "internet"
+      ],
+      "localizationKey": "word.people.jake-paul",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-ksi",
+      "displayText": "KSI",
+      "word": "KSI",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "creator",
+        "internet"
+      ],
+      "localizationKey": "word.people.ksi",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-pokimane",
+      "displayText": "Pokimane",
+      "word": "Pokimane",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "creator",
+        "internet"
+      ],
+      "localizationKey": "word.people.pokimane",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-addison-rae",
+      "displayText": "Addison Rae",
+      "word": "Addison Rae",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "creator",
+        "internet"
+      ],
+      "localizationKey": "word.people.addison-rae",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-charli-d-amelio",
+      "displayText": "Charli D'Amelio",
+      "word": "Charli D'Amelio",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "creator",
+        "internet"
+      ],
+      "localizationKey": "word.people.charli-d-amelio",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-alix-earle",
+      "displayText": "Alix Earle",
+      "word": "Alix Earle",
+      "category": "People",
+      "difficulty": "medium",
+      "tags": [
+        "people",
+        "medium",
+        "creator",
+        "internet"
+      ],
+      "localizationKey": "word.people.alix-earle",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-michael-jackson",
+      "displayText": "Michael Jackson",
+      "word": "Michael Jackson",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "music",
+        "performer",
+        "pop",
+        "singer",
+        "dancer",
+        "icon"
+      ],
+      "localizationKey": "word.people.michael-jackson",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-prince",
+      "displayText": "Prince",
+      "word": "Prince",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "music",
+        "performer",
+        "classic",
+        "icon",
+        "funk",
+        "pop",
+        "singer",
+        "guitarist"
+      ],
+      "localizationKey": "word.people.prince",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-freddie-mercury",
+      "displayText": "Freddie Mercury",
+      "word": "Freddie Mercury",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "music",
+        "performer",
+        "classic",
+        "icon",
+        "rock",
+        "singer",
+        "frontman"
+      ],
+      "localizationKey": "word.people.freddie-mercury",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-david-bowie",
+      "displayText": "David Bowie",
+      "word": "David Bowie",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "music",
+        "performer",
+        "classic",
+        "icon",
+        "rock",
+        "singer",
+        "actor"
+      ],
+      "localizationKey": "word.people.david-bowie",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-whitney-houston",
+      "displayText": "Whitney Houston",
+      "word": "Whitney Houston",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "music",
+        "performer",
+        "pop",
+        "singer",
+        "vocalist",
+        "icon"
+      ],
+      "localizationKey": "word.people.whitney-houston",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-elvis-presley",
+      "displayText": "Elvis Presley",
+      "word": "Elvis Presley",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "music",
+        "performer",
+        "classic",
+        "icon"
+      ],
+      "localizationKey": "word.people.elvis-presley",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-bob-marley",
+      "displayText": "Bob Marley",
+      "word": "Bob Marley",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "music",
+        "performer",
+        "classic",
+        "icon"
+      ],
+      "localizationKey": "word.people.bob-marley",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-john-lennon",
+      "displayText": "John Lennon",
+      "word": "John Lennon",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "music",
+        "performer",
+        "classic",
+        "icon"
+      ],
+      "localizationKey": "word.people.john-lennon",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-paul-mccartney",
+      "displayText": "Paul McCartney",
+      "word": "Paul McCartney",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "music",
+        "performer",
+        "classic",
+        "icon"
+      ],
+      "localizationKey": "word.people.paul-mccartney",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-elton-john",
+      "displayText": "Elton John",
+      "word": "Elton John",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "music",
+        "performer",
+        "classic",
+        "icon"
+      ],
+      "localizationKey": "word.people.elton-john",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-madonna",
+      "displayText": "Madonna",
+      "word": "Madonna",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "music",
+        "performer",
+        "pop",
+        "singer"
+      ],
+      "localizationKey": "word.people.madonna",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-britney-spears",
+      "displayText": "Britney Spears",
+      "word": "Britney Spears",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "music",
+        "performer",
+        "pop",
+        "singer"
+      ],
+      "localizationKey": "word.people.britney-spears",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-mariah-carey",
+      "displayText": "Mariah Carey",
+      "word": "Mariah Carey",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "music",
+        "performer",
+        "pop",
+        "singer"
+      ],
+      "localizationKey": "word.people.mariah-carey",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-celine-dion",
+      "displayText": "Celine Dion",
+      "word": "Celine Dion",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "music",
+        "performer",
+        "pop",
+        "singer"
+      ],
+      "localizationKey": "word.people.celine-dion",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-marlon-brando",
+      "displayText": "Marlon Brando",
+      "word": "Marlon Brando",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.marlon-brando",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-al-pacino",
+      "displayText": "Al Pacino",
+      "word": "Al Pacino",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.al-pacino",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-robert-de-niro",
+      "displayText": "Robert De Niro",
+      "word": "Robert De Niro",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.robert-de-niro",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-jack-nicholson",
+      "displayText": "Jack Nicholson",
+      "word": "Jack Nicholson",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.jack-nicholson",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-harrison-ford",
+      "displayText": "Harrison Ford",
+      "word": "Harrison Ford",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.harrison-ford",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-arnold-schwarzenegger",
+      "displayText": "Arnold Schwarzenegger",
+      "word": "Arnold Schwarzenegger",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.arnold-schwarzenegger",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-tom-cruise",
+      "displayText": "Tom Cruise",
+      "word": "Tom Cruise",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.tom-cruise",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-audrey-hepburn",
+      "displayText": "Audrey Hepburn",
+      "word": "Audrey Hepburn",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.audrey-hepburn",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-marilyn-monroe",
+      "displayText": "Marilyn Monroe",
+      "word": "Marilyn Monroe",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "actor",
+        "film"
+      ],
+      "localizationKey": "word.people.marilyn-monroe",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-muhammad-ali",
+      "displayText": "Muhammad Ali",
+      "word": "Muhammad Ali",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "athlete",
+        "sports"
+      ],
+      "localizationKey": "word.people.muhammad-ali",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-michael-jordan",
+      "displayText": "Michael Jordan",
+      "word": "Michael Jordan",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "athlete",
+        "sports",
+        "basketball"
+      ],
+      "localizationKey": "word.people.michael-jordan",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-pele",
+      "displayText": "Pelé",
+      "word": "Pelé",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "athlete",
+        "sports",
+        "soccer"
+      ],
+      "localizationKey": "word.people.pele",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-kobe-bryant",
+      "displayText": "Kobe Bryant",
+      "word": "Kobe Bryant",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "athlete",
+        "sports",
+        "basketball"
+      ],
+      "localizationKey": "word.people.kobe-bryant",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-serena-williams",
+      "displayText": "Serena Williams",
+      "word": "Serena Williams",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "athlete",
+        "sports",
+        "tennis"
+      ],
+      "localizationKey": "word.people.serena-williams",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-tom-brady",
+      "displayText": "Tom Brady",
+      "word": "Tom Brady",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "athlete",
+        "sports",
+        "football"
+      ],
+      "localizationKey": "word.people.tom-brady",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-usain-bolt",
+      "displayText": "Usain Bolt",
+      "word": "Usain Bolt",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "athlete",
+        "sports"
+      ],
+      "localizationKey": "word.people.usain-bolt",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-bill-gates",
+      "displayText": "Bill Gates",
+      "word": "Bill Gates",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "business",
+        "technology"
+      ],
+      "localizationKey": "word.people.bill-gates",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-steve-jobs",
+      "displayText": "Steve Jobs",
+      "word": "Steve Jobs",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "business",
+        "technology"
+      ],
+      "localizationKey": "word.people.steve-jobs",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-mark-zuckerberg",
+      "displayText": "Mark Zuckerberg",
+      "word": "Mark Zuckerberg",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "business",
+        "technology"
+      ],
+      "localizationKey": "word.people.mark-zuckerberg",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-jeff-bezos",
+      "displayText": "Jeff Bezos",
+      "word": "Jeff Bezos",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "business",
+        "technology"
+      ],
+      "localizationKey": "word.people.jeff-bezos",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-oprah-winfrey",
+      "displayText": "Oprah Winfrey",
+      "word": "Oprah Winfrey",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "business",
+        "technology"
+      ],
+      "localizationKey": "word.people.oprah-winfrey",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-walt-disney",
+      "displayText": "Walt Disney",
+      "word": "Walt Disney",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "business",
+        "technology"
+      ],
+      "localizationKey": "word.people.walt-disney",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-steven-spielberg",
+      "displayText": "Steven Spielberg",
+      "word": "Steven Spielberg",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "director",
+        "film"
+      ],
+      "localizationKey": "word.people.steven-spielberg",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-christopher-nolan",
+      "displayText": "Christopher Nolan",
+      "word": "Christopher Nolan",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "director",
+        "film"
+      ],
+      "localizationKey": "word.people.christopher-nolan",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-martin-scorsese",
+      "displayText": "Martin Scorsese",
+      "word": "Martin Scorsese",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "director",
+        "film"
+      ],
+      "localizationKey": "word.people.martin-scorsese",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "people-quentin-tarantino",
+      "displayText": "Quentin Tarantino",
+      "word": "Quentin Tarantino",
+      "category": "People",
+      "difficulty": "hard",
+      "tags": [
+        "people",
+        "hard",
+        "director",
+        "film"
+      ],
+      "localizationKey": "word.people.quentin-tarantino",
+      "safety": {
+        "level": "general"
+      }
+    }
   ]
 }

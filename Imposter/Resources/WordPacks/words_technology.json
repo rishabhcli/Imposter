@@ -1,161 +1,2735 @@
 {
   "category": "Technology",
   "words": [
-    {"word": "iPhone 16", "difficulty": "easy"},
-    {"word": "Apple Vision Pro", "difficulty": "easy"},
-    {"word": "AirPods", "difficulty": "easy"},
-    {"word": "MacBook", "difficulty": "easy"},
-    {"word": "iPad", "difficulty": "easy"},
-    {"word": "Apple Watch", "difficulty": "easy"},
-    {"word": "PlayStation 5", "difficulty": "easy"},
-    {"word": "Xbox", "difficulty": "easy"},
-    {"word": "Nintendo Switch", "difficulty": "easy"},
-    {"word": "ChatGPT", "difficulty": "easy"},
-    {"word": "TikTok", "difficulty": "easy"},
-    {"word": "Instagram", "difficulty": "easy"},
-    {"word": "YouTube", "difficulty": "easy"},
-    {"word": "Netflix", "difficulty": "easy"},
-    {"word": "Spotify", "difficulty": "easy"},
-    {"word": "WhatsApp", "difficulty": "easy"},
-    {"word": "Snapchat", "difficulty": "easy"},
-    {"word": "BeReal", "difficulty": "easy"},
-    {"word": "Threads", "difficulty": "easy"},
-    {"word": "Discord", "difficulty": "easy"},
-    {"word": "Fortnite", "difficulty": "easy"},
-    {"word": "Minecraft", "difficulty": "easy"},
-    {"word": "Roblox", "difficulty": "easy"},
-    {"word": "Call of Duty", "difficulty": "easy"},
-    {"word": "GTA 6", "difficulty": "easy"},
-    {"word": "FIFA", "difficulty": "easy"},
-    {"word": "Madden", "difficulty": "easy"},
-    {"word": "NBA 2K", "difficulty": "easy"},
-    {"word": "Mario Kart", "difficulty": "easy"},
-    {"word": "Pokémon", "difficulty": "easy"},
-    {"word": "Among Us", "difficulty": "easy"},
-    {"word": "Candy Crush", "difficulty": "easy"},
-    {"word": "Subway Surfers", "difficulty": "easy"},
-    {"word": "Tesla", "difficulty": "easy"},
-    {"word": "Uber", "difficulty": "easy"},
-    {"word": "Amazon", "difficulty": "easy"},
-    {"word": "Google", "difficulty": "easy"},
-    {"word": "Alexa", "difficulty": "easy"},
-    {"word": "Siri", "difficulty": "easy"},
-    {"word": "FaceTime", "difficulty": "easy"},
-    {"word": "Zoom", "difficulty": "easy"},
-    {"word": "WiFi", "difficulty": "easy"},
-    {"word": "Bluetooth", "difficulty": "easy"},
-    {"word": "Emoji", "difficulty": "easy"},
-    {"word": "Selfie", "difficulty": "easy"},
-    {"word": "Meme", "difficulty": "easy"},
-    {"word": "Google Maps", "difficulty": "easy"},
-    {"word": "Fitbit", "difficulty": "easy"},
-    {"word": "GoPro", "difficulty": "easy"},
-    {"word": "Kindle", "difficulty": "easy"},
-    {"word": "Marvel Rivals", "difficulty": "medium"},
-    {"word": "Black Myth Wukong", "difficulty": "medium"},
-    {"word": "Palworld", "difficulty": "medium"},
-    {"word": "Helldivers 2", "difficulty": "medium"},
-    {"word": "Baldur's Gate 3", "difficulty": "medium"},
-    {"word": "Elden Ring", "difficulty": "medium"},
-    {"word": "Hogwarts Legacy", "difficulty": "medium"},
-    {"word": "Zelda Tears of the Kingdom", "difficulty": "medium"},
-    {"word": "Starfield", "difficulty": "medium"},
-    {"word": "Diablo 4", "difficulty": "medium"},
-    {"word": "Street Fighter 6", "difficulty": "medium"},
-    {"word": "Final Fantasy 7 Rebirth", "difficulty": "medium"},
-    {"word": "Valorant", "difficulty": "medium"},
-    {"word": "League of Legends", "difficulty": "medium"},
-    {"word": "Apex Legends", "difficulty": "medium"},
-    {"word": "Overwatch 2", "difficulty": "medium"},
-    {"word": "Genshin Impact", "difficulty": "medium"},
-    {"word": "Honkai Star Rail", "difficulty": "medium"},
-    {"word": "Animal Crossing", "difficulty": "medium"},
-    {"word": "The Sims", "difficulty": "medium"},
-    {"word": "God of War", "difficulty": "medium"},
-    {"word": "Spider-Man 2", "difficulty": "medium"},
-    {"word": "Halo", "difficulty": "medium"},
-    {"word": "Clash of Clans", "difficulty": "medium"},
-    {"word": "Wordle", "difficulty": "medium"},
-    {"word": "Claude AI", "difficulty": "medium"},
-    {"word": "Gemini AI", "difficulty": "medium"},
-    {"word": "Midjourney", "difficulty": "medium"},
-    {"word": "DALL-E", "difficulty": "medium"},
-    {"word": "Sora AI", "difficulty": "medium"},
-    {"word": "Copilot", "difficulty": "medium"},
-    {"word": "Meta Quest", "difficulty": "medium"},
-    {"word": "Steam Deck", "difficulty": "medium"},
-    {"word": "Windows", "difficulty": "medium"},
-    {"word": "Mac", "difficulty": "medium"},
-    {"word": "Chrome", "difficulty": "medium"},
-    {"word": "Safari", "difficulty": "medium"},
-    {"word": "Microsoft Word", "difficulty": "medium"},
-    {"word": "Excel", "difficulty": "medium"},
-    {"word": "Photoshop", "difficulty": "medium"},
-    {"word": "iCloud", "difficulty": "medium"},
-    {"word": "Google Drive", "difficulty": "medium"},
-    {"word": "Twitch", "difficulty": "medium"},
-    {"word": "Reddit", "difficulty": "medium"},
-    {"word": "X Twitter", "difficulty": "medium"},
-    {"word": "LinkedIn", "difficulty": "medium"},
-    {"word": "Tinder", "difficulty": "medium"},
-    {"word": "DoorDash", "difficulty": "medium"},
-    {"word": "Venmo", "difficulty": "medium"},
-    {"word": "Apple Pay", "difficulty": "medium"},
-    {"word": "PayPal", "difficulty": "medium"},
-    {"word": "Duolingo", "difficulty": "medium"},
-    {"word": "Shazam", "difficulty": "medium"},
-    {"word": "Steam", "difficulty": "medium"},
-    {"word": "Nintendo Wii", "difficulty": "medium"},
-    {"word": "Game Boy", "difficulty": "medium"},
-    {"word": "Dark Souls", "difficulty": "hard"},
-    {"word": "Red Dead Redemption", "difficulty": "hard"},
-    {"word": "Cyberpunk 2077", "difficulty": "hard"},
-    {"word": "The Witcher 3", "difficulty": "hard"},
-    {"word": "World of Warcraft", "difficulty": "hard"},
-    {"word": "Skyrim", "difficulty": "hard"},
-    {"word": "Mass Effect", "difficulty": "hard"},
-    {"word": "Bioshock", "difficulty": "hard"},
-    {"word": "Portal", "difficulty": "hard"},
-    {"word": "Half-Life", "difficulty": "hard"},
-    {"word": "Metal Gear Solid", "difficulty": "hard"},
-    {"word": "Silent Hill", "difficulty": "hard"},
-    {"word": "Resident Evil", "difficulty": "hard"},
-    {"word": "Doom", "difficulty": "hard"},
-    {"word": "Starcraft", "difficulty": "hard"},
-    {"word": "Linux", "difficulty": "hard"},
-    {"word": "Ubuntu", "difficulty": "hard"},
-    {"word": "iOS", "difficulty": "hard"},
-    {"word": "Android OS", "difficulty": "hard"},
-    {"word": "GitHub", "difficulty": "hard"},
-    {"word": "VS Code", "difficulty": "hard"},
-    {"word": "Figma", "difficulty": "hard"},
-    {"word": "Notion", "difficulty": "hard"},
-    {"word": "Slack", "difficulty": "hard"},
-    {"word": "Bitcoin", "difficulty": "hard"},
-    {"word": "Ethereum", "difficulty": "hard"},
-    {"word": "NFT", "difficulty": "hard"},
-    {"word": "Blockchain", "difficulty": "hard"},
-    {"word": "Cryptocurrency", "difficulty": "hard"},
-    {"word": "Artificial Intelligence", "difficulty": "hard"},
-    {"word": "Machine Learning", "difficulty": "hard"},
-    {"word": "Virtual Reality", "difficulty": "hard"},
-    {"word": "Augmented Reality", "difficulty": "hard"},
-    {"word": "Cloud Computing", "difficulty": "hard"},
-    {"word": "Cybersecurity", "difficulty": "hard"},
-    {"word": "Encryption", "difficulty": "hard"},
-    {"word": "Algorithm", "difficulty": "hard"},
-    {"word": "Database", "difficulty": "hard"},
-    {"word": "Server", "difficulty": "hard"},
-    {"word": "API", "difficulty": "hard"},
-    {"word": "Python", "difficulty": "hard"},
-    {"word": "JavaScript", "difficulty": "hard"},
-    {"word": "HTML", "difficulty": "hard"},
-    {"word": "Firewall", "difficulty": "hard"},
-    {"word": "VPN", "difficulty": "hard"},
-    {"word": "Router", "difficulty": "hard"},
-    {"word": "RAM", "difficulty": "hard"},
-    {"word": "SSD", "difficulty": "hard"},
-    {"word": "GPU", "difficulty": "hard"},
-    {"word": "CPU", "difficulty": "hard"}
+    {
+      "id": "technology-iphone-16",
+      "displayText": "iPhone 16",
+      "word": "iPhone 16",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "device",
+        "hardware",
+        "smartphone",
+        "apple",
+        "mobile"
+      ],
+      "localizationKey": "word.technology.iphone-16",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-apple-vision-pro",
+      "displayText": "Apple Vision Pro",
+      "word": "Apple Vision Pro",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "device",
+        "hardware",
+        "immersive",
+        "reality",
+        "headset",
+        "spatial-computing",
+        "apple",
+        "mixed-reality"
+      ],
+      "localizationKey": "word.technology.apple-vision-pro",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-airpods",
+      "displayText": "AirPods",
+      "word": "AirPods",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "device",
+        "hardware",
+        "earbuds",
+        "audio",
+        "wireless",
+        "apple"
+      ],
+      "localizationKey": "word.technology.airpods",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-macbook",
+      "displayText": "MacBook",
+      "word": "MacBook",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "device",
+        "hardware",
+        "laptop",
+        "apple",
+        "computer",
+        "portable"
+      ],
+      "localizationKey": "word.technology.macbook",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-ipad",
+      "displayText": "iPad",
+      "word": "iPad",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "device",
+        "hardware",
+        "tablet",
+        "apple",
+        "touch",
+        "portable"
+      ],
+      "localizationKey": "word.technology.ipad",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-apple-watch",
+      "displayText": "Apple Watch",
+      "word": "Apple Watch",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "device",
+        "hardware"
+      ],
+      "localizationKey": "word.technology.apple-watch",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-playstation-5",
+      "displayText": "PlayStation 5",
+      "word": "PlayStation 5",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "device",
+        "hardware"
+      ],
+      "localizationKey": "word.technology.playstation-5",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-xbox",
+      "displayText": "Xbox",
+      "word": "Xbox",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "device",
+        "hardware"
+      ],
+      "localizationKey": "word.technology.xbox",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-nintendo-switch",
+      "displayText": "Nintendo Switch",
+      "word": "Nintendo Switch",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "device",
+        "hardware"
+      ],
+      "localizationKey": "word.technology.nintendo-switch",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-chatgpt",
+      "displayText": "ChatGPT",
+      "word": "ChatGPT",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "ai",
+        "generative",
+        "app",
+        "assistant"
+      ],
+      "localizationKey": "word.technology.chatgpt",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-tiktok",
+      "displayText": "TikTok",
+      "word": "TikTok",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "social",
+        "app"
+      ],
+      "localizationKey": "word.technology.tiktok",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-instagram",
+      "displayText": "Instagram",
+      "word": "Instagram",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "social",
+        "app"
+      ],
+      "localizationKey": "word.technology.instagram",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-youtube",
+      "displayText": "YouTube",
+      "word": "YouTube",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "social",
+        "app"
+      ],
+      "localizationKey": "word.technology.youtube",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-netflix",
+      "displayText": "Netflix",
+      "word": "Netflix",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "media",
+        "app"
+      ],
+      "localizationKey": "word.technology.netflix",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-spotify",
+      "displayText": "Spotify",
+      "word": "Spotify",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "media",
+        "app"
+      ],
+      "localizationKey": "word.technology.spotify",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-whatsapp",
+      "displayText": "WhatsApp",
+      "word": "WhatsApp",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "social",
+        "app"
+      ],
+      "localizationKey": "word.technology.whatsapp",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-snapchat",
+      "displayText": "Snapchat",
+      "word": "Snapchat",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "social",
+        "app"
+      ],
+      "localizationKey": "word.technology.snapchat",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-bereal",
+      "displayText": "BeReal",
+      "word": "BeReal",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "social",
+        "app"
+      ],
+      "localizationKey": "word.technology.bereal",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-threads",
+      "displayText": "Threads",
+      "word": "Threads",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "social",
+        "app"
+      ],
+      "localizationKey": "word.technology.threads",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-discord",
+      "displayText": "Discord",
+      "word": "Discord",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "social",
+        "app"
+      ],
+      "localizationKey": "word.technology.discord",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-fortnite",
+      "displayText": "Fortnite",
+      "word": "Fortnite",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "game",
+        "interactive"
+      ],
+      "localizationKey": "word.technology.fortnite",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-minecraft",
+      "displayText": "Minecraft",
+      "word": "Minecraft",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "game",
+        "interactive",
+        "sandbox"
+      ],
+      "localizationKey": "word.technology.minecraft",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-roblox",
+      "displayText": "Roblox",
+      "word": "Roblox",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "game",
+        "interactive",
+        "sandbox"
+      ],
+      "localizationKey": "word.technology.roblox",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-call-of-duty",
+      "displayText": "Call of Duty",
+      "word": "Call of Duty",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "game",
+        "interactive",
+        "shooter"
+      ],
+      "localizationKey": "word.technology.call-of-duty",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-gta-6",
+      "displayText": "GTA 6",
+      "word": "GTA 6",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "game",
+        "interactive"
+      ],
+      "localizationKey": "word.technology.gta-6",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-fifa",
+      "displayText": "FIFA",
+      "word": "FIFA",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "game",
+        "interactive"
+      ],
+      "localizationKey": "word.technology.fifa",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-madden",
+      "displayText": "Madden",
+      "word": "Madden",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "game",
+        "interactive"
+      ],
+      "localizationKey": "word.technology.madden",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-nba-2k",
+      "displayText": "NBA 2K",
+      "word": "NBA 2K",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "game",
+        "interactive"
+      ],
+      "localizationKey": "word.technology.nba-2k",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-mario-kart",
+      "displayText": "Mario Kart",
+      "word": "Mario Kart",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "game",
+        "interactive"
+      ],
+      "localizationKey": "word.technology.mario-kart",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-pokemon-go",
+      "displayText": "Pokémon Go",
+      "word": "Pokémon Go",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "game",
+        "interactive"
+      ],
+      "localizationKey": "word.technology.pokemon-go",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-among-us",
+      "displayText": "Among Us",
+      "word": "Among Us",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "game",
+        "interactive"
+      ],
+      "localizationKey": "word.technology.among-us",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-candy-crush",
+      "displayText": "Candy Crush",
+      "word": "Candy Crush",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "game",
+        "interactive"
+      ],
+      "localizationKey": "word.technology.candy-crush",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-subway-surfers",
+      "displayText": "Subway Surfers",
+      "word": "Subway Surfers",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "game",
+        "interactive"
+      ],
+      "localizationKey": "word.technology.subway-surfers",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-tesla",
+      "displayText": "Tesla",
+      "word": "Tesla",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "device",
+        "hardware"
+      ],
+      "localizationKey": "word.technology.tesla",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-uber",
+      "displayText": "Uber",
+      "word": "Uber",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "service",
+        "real-world"
+      ],
+      "localizationKey": "word.technology.uber",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-amazon",
+      "displayText": "Amazon",
+      "word": "Amazon",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "big-tech",
+        "platform"
+      ],
+      "localizationKey": "word.technology.amazon",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-google",
+      "displayText": "Google",
+      "word": "Google",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "big-tech",
+        "platform"
+      ],
+      "localizationKey": "word.technology.google",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-alexa",
+      "displayText": "Alexa",
+      "word": "Alexa",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "communication",
+        "assistant"
+      ],
+      "localizationKey": "word.technology.alexa",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-siri",
+      "displayText": "Siri",
+      "word": "Siri",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "communication",
+        "assistant"
+      ],
+      "localizationKey": "word.technology.siri",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-facetime",
+      "displayText": "FaceTime",
+      "word": "FaceTime",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "communication",
+        "assistant"
+      ],
+      "localizationKey": "word.technology.facetime",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-zoom",
+      "displayText": "Zoom",
+      "word": "Zoom",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "communication",
+        "assistant"
+      ],
+      "localizationKey": "word.technology.zoom",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-wifi",
+      "displayText": "WiFi",
+      "word": "WiFi",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "network",
+        "security"
+      ],
+      "localizationKey": "word.technology.wifi",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-bluetooth",
+      "displayText": "Bluetooth",
+      "word": "Bluetooth",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "network",
+        "security"
+      ],
+      "localizationKey": "word.technology.bluetooth",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-emoji",
+      "displayText": "Emoji",
+      "word": "Emoji",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "internet-culture",
+        "communication"
+      ],
+      "localizationKey": "word.technology.emoji",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-selfie",
+      "displayText": "Selfie",
+      "word": "Selfie",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "internet-culture",
+        "communication"
+      ],
+      "localizationKey": "word.technology.selfie",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-meme",
+      "displayText": "Meme",
+      "word": "Meme",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "internet-culture",
+        "communication"
+      ],
+      "localizationKey": "word.technology.meme",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-google-maps",
+      "displayText": "Google Maps",
+      "word": "Google Maps",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "service",
+        "real-world"
+      ],
+      "localizationKey": "word.technology.google-maps",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-fitbit",
+      "displayText": "Fitbit",
+      "word": "Fitbit",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "device",
+        "hardware"
+      ],
+      "localizationKey": "word.technology.fitbit",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-gopro",
+      "displayText": "GoPro",
+      "word": "GoPro",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "device",
+        "hardware"
+      ],
+      "localizationKey": "word.technology.gopro",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-kindle",
+      "displayText": "Kindle",
+      "word": "Kindle",
+      "category": "Technology",
+      "difficulty": "easy",
+      "tags": [
+        "technology",
+        "easy",
+        "device",
+        "hardware"
+      ],
+      "localizationKey": "word.technology.kindle",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-marvel-rivals",
+      "displayText": "Marvel Rivals",
+      "word": "Marvel Rivals",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "game",
+        "interactive",
+        "multiplayer",
+        "hero-shooter",
+        "marvel"
+      ],
+      "localizationKey": "word.technology.marvel-rivals",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-black-myth-wukong",
+      "displayText": "Black Myth Wukong",
+      "word": "Black Myth Wukong",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "game",
+        "interactive",
+        "action",
+        "mythology",
+        "adventure"
+      ],
+      "localizationKey": "word.technology.black-myth-wukong",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-palworld",
+      "displayText": "Palworld",
+      "word": "Palworld",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "game",
+        "interactive",
+        "sandbox",
+        "survival",
+        "creatures",
+        "crafting"
+      ],
+      "localizationKey": "word.technology.palworld",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-helldivers-2",
+      "displayText": "Helldivers 2",
+      "word": "Helldivers 2",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "game",
+        "interactive",
+        "shooter",
+        "co-op",
+        "sci-fi"
+      ],
+      "localizationKey": "word.technology.helldivers-2",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-baldur-s-gate-3",
+      "displayText": "Baldur's Gate 3",
+      "word": "Baldur's Gate 3",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "game",
+        "interactive",
+        "rpg",
+        "fantasy",
+        "party"
+      ],
+      "localizationKey": "word.technology.baldur-s-gate-3",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-elden-ring",
+      "displayText": "Elden Ring",
+      "word": "Elden Ring",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "game",
+        "interactive",
+        "rpg"
+      ],
+      "localizationKey": "word.technology.elden-ring",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-hogwarts-legacy",
+      "displayText": "Hogwarts Legacy",
+      "word": "Hogwarts Legacy",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "game",
+        "interactive"
+      ],
+      "localizationKey": "word.technology.hogwarts-legacy",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-zelda-tears-of-the-kingdom",
+      "displayText": "Zelda Tears of the Kingdom",
+      "word": "Zelda Tears of the Kingdom",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "game",
+        "interactive"
+      ],
+      "localizationKey": "word.technology.zelda-tears-of-the-kingdom",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-starfield",
+      "displayText": "Starfield",
+      "word": "Starfield",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "game",
+        "interactive"
+      ],
+      "localizationKey": "word.technology.starfield",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-diablo-4",
+      "displayText": "Diablo 4",
+      "word": "Diablo 4",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "game",
+        "interactive",
+        "rpg"
+      ],
+      "localizationKey": "word.technology.diablo-4",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-street-fighter-6",
+      "displayText": "Street Fighter 6",
+      "word": "Street Fighter 6",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "game",
+        "interactive"
+      ],
+      "localizationKey": "word.technology.street-fighter-6",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-final-fantasy-7-rebirth",
+      "displayText": "Final Fantasy 7 Rebirth",
+      "word": "Final Fantasy 7 Rebirth",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "game",
+        "interactive",
+        "rpg"
+      ],
+      "localizationKey": "word.technology.final-fantasy-7-rebirth",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-valorant",
+      "displayText": "Valorant",
+      "word": "Valorant",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "game",
+        "interactive",
+        "shooter"
+      ],
+      "localizationKey": "word.technology.valorant",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-league-of-legends",
+      "displayText": "League of Legends",
+      "word": "League of Legends",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "game",
+        "interactive"
+      ],
+      "localizationKey": "word.technology.league-of-legends",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-apex-legends",
+      "displayText": "Apex Legends",
+      "word": "Apex Legends",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "game",
+        "interactive",
+        "shooter"
+      ],
+      "localizationKey": "word.technology.apex-legends",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-overwatch-2",
+      "displayText": "Overwatch 2",
+      "word": "Overwatch 2",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "game",
+        "interactive",
+        "shooter"
+      ],
+      "localizationKey": "word.technology.overwatch-2",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-genshin-impact",
+      "displayText": "Genshin Impact",
+      "word": "Genshin Impact",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "game",
+        "interactive",
+        "rpg"
+      ],
+      "localizationKey": "word.technology.genshin-impact",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-honkai-star-rail",
+      "displayText": "Honkai Star Rail",
+      "word": "Honkai Star Rail",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "game",
+        "interactive",
+        "rpg"
+      ],
+      "localizationKey": "word.technology.honkai-star-rail",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-animal-crossing",
+      "displayText": "Animal Crossing",
+      "word": "Animal Crossing",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "game",
+        "interactive",
+        "sandbox"
+      ],
+      "localizationKey": "word.technology.animal-crossing",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-the-sims",
+      "displayText": "The Sims",
+      "word": "The Sims",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "game",
+        "interactive",
+        "sandbox"
+      ],
+      "localizationKey": "word.technology.the-sims",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-god-of-war",
+      "displayText": "God of War",
+      "word": "God of War",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "game",
+        "interactive"
+      ],
+      "localizationKey": "word.technology.god-of-war",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-spider-man-2",
+      "displayText": "Spider-Man 2",
+      "word": "Spider-Man 2",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "game",
+        "interactive"
+      ],
+      "localizationKey": "word.technology.spider-man-2",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-halo",
+      "displayText": "Halo",
+      "word": "Halo",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "game",
+        "interactive",
+        "shooter"
+      ],
+      "localizationKey": "word.technology.halo",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-clash-of-clans",
+      "displayText": "Clash of Clans",
+      "word": "Clash of Clans",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "game",
+        "interactive"
+      ],
+      "localizationKey": "word.technology.clash-of-clans",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-wordle",
+      "displayText": "Wordle",
+      "word": "Wordle",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "game",
+        "interactive"
+      ],
+      "localizationKey": "word.technology.wordle",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-claude-ai",
+      "displayText": "Claude AI",
+      "word": "Claude AI",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "ai",
+        "generative"
+      ],
+      "localizationKey": "word.technology.claude-ai",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-gemini-ai",
+      "displayText": "Gemini AI",
+      "word": "Gemini AI",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "ai",
+        "generative"
+      ],
+      "localizationKey": "word.technology.gemini-ai",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-midjourney",
+      "displayText": "Midjourney",
+      "word": "Midjourney",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "ai",
+        "generative"
+      ],
+      "localizationKey": "word.technology.midjourney",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-dall-e",
+      "displayText": "DALL-E",
+      "word": "DALL-E",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "ai",
+        "generative"
+      ],
+      "localizationKey": "word.technology.dall-e",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-sora-ai",
+      "displayText": "Sora AI",
+      "word": "Sora AI",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "ai",
+        "generative"
+      ],
+      "localizationKey": "word.technology.sora-ai",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-copilot",
+      "displayText": "Copilot",
+      "word": "Copilot",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "ai",
+        "generative"
+      ],
+      "localizationKey": "word.technology.copilot",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-meta-quest",
+      "displayText": "Meta Quest",
+      "word": "Meta Quest",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "device",
+        "hardware",
+        "immersive",
+        "reality"
+      ],
+      "localizationKey": "word.technology.meta-quest",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-steam-deck",
+      "displayText": "Steam Deck",
+      "word": "Steam Deck",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "device",
+        "hardware"
+      ],
+      "localizationKey": "word.technology.steam-deck",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-windows",
+      "displayText": "Windows",
+      "word": "Windows",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "software",
+        "developer"
+      ],
+      "localizationKey": "word.technology.windows",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-mac",
+      "displayText": "Mac",
+      "word": "Mac",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "software",
+        "developer"
+      ],
+      "localizationKey": "word.technology.mac",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-chrome",
+      "displayText": "Chrome",
+      "word": "Chrome",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "software",
+        "developer"
+      ],
+      "localizationKey": "word.technology.chrome",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-safari",
+      "displayText": "Safari",
+      "word": "Safari",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "software",
+        "developer"
+      ],
+      "localizationKey": "word.technology.safari",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-microsoft-word",
+      "displayText": "Microsoft Word",
+      "word": "Microsoft Word",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "productivity",
+        "software"
+      ],
+      "localizationKey": "word.technology.microsoft-word",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-excel",
+      "displayText": "Excel",
+      "word": "Excel",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "productivity",
+        "software"
+      ],
+      "localizationKey": "word.technology.excel",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-photoshop",
+      "displayText": "Photoshop",
+      "word": "Photoshop",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "productivity",
+        "software"
+      ],
+      "localizationKey": "word.technology.photoshop",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-icloud",
+      "displayText": "iCloud",
+      "word": "iCloud",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "productivity",
+        "software"
+      ],
+      "localizationKey": "word.technology.icloud",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-google-drive",
+      "displayText": "Google Drive",
+      "word": "Google Drive",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "productivity",
+        "software"
+      ],
+      "localizationKey": "word.technology.google-drive",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-twitch",
+      "displayText": "Twitch",
+      "word": "Twitch",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "social",
+        "app"
+      ],
+      "localizationKey": "word.technology.twitch",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-reddit",
+      "displayText": "Reddit",
+      "word": "Reddit",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "social",
+        "app"
+      ],
+      "localizationKey": "word.technology.reddit",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-x-twitter",
+      "displayText": "X Twitter",
+      "word": "X Twitter",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "social",
+        "app"
+      ],
+      "localizationKey": "word.technology.x-twitter",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-linkedin",
+      "displayText": "LinkedIn",
+      "word": "LinkedIn",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "social",
+        "app"
+      ],
+      "localizationKey": "word.technology.linkedin",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-tinder",
+      "displayText": "Tinder",
+      "word": "Tinder",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "social",
+        "app"
+      ],
+      "localizationKey": "word.technology.tinder",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-doordash",
+      "displayText": "DoorDash",
+      "word": "DoorDash",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "service",
+        "real-world",
+        "app",
+        "delivery"
+      ],
+      "localizationKey": "word.technology.doordash",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-venmo",
+      "displayText": "Venmo",
+      "word": "Venmo",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "finance",
+        "digital-money"
+      ],
+      "localizationKey": "word.technology.venmo",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-apple-pay",
+      "displayText": "Apple Pay",
+      "word": "Apple Pay",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "finance",
+        "digital-money"
+      ],
+      "localizationKey": "word.technology.apple-pay",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-paypal",
+      "displayText": "PayPal",
+      "word": "PayPal",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "finance",
+        "digital-money"
+      ],
+      "localizationKey": "word.technology.paypal",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-duolingo",
+      "displayText": "Duolingo",
+      "word": "Duolingo",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "digital",
+        "modern"
+      ],
+      "localizationKey": "word.technology.duolingo",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-shazam",
+      "displayText": "Shazam",
+      "word": "Shazam",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "media",
+        "app"
+      ],
+      "localizationKey": "word.technology.shazam",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-steam",
+      "displayText": "Steam",
+      "word": "Steam",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "digital",
+        "modern"
+      ],
+      "localizationKey": "word.technology.steam",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-nintendo-wii",
+      "displayText": "Nintendo Wii",
+      "word": "Nintendo Wii",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "device",
+        "hardware"
+      ],
+      "localizationKey": "word.technology.nintendo-wii",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-game-boy",
+      "displayText": "Game Boy",
+      "word": "Game Boy",
+      "category": "Technology",
+      "difficulty": "medium",
+      "tags": [
+        "technology",
+        "medium",
+        "device",
+        "hardware"
+      ],
+      "localizationKey": "word.technology.game-boy",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-dark-souls",
+      "displayText": "Dark Souls",
+      "word": "Dark Souls",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "game",
+        "interactive",
+        "rpg",
+        "action-rpg",
+        "difficult",
+        "fantasy"
+      ],
+      "localizationKey": "word.technology.dark-souls",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-red-dead-redemption",
+      "displayText": "Red Dead Redemption",
+      "word": "Red Dead Redemption",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "game",
+        "interactive",
+        "western",
+        "open-world",
+        "outlaw"
+      ],
+      "localizationKey": "word.technology.red-dead-redemption",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-cyberpunk-2077",
+      "displayText": "Cyberpunk 2077",
+      "word": "Cyberpunk 2077",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "game",
+        "interactive",
+        "sci-fi",
+        "open-world",
+        "future"
+      ],
+      "localizationKey": "word.technology.cyberpunk-2077",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-the-witcher-3",
+      "displayText": "The Witcher 3",
+      "word": "The Witcher 3",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "game",
+        "interactive",
+        "rpg",
+        "fantasy",
+        "monster-hunter"
+      ],
+      "localizationKey": "word.technology.the-witcher-3",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-world-of-warcraft",
+      "displayText": "World of Warcraft",
+      "word": "World of Warcraft",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "game",
+        "interactive",
+        "mmo",
+        "fantasy",
+        "online"
+      ],
+      "localizationKey": "word.technology.world-of-warcraft",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-skyrim",
+      "displayText": "Skyrim",
+      "word": "Skyrim",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "game",
+        "interactive",
+        "rpg"
+      ],
+      "localizationKey": "word.technology.skyrim",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-mass-effect",
+      "displayText": "Mass Effect",
+      "word": "Mass Effect",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "game",
+        "interactive",
+        "rpg"
+      ],
+      "localizationKey": "word.technology.mass-effect",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-bioshock",
+      "displayText": "Bioshock",
+      "word": "Bioshock",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "game",
+        "interactive"
+      ],
+      "localizationKey": "word.technology.bioshock",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-portal",
+      "displayText": "Portal",
+      "word": "Portal",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "game",
+        "interactive"
+      ],
+      "localizationKey": "word.technology.portal",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-half-life",
+      "displayText": "Half-Life",
+      "word": "Half-Life",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "game",
+        "interactive"
+      ],
+      "localizationKey": "word.technology.half-life",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-metal-gear-solid",
+      "displayText": "Metal Gear Solid",
+      "word": "Metal Gear Solid",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "game",
+        "interactive"
+      ],
+      "localizationKey": "word.technology.metal-gear-solid",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-silent-hill",
+      "displayText": "Silent Hill",
+      "word": "Silent Hill",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "game",
+        "interactive"
+      ],
+      "localizationKey": "word.technology.silent-hill",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-resident-evil",
+      "displayText": "Resident Evil",
+      "word": "Resident Evil",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "game",
+        "interactive"
+      ],
+      "localizationKey": "word.technology.resident-evil",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-doom",
+      "displayText": "Doom",
+      "word": "Doom",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "game",
+        "interactive",
+        "shooter"
+      ],
+      "localizationKey": "word.technology.doom",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-starcraft",
+      "displayText": "Starcraft",
+      "word": "Starcraft",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "game",
+        "interactive"
+      ],
+      "localizationKey": "word.technology.starcraft",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-linux",
+      "displayText": "Linux",
+      "word": "Linux",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "software",
+        "developer"
+      ],
+      "localizationKey": "word.technology.linux",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-ubuntu",
+      "displayText": "Ubuntu",
+      "word": "Ubuntu",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "software",
+        "developer"
+      ],
+      "localizationKey": "word.technology.ubuntu",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-ios",
+      "displayText": "iOS",
+      "word": "iOS",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "software",
+        "developer"
+      ],
+      "localizationKey": "word.technology.ios",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-android-os",
+      "displayText": "Android OS",
+      "word": "Android OS",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "software",
+        "developer"
+      ],
+      "localizationKey": "word.technology.android-os",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-github",
+      "displayText": "GitHub",
+      "word": "GitHub",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "productivity",
+        "software"
+      ],
+      "localizationKey": "word.technology.github",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-vs-code",
+      "displayText": "VS Code",
+      "word": "VS Code",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "productivity",
+        "software"
+      ],
+      "localizationKey": "word.technology.vs-code",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-figma",
+      "displayText": "Figma",
+      "word": "Figma",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "productivity",
+        "software"
+      ],
+      "localizationKey": "word.technology.figma",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-notion",
+      "displayText": "Notion",
+      "word": "Notion",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "productivity",
+        "software"
+      ],
+      "localizationKey": "word.technology.notion",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-slack",
+      "displayText": "Slack",
+      "word": "Slack",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "productivity",
+        "software"
+      ],
+      "localizationKey": "word.technology.slack",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-bitcoin",
+      "displayText": "Bitcoin",
+      "word": "Bitcoin",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "finance",
+        "digital-money"
+      ],
+      "localizationKey": "word.technology.bitcoin",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-ethereum",
+      "displayText": "Ethereum",
+      "word": "Ethereum",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "finance",
+        "digital-money"
+      ],
+      "localizationKey": "word.technology.ethereum",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-nft",
+      "displayText": "NFT",
+      "word": "NFT",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "finance",
+        "digital-money"
+      ],
+      "localizationKey": "word.technology.nft",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-blockchain",
+      "displayText": "Blockchain",
+      "word": "Blockchain",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "finance",
+        "digital-money"
+      ],
+      "localizationKey": "word.technology.blockchain",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-cryptocurrency",
+      "displayText": "Cryptocurrency",
+      "word": "Cryptocurrency",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "finance",
+        "digital-money"
+      ],
+      "localizationKey": "word.technology.cryptocurrency",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-artificial-intelligence",
+      "displayText": "Artificial Intelligence",
+      "word": "Artificial Intelligence",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "ai",
+        "generative"
+      ],
+      "localizationKey": "word.technology.artificial-intelligence",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-machine-learning",
+      "displayText": "Machine Learning",
+      "word": "Machine Learning",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "ai",
+        "generative"
+      ],
+      "localizationKey": "word.technology.machine-learning",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-virtual-reality",
+      "displayText": "Virtual Reality",
+      "word": "Virtual Reality",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "immersive",
+        "reality"
+      ],
+      "localizationKey": "word.technology.virtual-reality",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-augmented-reality",
+      "displayText": "Augmented Reality",
+      "word": "Augmented Reality",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "immersive",
+        "reality"
+      ],
+      "localizationKey": "word.technology.augmented-reality",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-cloud-computing",
+      "displayText": "Cloud Computing",
+      "word": "Cloud Computing",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "network",
+        "security"
+      ],
+      "localizationKey": "word.technology.cloud-computing",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-cybersecurity",
+      "displayText": "Cybersecurity",
+      "word": "Cybersecurity",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "network",
+        "security"
+      ],
+      "localizationKey": "word.technology.cybersecurity",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-encryption",
+      "displayText": "Encryption",
+      "word": "Encryption",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "network",
+        "security"
+      ],
+      "localizationKey": "word.technology.encryption",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-algorithm",
+      "displayText": "Algorithm",
+      "word": "Algorithm",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "software",
+        "developer"
+      ],
+      "localizationKey": "word.technology.algorithm",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-database",
+      "displayText": "Database",
+      "word": "Database",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "software",
+        "developer"
+      ],
+      "localizationKey": "word.technology.database",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-server",
+      "displayText": "Server",
+      "word": "Server",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "software",
+        "developer"
+      ],
+      "localizationKey": "word.technology.server",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-api",
+      "displayText": "API",
+      "word": "API",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "software",
+        "developer"
+      ],
+      "localizationKey": "word.technology.api",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-python",
+      "displayText": "Python",
+      "word": "Python",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "software",
+        "developer"
+      ],
+      "localizationKey": "word.technology.python",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-javascript",
+      "displayText": "JavaScript",
+      "word": "JavaScript",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "software",
+        "developer"
+      ],
+      "localizationKey": "word.technology.javascript",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-html",
+      "displayText": "HTML",
+      "word": "HTML",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "software",
+        "developer"
+      ],
+      "localizationKey": "word.technology.html",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-firewall",
+      "displayText": "Firewall",
+      "word": "Firewall",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "network",
+        "security"
+      ],
+      "localizationKey": "word.technology.firewall",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-vpn",
+      "displayText": "VPN",
+      "word": "VPN",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "network",
+        "security"
+      ],
+      "localizationKey": "word.technology.vpn",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-router",
+      "displayText": "Router",
+      "word": "Router",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "device",
+        "hardware",
+        "network",
+        "security"
+      ],
+      "localizationKey": "word.technology.router",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-ram",
+      "displayText": "RAM",
+      "word": "RAM",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "device",
+        "hardware"
+      ],
+      "localizationKey": "word.technology.ram",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-ssd",
+      "displayText": "SSD",
+      "word": "SSD",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "device",
+        "hardware"
+      ],
+      "localizationKey": "word.technology.ssd",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-gpu",
+      "displayText": "GPU",
+      "word": "GPU",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "device",
+        "hardware"
+      ],
+      "localizationKey": "word.technology.gpu",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "technology-cpu",
+      "displayText": "CPU",
+      "word": "CPU",
+      "category": "Technology",
+      "difficulty": "hard",
+      "tags": [
+        "technology",
+        "hard",
+        "device",
+        "hardware"
+      ],
+      "localizationKey": "word.technology.cpu",
+      "safety": {
+        "level": "general"
+      }
+    }
   ]
 }

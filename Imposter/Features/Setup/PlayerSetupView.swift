@@ -30,6 +30,9 @@ struct PlayerSetupView: View {
                 // Game settings (difficulty and timer)
                 gameSettingsSection
 
+                // Host-facing rule summary
+                ruleSummarySection
+
                 // Validation message
                 if !store.canStartGame {
                     validationMessage
@@ -161,6 +164,77 @@ struct PlayerSetupView: View {
                         .foregroundStyle(.secondary)
                 }
             }
+        }
+    }
+
+    private var ruleSummarySection: some View {
+        let summary = GameRules.summary(settings: store.settings, playerCount: store.players.count)
+
+        return LGCard(cornerRadius: LGSpacing.cornerRadiusLarge) {
+            VStack(alignment: .leading, spacing: LGSpacing.medium) {
+                HStack(alignment: .firstTextBaseline) {
+                    VStack(alignment: .leading, spacing: LGSpacing.extraSmall) {
+                        Text(String(localized: "Rule Summary"))
+                            .font(LGTypography.headlineSmall)
+                            .foregroundStyle(.primary)
+
+                        Text(summary.detail)
+                            .font(LGTypography.bodySmall)
+                            .foregroundStyle(.secondary)
+                    }
+
+                    Spacer()
+
+                    LGBadge(
+                        summary.title,
+                        color: summary.status == .ready ? LGColors.success : LGColors.warning,
+                        size: .small
+                    )
+                }
+
+                VStack(spacing: LGSpacing.small) {
+                    ForEach(summary.items) { item in
+                        ruleSummaryRow(item)
+                    }
+                }
+            }
+        }
+        .accessibilityIdentifier(AccessibilityIDs.ruleSummary)
+        .accessibilityElement(children: .contain)
+    }
+
+    private func ruleSummaryRow(_ item: RuleSummaryItem) -> some View {
+        HStack(alignment: .top, spacing: LGSpacing.medium) {
+            Image(systemName: item.icon)
+                .font(.system(size: 15, weight: .semibold))
+                .foregroundStyle(ruleSummaryToneColor(item.tone))
+                .frame(width: 24, height: 24)
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(item.title)
+                    .font(LGTypography.labelMedium)
+                    .foregroundStyle(.primary)
+
+                Text(item.detail)
+                    .font(LGTypography.bodySmall)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            Spacer(minLength: 0)
+        }
+        .padding(.vertical, LGSpacing.extraSmall)
+        .accessibilityElement(children: .combine)
+    }
+
+    private func ruleSummaryToneColor(_ tone: RuleSummaryItem.Tone) -> Color {
+        switch tone {
+        case .normal:
+            return LGColors.accentPrimary
+        case .warning:
+            return LGColors.warning
+        case .blocking:
+            return LGColors.error
         }
     }
 

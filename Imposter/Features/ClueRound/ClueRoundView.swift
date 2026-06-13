@@ -12,61 +12,40 @@ import SwiftUI
 /// Simple clue round view - shows first player and slide-to-discussion control.
 struct ClueRoundView: View {
     @Environment(GameStore.self) private var store
+    @Environment(\.accessibilityReduceMotion) private var systemReduceMotion
+    @Environment(\.imposterAccessibilityPreferences) private var accessibilityPreferences
+
     @State private var currentPlayerScale: CGFloat = 1.0
     @State private var motionManager = MotionManager.shared
     
     var body: some View {
-        ZStack {
-            // Background
-            AnimatedBackground(style: .gameplay)
-            
+        LGPhaseStage(
+            phase: String(localized: "Clue Round"),
+            title: String(localized: "Find the Imposter"),
+            subtitle: String(localized: "Take turns giving one-word clues.\nTry to identify who doesn't know the word!"),
+            icon: "quote.bubble.fill",
+            style: .gameplay,
+            accentColor: LGColors.accentPrimary
+        ) {
             VStack(spacing: LGSpacing.extraLarge) {
-                Spacer()
-                
-                // Header
-                headerSection
-                
-                // First player indicator
                 firstPlayerSection
-                
-                // Instructions
-                instructionsSection
-                
-                Spacer()
-                
-                // Slide to end control
-                SlideToEndControl {
-                    HapticManager.roundCompleted()
-                    store.dispatch(.completeClueRounds)
-                }
-                .padding(.horizontal, LGSpacing.large)
-                .padding(.bottom, LGSpacing.extraLarge)
+                categoryHint
             }
-            .padding(LGSpacing.large)
+        } footer: {
+            SlideToEndControl {
+                HapticManager.roundCompleted()
+                store.dispatch(.completeClueRounds)
+            }
         }
     }
     
     // MARK: - Subviews
-    
-    private var headerSection: some View {
-        VStack(spacing: LGSpacing.small) {
-            Text("DISCUSS")
-                .font(.system(size: 14, weight: .black, design: .rounded))
-                .tracking(4)
-                .foregroundStyle(.white.opacity(0.5))
-                .accessibilityIdentifier(AccessibilityIDs.clueRoundScreen)
-            
-            Text("Find the Imposter")
-                .font(.system(size: 32, weight: .bold, design: .rounded))
-                .foregroundStyle(.white)
-        }
-    }
-    
+
     private var firstPlayerSection: some View {
         VStack(spacing: LGSpacing.medium) {
             if let firstPlayer = store.currentClueGiver {
                 // "Goes first" label
-                Text("GOES FIRST")
+                Text(String(localized: "GOES FIRST"))
                     .font(.system(size: 12, weight: .bold, design: .rounded))
                     .tracking(2)
                     .foregroundStyle(LGColors.accentPrimary)
@@ -93,8 +72,8 @@ struct ClueRoundView: View {
                                     Color.clear
                                 ],
                                 center: UnitPoint(
-                                    x: 0.5 + motionManager.roll * 0.3,
-                                    y: 0.5 + motionManager.pitch * 0.3
+                                    x: 0.5 + motionRoll * 0.3,
+                                    y: 0.5 + motionPitch * 0.3
                                 ),
                                 startRadius: 40,
                                 endRadius: 100
@@ -127,8 +106,8 @@ struct ClueRoundView: View {
                                     Color.clear
                                 ],
                                 center: UnitPoint(
-                                    x: 0.3 + motionManager.roll * 0.4,
-                                    y: 0.3 + motionManager.pitch * 0.4
+                                    x: 0.3 + motionRoll * 0.4,
+                                    y: 0.3 + motionPitch * 0.4
                                 ),
                                 startRadius: 0,
                                 endRadius: 60
@@ -149,30 +128,35 @@ struct ClueRoundView: View {
                                     Color.white.opacity(0.2),
                                     Color.white.opacity(0.4)
                                 ],
-                                startPoint: UnitPoint(x: 0.5 - motionManager.roll * 0.3, y: 0),
-                                endPoint: UnitPoint(x: 0.5 + motionManager.roll * 0.3, y: 1)
+                                startPoint: UnitPoint(x: 0.5 - motionRoll * 0.3, y: 0),
+                                endPoint: UnitPoint(x: 0.5 + motionRoll * 0.3, y: 1)
                             ),
                             lineWidth: 3
                         )
                         .frame(width: 120, height: 120)
                 }
                 .rotation3DEffect(
-                    .degrees(motionManager.pitch * 8),
+                    .degrees(motionPitch * 8),
                     axis: (x: 1, y: 0, z: 0),
                     perspective: 0.4
                 )
                 .rotation3DEffect(
-                    .degrees(-motionManager.roll * 8),
+                    .degrees(-motionRoll * 8),
                     axis: (x: 0, y: 1, z: 0),
                     perspective: 0.4
                 )
                 .shadow(
                     color: LGColors.playerColor(firstPlayer.color).opacity(0.5),
                     radius: 25,
-                    x: CGFloat(motionManager.roll * 10),
-                    y: CGFloat(motionManager.pitch * 8) + 10
+                    x: CGFloat(motionRoll * 10),
+                    y: CGFloat(motionPitch * 8) + 10
                 )
                 .onAppear {
+                    guard !reduceMotion else {
+                        currentPlayerScale = 1.0
+                        return
+                    }
+
                     withAnimation(.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) {
                         currentPlayerScale = 1.15
                     }
@@ -186,36 +170,39 @@ struct ClueRoundView: View {
         }
     }
     
-    private var instructionsSection: some View {
-        VStack(spacing: LGSpacing.medium) {
-            // Category hint
-            HStack(spacing: LGSpacing.small) {
-                Image(systemName: "tag.fill")
-                    .font(.system(size: 14))
-                Text(displayCategory)
-                    .font(.system(size: 16, weight: .medium, design: .rounded))
-            }
-            .foregroundStyle(.white.opacity(0.6))
-            .padding(.horizontal, LGSpacing.medium)
-            .padding(.vertical, LGSpacing.small)
-            .glassEffect(.regular, in: .capsule)
-            
-            // Instructions
-            Text("Take turns giving one-word clues.\nTry to identify who doesn't know the word!")
-                .font(LGTypography.bodyMedium)
-                .foregroundStyle(.white.opacity(0.6))
-                .multilineTextAlignment(.center)
-                .lineSpacing(4)
+    private var categoryHint: some View {
+        HStack(spacing: LGSpacing.small) {
+            Image(systemName: "tag.fill")
+                .font(.system(size: 14))
+            Text(displayCategory)
+                .font(.system(size: 16, weight: .medium, design: .rounded))
         }
+        .foregroundStyle(.white.opacity(0.68))
+        .padding(.horizontal, LGSpacing.medium)
+        .padding(.vertical, LGSpacing.small)
+        .glassEffect(.regular, in: .capsule)
+        .accessibilityIdentifier(AccessibilityIDs.clueRoundScreen)
     }
     
     // MARK: - Computed Properties
+
+    private var reduceMotion: Bool {
+        systemReduceMotion || accessibilityPreferences.forceReduceMotion
+    }
+
+    private var motionRoll: Double {
+        reduceMotion ? 0 : motionManager.roll
+    }
+
+    private var motionPitch: Double {
+        reduceMotion ? 0 : motionManager.pitch
+    }
     
     private var displayCategory: String {
         if store.settings.wordSource == .customPrompt {
-            return store.state.roundState?.imposterHint ?? store.state.roundState?.categoryHint ?? "Custom"
+            return store.state.roundState?.imposterHint ?? store.state.roundState?.categoryHint ?? String(localized: "Custom")
         } else {
-            return store.state.roundState?.categoryHint ?? "Mixed"
+            return store.state.roundState?.categoryHint ?? String(localized: "Mixed")
         }
     }
 }
@@ -264,7 +251,7 @@ struct SlideToEndControl: View {
                                 .opacity(0.8)
                         }
                         
-                        Text("Slide to Discuss")
+                        Text(String(localized: "Slide to Discuss"))
                             .font(.system(size: 17, weight: .bold, design: .rounded))
                         
                         HStack(spacing: 2) {
@@ -333,8 +320,8 @@ struct SlideToEndControl: View {
         }
         .frame(height: trackHeight)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Slide to start discussion")
-        .accessibilityHint("Swipe right after clues are complete to begin the discussion phase")
+        .accessibilityLabel(String(localized: "Slide to start discussion"))
+        .accessibilityHint(String(localized: "Swipe right after clues are complete to begin the discussion phase"))
         .accessibilityIdentifier(AccessibilityIDs.startDiscussionSlider)
     }
 }

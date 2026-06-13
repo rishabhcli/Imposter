@@ -129,8 +129,9 @@ final class AppEnvironment {
 
 /// SwiftUI environment key for AppEnvironment
 struct AppEnvironmentKey: EnvironmentKey {
-    @MainActor
-    static let defaultValue: AppEnvironment = .preview()
+    static let defaultValue: AppEnvironment = MainActor.assumeIsolated {
+        .preview()
+    }
 }
 
 extension EnvironmentValues {

@@ -11,6 +11,7 @@ import Foundation
 
 /// Protocol defining word selection and generation capabilities.
 /// Implementations can select from word packs or generate words using AI.
+@MainActor
 protocol WordServiceProtocol: Sendable {
 
     // MARK: - Word Selection
@@ -23,8 +24,25 @@ protocol WordServiceProtocol: Sendable {
     /// - Throws: `WordServiceError` if selection fails
     func selectWord(
         from categories: [String]?,
-        difficulty: GameSettings.Difficulty
+        difficulty: GameSettings.Difficulty,
+        avoiding avoidedWords: Set<String>
     ) async throws -> String
+
+    /// Selects a playable alternate word for hidden mode.
+    /// Implementations should prefer a same-category, same-difficulty decoy when metadata is available.
+    /// - Parameters:
+    ///   - secretWord: The current round's secret word
+    ///   - categories: Categories to select from (nil = all categories)
+    ///   - difficulty: Difficulty level for filtering words
+    ///   - avoidedWords: Words from recent history that should not repeat
+    /// - Returns: A playable distinct alternate word, or nil if no safe alternate is available
+    /// - Throws: `WordServiceError` if selection fails
+    func selectAlternateWord(
+        matching secretWord: String,
+        from categories: [String]?,
+        difficulty: GameSettings.Difficulty,
+        avoiding avoidedWords: Set<String>
+    ) async throws -> String?
 
     /// Generates a word related to the given prompt using AI.
     /// - Parameter prompt: User's input theme or prompt
@@ -49,6 +67,37 @@ protocol WordServiceProtocol: Sendable {
 
     /// User-friendly reason why AI generation is unavailable (if applicable)
     var aiUnavailabilityReason: String? { get }
+}
+
+extension WordServiceProtocol {
+    func selectWord(
+        from categories: [String]?,
+        difficulty: GameSettings.Difficulty
+    ) async throws -> String {
+        try await selectWord(from: categories, difficulty: difficulty, avoiding: [])
+    }
+
+    func selectAlternateWord(
+        matching secretWord: String,
+        from categories: [String]?,
+        difficulty: GameSettings.Difficulty,
+        avoiding avoidedWords: Set<String>
+    ) async throws -> String? {
+        let blockedWords = avoidedWords.union([secretWord])
+        for _ in 0..<10 {
+            let candidate = try await selectWord(
+                from: categories,
+                difficulty: difficulty,
+                avoiding: blockedWords
+            )
+
+            if WordSelector.isPlayableDistinctWord(candidate, from: blockedWords) {
+                return candidate
+            }
+        }
+
+        return nil
+    }
 }
 
 // MARK: - WordServiceError

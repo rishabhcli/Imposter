@@ -8,6 +8,17 @@ on:
       - master
 
 jobs:
+  content-and-localization:
+    name: Content and Localization
+    runs-on: macos-15
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Validate bundled content and localizations
+        run: scripts/verify_content.sh
+
   lint:
     name: SwiftLint
     runs-on: macos-15

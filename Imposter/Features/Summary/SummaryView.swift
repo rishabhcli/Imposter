@@ -14,80 +14,87 @@ struct SummaryView: View {
     @Environment(GameStore.self) private var store
 
     var body: some View {
-        ZStack {
-            // Background
-            ZStack {
-                LGColors.darkBackground
-                    .ignoresSafeArea()
+        LGPhaseStage(
+            phase: roundCounterText,
+            title: resultTitle,
+            subtitle: resultSubtitle,
+            icon: resultIcon,
+            style: isGameOver ? .celebration : .gameplay,
+            accentColor: resultColor
+        ) {
+            VStack(spacing: LGSpacing.extraLarge) {
+                leaderboardSection
 
-                LinearGradient(
-                    colors: [
-                        LGColors.darkBackgroundSecondary,
-                        LGColors.darkBackground
-                    ],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-                .ignoresSafeArea()
-            }
-
-            ScrollView {
-                VStack(spacing: LGSpacing.extraLarge) {
-                    // Round result header
-                    roundResultHeader
-
-                    // Leaderboard
-                    leaderboardSection
-
-                    // Last round details
-                    if let lastRound = store.gameHistory.last {
-                        lastRoundDetails(lastRound)
-                    }
-
-                    // Action buttons
-                    actionButtons
+                if let lastRound = store.gameHistory.last {
+                    lastRoundDetails(lastRound)
                 }
-                .padding(LGSpacing.large)
             }
+            .accessibilityIdentifier(AccessibilityIDs.summaryView)
+        } footer: {
+            actionButtons
         }
     }
 
-    // MARK: - Round Result Header
+    // MARK: - Result State
 
-    private var roundResultHeader: some View {
-        VStack(spacing: LGSpacing.medium) {
-            // Round counter
-            Text(roundCounterText)
-                .font(.system(size: 12, weight: .bold, design: .rounded))
-                .tracking(2)
-                .foregroundStyle(.white.opacity(0.5))
-                .textCase(.uppercase)
-                .accessibilityIdentifier(AccessibilityIDs.summaryView)
-
-            if isGameOver {
-                Image(systemName: "trophy.fill")
-                    .font(.system(size: 50))
-                    .foregroundStyle(LGColors.warning)
-
-                Text("Game Over!")
-                    .font(LGTypography.displaySmall)
-                    .foregroundStyle(.white)
-            } else if let lastRound = store.gameHistory.last {
-                Image(systemName: lastRound.wasImposterCaught ? "checkmark.shield.fill" : "eye.slash.fill")
-                    .font(.system(size: 50))
-                    .foregroundStyle(lastRound.wasImposterCaught ? LGColors.success : LGColors.imposter)
-
-                Text(lastRound.wasImposterCaught ? "Imposter Caught!" : "Imposter Escaped!")
-                    .font(LGTypography.displaySmall)
-                    .foregroundStyle(.white)
-
-                Text("The word was \"\(lastRound.secretWord)\"")
-                    .font(LGTypography.bodyMedium)
-                    .foregroundStyle(.white.opacity(0.7))
-                    .privacySensitive()
-            }
+    private var resultTitle: String {
+        if isGameOver {
+            return String(localized: "Game Over!")
         }
-        .padding(.top, LGSpacing.large)
+
+        guard let lastRound = store.gameHistory.last else {
+            return String(localized: "Round Complete")
+        }
+
+        return lastRound.wasImposterCaught
+            ? String(localized: "Imposter Caught!")
+            : String(localized: "Imposter Escaped!")
+    }
+
+    private var resultSubtitle: String {
+        if isGameOver {
+            return String(localized: "Final standings are ready.")
+        }
+
+        guard let lastRound = store.gameHistory.last else {
+            return String(localized: "Check the table and choose the next move.")
+        }
+
+        if lastRound.wasImposterCaught {
+            return String(
+                format: String(localized: "The table found %@."),
+                lastRound.imposterName
+            )
+        }
+
+        return String(
+            format: String(localized: "%@ survived the vote."),
+            lastRound.imposterName
+        )
+    }
+
+    private var resultIcon: String {
+        if isGameOver {
+            return "trophy.fill"
+        }
+
+        guard let lastRound = store.gameHistory.last else {
+            return "flag.checkered"
+        }
+
+        return lastRound.wasImposterCaught ? "checkmark.shield.fill" : "eye.slash.fill"
+    }
+
+    private var resultColor: Color {
+        if isGameOver {
+            return LGColors.warning
+        }
+
+        guard let lastRound = store.gameHistory.last else {
+            return LGColors.accentPrimary
+        }
+
+        return lastRound.wasImposterCaught ? LGColors.success : LGColors.imposter
     }
 
     // MARK: - Leaderboard
@@ -195,7 +202,6 @@ struct SummaryView: View {
             .buttonStyle(.glass)
             .accessibilityIdentifier(AccessibilityIDs.mainMenuButton)
         }
-        .padding(.bottom, LGSpacing.extraLarge)
     }
 
     // MARK: - Helpers

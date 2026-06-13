@@ -1,113 +1,1896 @@
 {
   "category": "Objects",
   "words": [
-    {"word": "Chair", "difficulty": "easy"},
-    {"word": "Table", "difficulty": "easy"},
-    {"word": "Bed", "difficulty": "easy"},
-    {"word": "Pillow", "difficulty": "easy"},
-    {"word": "Blanket", "difficulty": "easy"},
-    {"word": "Lamp", "difficulty": "easy"},
-    {"word": "Book", "difficulty": "easy"},
-    {"word": "Pen", "difficulty": "easy"},
-    {"word": "Pencil", "difficulty": "easy"},
-    {"word": "Paper", "difficulty": "easy"},
-    {"word": "Clock", "difficulty": "easy"},
-    {"word": "Mirror", "difficulty": "easy"},
-    {"word": "Door", "difficulty": "easy"},
-    {"word": "Window", "difficulty": "easy"},
-    {"word": "Key", "difficulty": "easy"},
-    {"word": "Lock", "difficulty": "easy"},
-    {"word": "Cup", "difficulty": "easy"},
-    {"word": "Plate", "difficulty": "easy"},
-    {"word": "Fork", "difficulty": "easy"},
-    {"word": "Spoon", "difficulty": "easy"},
-    {"word": "Knife", "difficulty": "easy"},
-    {"word": "Bowl", "difficulty": "easy"},
-    {"word": "Glass", "difficulty": "easy"},
-    {"word": "Bottle", "difficulty": "easy"},
-    {"word": "Bag", "difficulty": "easy"},
-    {"word": "Box", "difficulty": "easy"},
-    {"word": "Shoe", "difficulty": "easy"},
-    {"word": "Hat", "difficulty": "easy"},
-    {"word": "Shirt", "difficulty": "easy"},
-    {"word": "Pants", "difficulty": "easy"},
-    {"word": "Dress", "difficulty": "easy"},
-    {"word": "Jacket", "difficulty": "easy"},
-    {"word": "Umbrella", "difficulty": "easy"},
-    {"word": "Wallet", "difficulty": "easy"},
-    {"word": "Watch", "difficulty": "easy"},
-    {"word": "Couch", "difficulty": "medium"},
-    {"word": "Drawer", "difficulty": "medium"},
-    {"word": "Shelf", "difficulty": "medium"},
-    {"word": "Wardrobe", "difficulty": "medium"},
-    {"word": "Rug", "difficulty": "medium"},
-    {"word": "Curtain", "difficulty": "medium"},
-    {"word": "Vase", "difficulty": "medium"},
-    {"word": "Frame", "difficulty": "medium"},
-    {"word": "Candle", "difficulty": "medium"},
-    {"word": "Scissors", "difficulty": "medium"},
-    {"word": "Stapler", "difficulty": "medium"},
-    {"word": "Envelope", "difficulty": "medium"},
-    {"word": "Stamp", "difficulty": "medium"},
-    {"word": "Calendar", "difficulty": "medium"},
-    {"word": "Notebook", "difficulty": "medium"},
-    {"word": "Folder", "difficulty": "medium"},
-    {"word": "Ruler", "difficulty": "medium"},
-    {"word": "Eraser", "difficulty": "medium"},
-    {"word": "Marker", "difficulty": "medium"},
-    {"word": "Crayon", "difficulty": "medium"},
-    {"word": "Paintbrush", "difficulty": "medium"},
-    {"word": "Hammer", "difficulty": "medium"},
-    {"word": "Screwdriver", "difficulty": "medium"},
-    {"word": "Wrench", "difficulty": "medium"},
-    {"word": "Nail", "difficulty": "medium"},
-    {"word": "Screw", "difficulty": "medium"},
-    {"word": "Rope", "difficulty": "medium"},
-    {"word": "Tape", "difficulty": "medium"},
-    {"word": "Glue", "difficulty": "medium"},
-    {"word": "Needle", "difficulty": "medium"},
-    {"word": "Thread", "difficulty": "medium"},
-    {"word": "Button", "difficulty": "medium"},
-    {"word": "Zipper", "difficulty": "medium"},
-    {"word": "Belt", "difficulty": "medium"},
-    {"word": "Scarf", "difficulty": "medium"},
-    {"word": "Gloves", "difficulty": "medium"},
-    {"word": "Socks", "difficulty": "medium"},
-    {"word": "Towel", "difficulty": "medium"},
-    {"word": "Soap", "difficulty": "medium"},
-    {"word": "Shampoo", "difficulty": "medium"},
-    {"word": "Toothbrush", "difficulty": "medium"},
-    {"word": "Toothpaste", "difficulty": "medium"},
-    {"word": "Comb", "difficulty": "medium"},
-    {"word": "Brush", "difficulty": "medium"},
-    {"word": "Chandelier", "difficulty": "hard"},
-    {"word": "Armoire", "difficulty": "hard"},
-    {"word": "Ottoman", "difficulty": "hard"},
-    {"word": "Credenza", "difficulty": "hard"},
-    {"word": "Chaise Lounge", "difficulty": "hard"},
-    {"word": "Decanter", "difficulty": "hard"},
-    {"word": "Carafe", "difficulty": "hard"},
-    {"word": "Mortar and Pestle", "difficulty": "hard"},
-    {"word": "Trivet", "difficulty": "hard"},
-    {"word": "Ladle", "difficulty": "hard"},
-    {"word": "Whisk", "difficulty": "hard"},
-    {"word": "Colander", "difficulty": "hard"},
-    {"word": "Grater", "difficulty": "hard"},
-    {"word": "Rolling Pin", "difficulty": "hard"},
-    {"word": "Corkscrew", "difficulty": "hard"},
-    {"word": "Thimble", "difficulty": "hard"},
-    {"word": "Bobbin", "difficulty": "hard"},
-    {"word": "Compass", "difficulty": "hard"},
-    {"word": "Protractor", "difficulty": "hard"},
-    {"word": "Abacus", "difficulty": "hard"},
-    {"word": "Hourglass", "difficulty": "hard"},
-    {"word": "Sundial", "difficulty": "hard"},
-    {"word": "Metronome", "difficulty": "hard"},
-    {"word": "Tuning Fork", "difficulty": "hard"},
-    {"word": "Bellows", "difficulty": "hard"},
-    {"word": "Anvil", "difficulty": "hard"},
-    {"word": "Trowel", "difficulty": "hard"},
-    {"word": "Awl", "difficulty": "hard"},
-    {"word": "Chisel", "difficulty": "hard"}
+    {
+      "id": "objects-chair",
+      "displayText": "Chair",
+      "word": "Chair",
+      "category": "Objects",
+      "difficulty": "easy",
+      "tags": [
+        "objects",
+        "easy",
+        "furniture",
+        "home",
+        "seating",
+        "dining"
+      ],
+      "localizationKey": "word.objects.chair",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-table",
+      "displayText": "Table",
+      "word": "Table",
+      "category": "Objects",
+      "difficulty": "easy",
+      "tags": [
+        "objects",
+        "easy",
+        "furniture",
+        "home",
+        "surface",
+        "dining"
+      ],
+      "localizationKey": "word.objects.table",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-bed",
+      "displayText": "Bed",
+      "word": "Bed",
+      "category": "Objects",
+      "difficulty": "easy",
+      "tags": [
+        "objects",
+        "easy",
+        "furniture",
+        "home",
+        "sleep",
+        "bedroom",
+        "comfort"
+      ],
+      "localizationKey": "word.objects.bed",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-pillow",
+      "displayText": "Pillow",
+      "word": "Pillow",
+      "category": "Objects",
+      "difficulty": "easy",
+      "tags": [
+        "objects",
+        "easy",
+        "sleep",
+        "bedroom",
+        "soft",
+        "cushion"
+      ],
+      "localizationKey": "word.objects.pillow",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-blanket",
+      "displayText": "Blanket",
+      "word": "Blanket",
+      "category": "Objects",
+      "difficulty": "easy",
+      "tags": [
+        "objects",
+        "easy",
+        "sleep",
+        "bedroom",
+        "warm",
+        "fabric",
+        "bed"
+      ],
+      "localizationKey": "word.objects.blanket",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-lamp",
+      "displayText": "Lamp",
+      "word": "Lamp",
+      "category": "Objects",
+      "difficulty": "easy",
+      "tags": [
+        "objects",
+        "easy",
+        "decor",
+        "home"
+      ],
+      "localizationKey": "word.objects.lamp",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-book",
+      "displayText": "Book",
+      "word": "Book",
+      "category": "Objects",
+      "difficulty": "easy",
+      "tags": [
+        "objects",
+        "easy",
+        "office",
+        "stationery"
+      ],
+      "localizationKey": "word.objects.book",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-pen",
+      "displayText": "Pen",
+      "word": "Pen",
+      "category": "Objects",
+      "difficulty": "easy",
+      "tags": [
+        "objects",
+        "easy",
+        "office",
+        "stationery"
+      ],
+      "localizationKey": "word.objects.pen",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-pencil",
+      "displayText": "Pencil",
+      "word": "Pencil",
+      "category": "Objects",
+      "difficulty": "easy",
+      "tags": [
+        "objects",
+        "easy",
+        "office",
+        "stationery"
+      ],
+      "localizationKey": "word.objects.pencil",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-paper",
+      "displayText": "Paper",
+      "word": "Paper",
+      "category": "Objects",
+      "difficulty": "easy",
+      "tags": [
+        "objects",
+        "easy",
+        "office",
+        "stationery"
+      ],
+      "localizationKey": "word.objects.paper",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-clock",
+      "displayText": "Clock",
+      "word": "Clock",
+      "category": "Objects",
+      "difficulty": "easy",
+      "tags": [
+        "objects",
+        "easy",
+        "time",
+        "measurement"
+      ],
+      "localizationKey": "word.objects.clock",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-mirror",
+      "displayText": "Mirror",
+      "word": "Mirror",
+      "category": "Objects",
+      "difficulty": "easy",
+      "tags": [
+        "objects",
+        "easy",
+        "decor",
+        "home"
+      ],
+      "localizationKey": "word.objects.mirror",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-door",
+      "displayText": "Door",
+      "word": "Door",
+      "category": "Objects",
+      "difficulty": "easy",
+      "tags": [
+        "objects",
+        "easy",
+        "entry",
+        "household"
+      ],
+      "localizationKey": "word.objects.door",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-window",
+      "displayText": "Window",
+      "word": "Window",
+      "category": "Objects",
+      "difficulty": "easy",
+      "tags": [
+        "objects",
+        "easy",
+        "entry",
+        "household"
+      ],
+      "localizationKey": "word.objects.window",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-key",
+      "displayText": "Key",
+      "word": "Key",
+      "category": "Objects",
+      "difficulty": "easy",
+      "tags": [
+        "objects",
+        "easy",
+        "entry",
+        "household"
+      ],
+      "localizationKey": "word.objects.key",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-lock",
+      "displayText": "Lock",
+      "word": "Lock",
+      "category": "Objects",
+      "difficulty": "easy",
+      "tags": [
+        "objects",
+        "easy",
+        "entry",
+        "household"
+      ],
+      "localizationKey": "word.objects.lock",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-cup",
+      "displayText": "Cup",
+      "word": "Cup",
+      "category": "Objects",
+      "difficulty": "easy",
+      "tags": [
+        "objects",
+        "easy",
+        "kitchen",
+        "dining"
+      ],
+      "localizationKey": "word.objects.cup",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-plate",
+      "displayText": "Plate",
+      "word": "Plate",
+      "category": "Objects",
+      "difficulty": "easy",
+      "tags": [
+        "objects",
+        "easy",
+        "kitchen",
+        "dining"
+      ],
+      "localizationKey": "word.objects.plate",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-fork",
+      "displayText": "Fork",
+      "word": "Fork",
+      "category": "Objects",
+      "difficulty": "easy",
+      "tags": [
+        "objects",
+        "easy",
+        "kitchen",
+        "dining"
+      ],
+      "localizationKey": "word.objects.fork",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-spoon",
+      "displayText": "Spoon",
+      "word": "Spoon",
+      "category": "Objects",
+      "difficulty": "easy",
+      "tags": [
+        "objects",
+        "easy",
+        "kitchen",
+        "dining"
+      ],
+      "localizationKey": "word.objects.spoon",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-knife",
+      "displayText": "Knife",
+      "word": "Knife",
+      "category": "Objects",
+      "difficulty": "easy",
+      "tags": [
+        "objects",
+        "easy",
+        "kitchen",
+        "dining"
+      ],
+      "localizationKey": "word.objects.knife",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-bowl",
+      "displayText": "Bowl",
+      "word": "Bowl",
+      "category": "Objects",
+      "difficulty": "easy",
+      "tags": [
+        "objects",
+        "easy",
+        "kitchen",
+        "dining"
+      ],
+      "localizationKey": "word.objects.bowl",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-glass",
+      "displayText": "Glass",
+      "word": "Glass",
+      "category": "Objects",
+      "difficulty": "easy",
+      "tags": [
+        "objects",
+        "easy",
+        "kitchen",
+        "dining"
+      ],
+      "localizationKey": "word.objects.glass",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-bottle",
+      "displayText": "Bottle",
+      "word": "Bottle",
+      "category": "Objects",
+      "difficulty": "easy",
+      "tags": [
+        "objects",
+        "easy",
+        "kitchen",
+        "dining",
+        "storage",
+        "container"
+      ],
+      "localizationKey": "word.objects.bottle",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-bag",
+      "displayText": "Bag",
+      "word": "Bag",
+      "category": "Objects",
+      "difficulty": "easy",
+      "tags": [
+        "objects",
+        "easy",
+        "storage",
+        "container"
+      ],
+      "localizationKey": "word.objects.bag",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-box",
+      "displayText": "Box",
+      "word": "Box",
+      "category": "Objects",
+      "difficulty": "easy",
+      "tags": [
+        "objects",
+        "easy",
+        "storage",
+        "container"
+      ],
+      "localizationKey": "word.objects.box",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-shoe",
+      "displayText": "Shoe",
+      "word": "Shoe",
+      "category": "Objects",
+      "difficulty": "easy",
+      "tags": [
+        "objects",
+        "easy",
+        "clothing",
+        "wearable"
+      ],
+      "localizationKey": "word.objects.shoe",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-hat",
+      "displayText": "Hat",
+      "word": "Hat",
+      "category": "Objects",
+      "difficulty": "easy",
+      "tags": [
+        "objects",
+        "easy",
+        "clothing",
+        "wearable"
+      ],
+      "localizationKey": "word.objects.hat",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-shirt",
+      "displayText": "Shirt",
+      "word": "Shirt",
+      "category": "Objects",
+      "difficulty": "easy",
+      "tags": [
+        "objects",
+        "easy",
+        "clothing",
+        "wearable"
+      ],
+      "localizationKey": "word.objects.shirt",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-pants",
+      "displayText": "Pants",
+      "word": "Pants",
+      "category": "Objects",
+      "difficulty": "easy",
+      "tags": [
+        "objects",
+        "easy",
+        "clothing",
+        "wearable"
+      ],
+      "localizationKey": "word.objects.pants",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-dress",
+      "displayText": "Dress",
+      "word": "Dress",
+      "category": "Objects",
+      "difficulty": "easy",
+      "tags": [
+        "objects",
+        "easy",
+        "clothing",
+        "wearable"
+      ],
+      "localizationKey": "word.objects.dress",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-jacket",
+      "displayText": "Jacket",
+      "word": "Jacket",
+      "category": "Objects",
+      "difficulty": "easy",
+      "tags": [
+        "objects",
+        "easy",
+        "clothing",
+        "wearable"
+      ],
+      "localizationKey": "word.objects.jacket",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-umbrella",
+      "displayText": "Umbrella",
+      "word": "Umbrella",
+      "category": "Objects",
+      "difficulty": "easy",
+      "tags": [
+        "objects",
+        "easy",
+        "entry",
+        "household"
+      ],
+      "localizationKey": "word.objects.umbrella",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-wallet",
+      "displayText": "Wallet",
+      "word": "Wallet",
+      "category": "Objects",
+      "difficulty": "easy",
+      "tags": [
+        "objects",
+        "easy",
+        "storage",
+        "container"
+      ],
+      "localizationKey": "word.objects.wallet",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-watch",
+      "displayText": "Watch",
+      "word": "Watch",
+      "category": "Objects",
+      "difficulty": "easy",
+      "tags": [
+        "objects",
+        "easy",
+        "time",
+        "measurement"
+      ],
+      "localizationKey": "word.objects.watch",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-couch",
+      "displayText": "Couch",
+      "word": "Couch",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "furniture",
+        "home",
+        "seating",
+        "living-room",
+        "comfort"
+      ],
+      "localizationKey": "word.objects.couch",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-drawer",
+      "displayText": "Drawer",
+      "word": "Drawer",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "furniture",
+        "home",
+        "storage",
+        "container",
+        "sliding"
+      ],
+      "localizationKey": "word.objects.drawer",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-shelf",
+      "displayText": "Shelf",
+      "word": "Shelf",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "furniture",
+        "home",
+        "storage",
+        "display",
+        "wall"
+      ],
+      "localizationKey": "word.objects.shelf",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-wardrobe",
+      "displayText": "Wardrobe",
+      "word": "Wardrobe",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "furniture",
+        "home",
+        "storage",
+        "container",
+        "clothing",
+        "bedroom"
+      ],
+      "localizationKey": "word.objects.wardrobe",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-rug",
+      "displayText": "Rug",
+      "word": "Rug",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "decor",
+        "home",
+        "floor",
+        "fabric",
+        "room"
+      ],
+      "localizationKey": "word.objects.rug",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-curtain",
+      "displayText": "Curtain",
+      "word": "Curtain",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "decor",
+        "home"
+      ],
+      "localizationKey": "word.objects.curtain",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-vase",
+      "displayText": "Vase",
+      "word": "Vase",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "decor",
+        "home"
+      ],
+      "localizationKey": "word.objects.vase",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-frame",
+      "displayText": "Frame",
+      "word": "Frame",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "decor",
+        "home"
+      ],
+      "localizationKey": "word.objects.frame",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-candle",
+      "displayText": "Candle",
+      "word": "Candle",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "decor",
+        "home"
+      ],
+      "localizationKey": "word.objects.candle",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-scissors",
+      "displayText": "Scissors",
+      "word": "Scissors",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "tool",
+        "creative"
+      ],
+      "localizationKey": "word.objects.scissors",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-stapler",
+      "displayText": "Stapler",
+      "word": "Stapler",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "office",
+        "stationery"
+      ],
+      "localizationKey": "word.objects.stapler",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-envelope",
+      "displayText": "Envelope",
+      "word": "Envelope",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "office",
+        "stationery"
+      ],
+      "localizationKey": "word.objects.envelope",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-stamp",
+      "displayText": "Stamp",
+      "word": "Stamp",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "office",
+        "stationery"
+      ],
+      "localizationKey": "word.objects.stamp",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-calendar",
+      "displayText": "Calendar",
+      "word": "Calendar",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "office",
+        "stationery",
+        "time",
+        "measurement"
+      ],
+      "localizationKey": "word.objects.calendar",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-notebook",
+      "displayText": "Notebook",
+      "word": "Notebook",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "office",
+        "stationery"
+      ],
+      "localizationKey": "word.objects.notebook",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-folder",
+      "displayText": "Folder",
+      "word": "Folder",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "office",
+        "stationery"
+      ],
+      "localizationKey": "word.objects.folder",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-ruler",
+      "displayText": "Ruler",
+      "word": "Ruler",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "office",
+        "stationery"
+      ],
+      "localizationKey": "word.objects.ruler",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-eraser",
+      "displayText": "Eraser",
+      "word": "Eraser",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "office",
+        "stationery"
+      ],
+      "localizationKey": "word.objects.eraser",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-marker",
+      "displayText": "Marker",
+      "word": "Marker",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "office",
+        "stationery"
+      ],
+      "localizationKey": "word.objects.marker",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-crayon",
+      "displayText": "Crayon",
+      "word": "Crayon",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "office",
+        "stationery"
+      ],
+      "localizationKey": "word.objects.crayon",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-paintbrush",
+      "displayText": "Paintbrush",
+      "word": "Paintbrush",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "tool",
+        "creative"
+      ],
+      "localizationKey": "word.objects.paintbrush",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-hammer",
+      "displayText": "Hammer",
+      "word": "Hammer",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "tool",
+        "handheld"
+      ],
+      "localizationKey": "word.objects.hammer",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-screwdriver",
+      "displayText": "Screwdriver",
+      "word": "Screwdriver",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "tool",
+        "handheld"
+      ],
+      "localizationKey": "word.objects.screwdriver",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-wrench",
+      "displayText": "Wrench",
+      "word": "Wrench",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "tool",
+        "handheld"
+      ],
+      "localizationKey": "word.objects.wrench",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-nail",
+      "displayText": "Nail",
+      "word": "Nail",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "tool",
+        "handheld"
+      ],
+      "localizationKey": "word.objects.nail",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-screw",
+      "displayText": "Screw",
+      "word": "Screw",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "tool",
+        "handheld"
+      ],
+      "localizationKey": "word.objects.screw",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-rope",
+      "displayText": "Rope",
+      "word": "Rope",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "tool",
+        "handheld"
+      ],
+      "localizationKey": "word.objects.rope",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-tape",
+      "displayText": "Tape",
+      "word": "Tape",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "tool",
+        "handheld"
+      ],
+      "localizationKey": "word.objects.tape",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-glue",
+      "displayText": "Glue",
+      "word": "Glue",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "tool",
+        "handheld"
+      ],
+      "localizationKey": "word.objects.glue",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-needle",
+      "displayText": "Needle",
+      "word": "Needle",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "tool",
+        "handheld"
+      ],
+      "localizationKey": "word.objects.needle",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-thread",
+      "displayText": "Thread",
+      "word": "Thread",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "tool",
+        "handheld"
+      ],
+      "localizationKey": "word.objects.thread",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-button",
+      "displayText": "Button",
+      "word": "Button",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "tool",
+        "handheld"
+      ],
+      "localizationKey": "word.objects.button",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-zipper",
+      "displayText": "Zipper",
+      "word": "Zipper",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "tool",
+        "handheld"
+      ],
+      "localizationKey": "word.objects.zipper",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-belt",
+      "displayText": "Belt",
+      "word": "Belt",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "clothing",
+        "wearable"
+      ],
+      "localizationKey": "word.objects.belt",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-scarf",
+      "displayText": "Scarf",
+      "word": "Scarf",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "clothing",
+        "wearable"
+      ],
+      "localizationKey": "word.objects.scarf",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-gloves",
+      "displayText": "Gloves",
+      "word": "Gloves",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "clothing",
+        "wearable"
+      ],
+      "localizationKey": "word.objects.gloves",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-socks",
+      "displayText": "Socks",
+      "word": "Socks",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "clothing",
+        "wearable"
+      ],
+      "localizationKey": "word.objects.socks",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-towel",
+      "displayText": "Towel",
+      "word": "Towel",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "bathroom",
+        "personal-care"
+      ],
+      "localizationKey": "word.objects.towel",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-soap",
+      "displayText": "Soap",
+      "word": "Soap",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "bathroom",
+        "personal-care"
+      ],
+      "localizationKey": "word.objects.soap",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-shampoo",
+      "displayText": "Shampoo",
+      "word": "Shampoo",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "bathroom",
+        "personal-care"
+      ],
+      "localizationKey": "word.objects.shampoo",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-toothbrush",
+      "displayText": "Toothbrush",
+      "word": "Toothbrush",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "bathroom",
+        "personal-care"
+      ],
+      "localizationKey": "word.objects.toothbrush",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-toothpaste",
+      "displayText": "Toothpaste",
+      "word": "Toothpaste",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "bathroom",
+        "personal-care"
+      ],
+      "localizationKey": "word.objects.toothpaste",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-comb",
+      "displayText": "Comb",
+      "word": "Comb",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "bathroom",
+        "personal-care"
+      ],
+      "localizationKey": "word.objects.comb",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-brush",
+      "displayText": "Brush",
+      "word": "Brush",
+      "category": "Objects",
+      "difficulty": "medium",
+      "tags": [
+        "objects",
+        "medium",
+        "bathroom",
+        "personal-care"
+      ],
+      "localizationKey": "word.objects.brush",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-chandelier",
+      "displayText": "Chandelier",
+      "word": "Chandelier",
+      "category": "Objects",
+      "difficulty": "hard",
+      "tags": [
+        "objects",
+        "hard",
+        "furniture",
+        "home",
+        "decor",
+        "lighting",
+        "ceiling",
+        "ornate",
+        "glass"
+      ],
+      "localizationKey": "word.objects.chandelier",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-armoire",
+      "displayText": "Armoire",
+      "word": "Armoire",
+      "category": "Objects",
+      "difficulty": "hard",
+      "tags": [
+        "objects",
+        "hard",
+        "furniture",
+        "home",
+        "storage",
+        "container",
+        "clothing",
+        "antique"
+      ],
+      "localizationKey": "word.objects.armoire",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-ottoman",
+      "displayText": "Ottoman",
+      "word": "Ottoman",
+      "category": "Objects",
+      "difficulty": "hard",
+      "tags": [
+        "objects",
+        "hard",
+        "furniture",
+        "home",
+        "footrest",
+        "seating",
+        "cushion"
+      ],
+      "localizationKey": "word.objects.ottoman",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-credenza",
+      "displayText": "Credenza",
+      "word": "Credenza",
+      "category": "Objects",
+      "difficulty": "hard",
+      "tags": [
+        "objects",
+        "hard",
+        "furniture",
+        "home",
+        "storage",
+        "container",
+        "dining",
+        "sideboard"
+      ],
+      "localizationKey": "word.objects.credenza",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-chaise-lounge",
+      "displayText": "Chaise Lounge",
+      "word": "Chaise Lounge",
+      "category": "Objects",
+      "difficulty": "hard",
+      "tags": [
+        "objects",
+        "hard",
+        "furniture",
+        "home",
+        "reclining",
+        "seating",
+        "lounge"
+      ],
+      "localizationKey": "word.objects.chaise-lounge",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-decanter",
+      "displayText": "Decanter",
+      "word": "Decanter",
+      "category": "Objects",
+      "difficulty": "hard",
+      "tags": [
+        "objects",
+        "hard",
+        "kitchen",
+        "dining",
+        "storage",
+        "container"
+      ],
+      "localizationKey": "word.objects.decanter",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-carafe",
+      "displayText": "Carafe",
+      "word": "Carafe",
+      "category": "Objects",
+      "difficulty": "hard",
+      "tags": [
+        "objects",
+        "hard",
+        "kitchen",
+        "dining",
+        "storage",
+        "container"
+      ],
+      "localizationKey": "word.objects.carafe",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-mortar-and-pestle",
+      "displayText": "Mortar and Pestle",
+      "word": "Mortar and Pestle",
+      "category": "Objects",
+      "difficulty": "hard",
+      "tags": [
+        "objects",
+        "hard",
+        "kitchen",
+        "dining"
+      ],
+      "localizationKey": "word.objects.mortar-and-pestle",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-trivet",
+      "displayText": "Trivet",
+      "word": "Trivet",
+      "category": "Objects",
+      "difficulty": "hard",
+      "tags": [
+        "objects",
+        "hard",
+        "kitchen",
+        "dining"
+      ],
+      "localizationKey": "word.objects.trivet",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-ladle",
+      "displayText": "Ladle",
+      "word": "Ladle",
+      "category": "Objects",
+      "difficulty": "hard",
+      "tags": [
+        "objects",
+        "hard",
+        "kitchen",
+        "dining"
+      ],
+      "localizationKey": "word.objects.ladle",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-whisk",
+      "displayText": "Whisk",
+      "word": "Whisk",
+      "category": "Objects",
+      "difficulty": "hard",
+      "tags": [
+        "objects",
+        "hard",
+        "kitchen",
+        "dining"
+      ],
+      "localizationKey": "word.objects.whisk",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-colander",
+      "displayText": "Colander",
+      "word": "Colander",
+      "category": "Objects",
+      "difficulty": "hard",
+      "tags": [
+        "objects",
+        "hard",
+        "kitchen",
+        "dining"
+      ],
+      "localizationKey": "word.objects.colander",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-grater",
+      "displayText": "Grater",
+      "word": "Grater",
+      "category": "Objects",
+      "difficulty": "hard",
+      "tags": [
+        "objects",
+        "hard",
+        "kitchen",
+        "dining"
+      ],
+      "localizationKey": "word.objects.grater",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-rolling-pin",
+      "displayText": "Rolling Pin",
+      "word": "Rolling Pin",
+      "category": "Objects",
+      "difficulty": "hard",
+      "tags": [
+        "objects",
+        "hard",
+        "kitchen",
+        "dining"
+      ],
+      "localizationKey": "word.objects.rolling-pin",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-corkscrew",
+      "displayText": "Corkscrew",
+      "word": "Corkscrew",
+      "category": "Objects",
+      "difficulty": "hard",
+      "tags": [
+        "objects",
+        "hard",
+        "kitchen",
+        "dining"
+      ],
+      "localizationKey": "word.objects.corkscrew",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-thimble",
+      "displayText": "Thimble",
+      "word": "Thimble",
+      "category": "Objects",
+      "difficulty": "hard",
+      "tags": [
+        "objects",
+        "hard",
+        "tool",
+        "handheld"
+      ],
+      "localizationKey": "word.objects.thimble",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-bobbin",
+      "displayText": "Bobbin",
+      "word": "Bobbin",
+      "category": "Objects",
+      "difficulty": "hard",
+      "tags": [
+        "objects",
+        "hard",
+        "tool",
+        "handheld"
+      ],
+      "localizationKey": "word.objects.bobbin",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-compass",
+      "displayText": "Compass",
+      "word": "Compass",
+      "category": "Objects",
+      "difficulty": "hard",
+      "tags": [
+        "objects",
+        "hard",
+        "office",
+        "stationery"
+      ],
+      "localizationKey": "word.objects.compass",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-protractor",
+      "displayText": "Protractor",
+      "word": "Protractor",
+      "category": "Objects",
+      "difficulty": "hard",
+      "tags": [
+        "objects",
+        "hard",
+        "office",
+        "stationery"
+      ],
+      "localizationKey": "word.objects.protractor",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-abacus",
+      "displayText": "Abacus",
+      "word": "Abacus",
+      "category": "Objects",
+      "difficulty": "hard",
+      "tags": [
+        "objects",
+        "hard",
+        "office",
+        "stationery"
+      ],
+      "localizationKey": "word.objects.abacus",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-hourglass",
+      "displayText": "Hourglass",
+      "word": "Hourglass",
+      "category": "Objects",
+      "difficulty": "hard",
+      "tags": [
+        "objects",
+        "hard",
+        "time",
+        "measurement"
+      ],
+      "localizationKey": "word.objects.hourglass",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-sundial",
+      "displayText": "Sundial",
+      "word": "Sundial",
+      "category": "Objects",
+      "difficulty": "hard",
+      "tags": [
+        "objects",
+        "hard",
+        "time",
+        "measurement"
+      ],
+      "localizationKey": "word.objects.sundial",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-metronome",
+      "displayText": "Metronome",
+      "word": "Metronome",
+      "category": "Objects",
+      "difficulty": "hard",
+      "tags": [
+        "objects",
+        "hard",
+        "time",
+        "measurement"
+      ],
+      "localizationKey": "word.objects.metronome",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-tuning-fork",
+      "displayText": "Tuning Fork",
+      "word": "Tuning Fork",
+      "category": "Objects",
+      "difficulty": "hard",
+      "tags": [
+        "objects",
+        "hard",
+        "tool",
+        "creative"
+      ],
+      "localizationKey": "word.objects.tuning-fork",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-bellows",
+      "displayText": "Bellows",
+      "word": "Bellows",
+      "category": "Objects",
+      "difficulty": "hard",
+      "tags": [
+        "objects",
+        "hard",
+        "tool",
+        "handheld"
+      ],
+      "localizationKey": "word.objects.bellows",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-anvil",
+      "displayText": "Anvil",
+      "word": "Anvil",
+      "category": "Objects",
+      "difficulty": "hard",
+      "tags": [
+        "objects",
+        "hard",
+        "tool",
+        "handheld"
+      ],
+      "localizationKey": "word.objects.anvil",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-trowel",
+      "displayText": "Trowel",
+      "word": "Trowel",
+      "category": "Objects",
+      "difficulty": "hard",
+      "tags": [
+        "objects",
+        "hard",
+        "tool",
+        "handheld"
+      ],
+      "localizationKey": "word.objects.trowel",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-awl",
+      "displayText": "Awl",
+      "word": "Awl",
+      "category": "Objects",
+      "difficulty": "hard",
+      "tags": [
+        "objects",
+        "hard",
+        "tool",
+        "handheld"
+      ],
+      "localizationKey": "word.objects.awl",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "objects-chisel",
+      "displayText": "Chisel",
+      "word": "Chisel",
+      "category": "Objects",
+      "difficulty": "hard",
+      "tags": [
+        "objects",
+        "hard",
+        "tool",
+        "handheld"
+      ],
+      "localizationKey": "word.objects.chisel",
+      "safety": {
+        "level": "general"
+      }
+    }
   ]
 }

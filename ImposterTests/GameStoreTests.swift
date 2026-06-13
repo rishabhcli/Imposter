@@ -92,8 +92,177 @@ final class GameStoreTests: XCTestCase {
         XCTAssertEqual(hintService.lastSecretWord, "Giraffe")
         XCTAssertEqual(hintService.lastCategory, "Ocean creatures")
         XCTAssertEqual(store.state.roundState?.secretWord, "Giraffe")
+        XCTAssertEqual(store.wordGenerationStatus, .generated)
         XCTAssertEqual(store.state.roundState?.imposterHint, "Animals")
         XCTAssertEqual(imageService.generateImageCallCount, 1)
+    }
+
+    func testCustomPromptGenerationFailureFallsBackToPackWord() async throws {
+        let wordService = MockWordService()
+        wordService.failGenerateWord(with: WordServiceError.aiTimeout)
+        wordService.returnWord("Dolphin")
+        let hintService = MockHintService()
+        let state = TestFixtures.gameState(
+            players: TestFixtures.minimumPlayers,
+            phase: .setup,
+            settings: TestFixtures.customPromptSettings
+        )
+
+        let store = GameStore(
+            state: state,
+            storageService: MockStorageService(),
+            wordService: wordService,
+            hintService: hintService,
+            imageService: MockImageService()
+        )
+
+        store.startGame()
+
+        try await assertEventually("fallback pack word should replace failed generation") {
+            store.state.roundState?.secretWord == "Dolphin"
+        }
+
+        XCTAssertEqual(wordService.generateWordCallCount, 1)
+        XCTAssertEqual(wordService.selectWordCallCount, 1)
+        XCTAssertEqual(wordService.lastAvoidedWords, ["Ocean creatures"])
+        XCTAssertEqual(store.wordGenerationStatus, .fallback(.generationFailed))
+        XCTAssertEqual(hintService.lastSecretWord, "Dolphin")
+    }
+
+    func testCustomPromptDuplicateGeneratedWordFallsBackToPackWord() async throws {
+        let wordService = MockWordService()
+        wordService.returnGeneratedWord("Elephant")
+        wordService.returnWord("Dolphin")
+        let completedRound = CompletedRound(
+            roundNumber: 1,
+            secretWord: "Elephant",
+            imposterID: TestFixtures.PlayerIDs.alice,
+            imposterName: "Alice",
+            wasImposterCaught: true,
+            imposterGuessedWord: false,
+            clues: [],
+            votes: [:]
+        )
+        let state = GameState(
+            players: TestFixtures.minimumPlayers,
+            settings: TestFixtures.customPromptSettings,
+            currentPhase: .setup,
+            gameHistory: [completedRound]
+        )
+
+        let store = GameStore(
+            state: state,
+            storageService: MockStorageService(),
+            wordService: wordService,
+            hintService: MockHintService(),
+            imageService: MockImageService()
+        )
+
+        store.startGame()
+
+        try await assertEventually("duplicate generated word should be replaced") {
+            store.state.roundState?.secretWord == "Dolphin"
+        }
+
+        XCTAssertEqual(wordService.generateWordCallCount, 1)
+        XCTAssertEqual(wordService.selectWordCallCount, 1)
+        XCTAssertEqual(wordService.lastAvoidedWords, ["Elephant", "Ocean creatures"])
+        XCTAssertEqual(store.wordGenerationStatus, .fallback(.duplicateRecentWord))
+    }
+
+    func testCustomPromptNearDuplicateGeneratedWordFallsBackToPackWord() async throws {
+        let wordService = MockWordService()
+        wordService.returnGeneratedWord("Ocean creatures")
+        wordService.returnWord("Dolphin")
+        let state = TestFixtures.gameState(
+            players: TestFixtures.minimumPlayers,
+            phase: .setup,
+            settings: TestFixtures.customPromptSettings
+        )
+
+        let store = GameStore(
+            state: state,
+            storageService: MockStorageService(),
+            wordService: wordService,
+            hintService: MockHintService(),
+            imageService: MockImageService()
+        )
+
+        store.startGame()
+
+        try await assertEventually("near-duplicate generated word should be replaced") {
+            store.state.roundState?.secretWord == "Dolphin"
+        }
+
+        XCTAssertEqual(wordService.generateWordCallCount, 1)
+        XCTAssertEqual(wordService.selectWordCallCount, 1)
+        XCTAssertEqual(wordService.lastAvoidedWords, ["Ocean creatures"])
+        XCTAssertEqual(store.wordGenerationStatus, .fallback(.nearDuplicateWord))
+    }
+
+    func testCustomPromptHiddenModePreparesDistinctImposterWord() async throws {
+        let wordService = MockWordService()
+        wordService.returnGeneratedWord("Giraffe")
+        wordService.returnWord("Tiger")
+        var settings = TestFixtures.customPromptSettings
+        settings.gameMode = .hidden
+        let state = TestFixtures.gameState(
+            players: TestFixtures.minimumPlayers,
+            phase: .setup,
+            settings: settings
+        )
+
+        let store = GameStore(
+            state: state,
+            storageService: MockStorageService(),
+            wordService: wordService,
+            hintService: MockHintService(),
+            imageService: MockImageService()
+        )
+
+        store.startGame()
+
+        try await assertEventually("hidden custom prompt round should have a secret and decoy") {
+            store.state.roundState?.secretWord == "Giraffe" &&
+                store.state.roundState?.imposterWord == "Tiger"
+        }
+
+        XCTAssertEqual(store.settings.gameMode, .hidden)
+        XCTAssertEqual(wordService.generateWordCallCount, 1)
+        XCTAssertEqual(wordService.selectWordCallCount, 1)
+        XCTAssertEqual(wordService.lastAvoidedWords, ["Giraffe", "Ocean creatures"])
+        XCTAssertEqual(store.wordGenerationStatus, .generated)
+    }
+
+    func testHiddenModeDropsNearDuplicateAlternateWord() async throws {
+        let wordService = MockWordService()
+        wordService.returnWords(["Elephant"])
+        wordService.returnWord("Elephants")
+
+        var settings = TestFixtures.defaultSettings
+        settings.gameMode = .hidden
+        let state = TestFixtures.gameState(
+            players: TestFixtures.minimumPlayers,
+            phase: .setup,
+            settings: settings
+        )
+
+        let store = GameStore(
+            state: state,
+            storageService: MockStorageService(),
+            wordService: wordService,
+            hintService: MockHintService(),
+            imageService: MockImageService()
+        )
+
+        store.startGame()
+
+        try await assertEventually("hidden round should be prepared") {
+            store.state.roundState?.secretWord == "Elephant"
+        }
+
+        XCTAssertNil(store.state.roundState?.imposterWord)
+        XCTAssertEqual(wordService.selectWordCallCount, 11)
     }
 
     func testHintGenerationFallsBackToCategoryWhenServiceFails() async throws {
@@ -187,6 +356,46 @@ final class GameStoreTests: XCTestCase {
 
         XCTAssertEqual(store.state.roundState?.secretWord, "Elephant")
         XCTAssertEqual(store.state.roundState?.categoryHint, "Mixed")
+    }
+
+    func testStartNewRoundPassesRecentHistoryToWordServiceAvoidance() async throws {
+        let wordService = MockWordService()
+        wordService.returnWord("Giraffe")
+
+        let completedRound = CompletedRound(
+            roundNumber: 1,
+            secretWord: "Elephant",
+            imposterID: TestFixtures.PlayerIDs.alice,
+            imposterName: "Alice",
+            wasImposterCaught: true,
+            imposterGuessedWord: false,
+            clues: [],
+            votes: [:]
+        )
+        let state = GameState(
+            players: TestFixtures.minimumPlayers,
+            settings: TestFixtures.defaultSettings,
+            currentPhase: .summary,
+            roundNumber: 1,
+            gameHistory: [completedRound]
+        )
+
+        let store = GameStore(
+            state: state,
+            storageService: MockStorageService(),
+            wordService: wordService,
+            hintService: MockHintService(),
+            imageService: MockImageService()
+        )
+
+        store.startNewRound()
+
+        try await assertEventually("next round should request a fresh word") {
+            wordService.selectWordCallCount == 1
+        }
+
+        XCTAssertEqual(wordService.lastAvoidedWords, ["Elephant"])
+        XCTAssertEqual(store.state.roundState?.secretWord, "Giraffe")
     }
 
     private func assertEventually(

@@ -12,6 +12,8 @@ import SwiftUI
 /// Handles the pass-and-play voting sequence for all players
 struct VotingView: View {
     @Environment(GameStore.self) private var store
+    @Environment(\.accessibilityReduceMotion) private var systemReduceMotion
+    @Environment(\.imposterAccessibilityPreferences) private var accessibilityPreferences
 
     @State private var currentVoterIndex = 0
     @State private var hasVoted = false
@@ -22,30 +24,30 @@ struct VotingView: View {
     @State private var isTransitioning = false
 
     var body: some View {
-        ZStack {
-            // Background
-            backgroundGradient
-
+        LGPhaseStage(
+            phase: String(localized: "Voting"),
+            title: votingStageTitle,
+            subtitle: votingStageSubtitle,
+            icon: votingStageIcon,
+            style: .gameplay,
+            accentColor: votingStageAccentColor
+        ) {
             VStack(spacing: LGSpacing.large) {
-                // Header with progress
-                headerSection
+                votingProgressSection
                     .opacity(headerOpacity)
 
                 if isTransitioning {
-                    // Empty state during transition
                     Color.clear
+                        .frame(minHeight: 320)
                 } else if !hasVoted {
-                    // Vote prompt
                     votePrompt
                         .offset(y: contentOffset)
                         .opacity(headerOpacity)
                     
-                    // Self-vote explanation
                     selfVoteExplanation
                         .offset(y: contentOffset)
                         .opacity(headerOpacity)
 
-                    // Player selection grid
                     PlayerSelectionGrid(
                         players: selectablePlayers,
                         selectedID: $selectedPlayerID,
@@ -56,12 +58,11 @@ struct VotingView: View {
                     .offset(y: contentOffset)
                     .opacity(headerOpacity)
                 } else {
-                    // Vote confirmation
                     voteConfirmation
                 }
             }
-            .padding(LGSpacing.large)
         }
+        .accessibilityIdentifier(AccessibilityIDs.votingScreen)
         .contentShape(Rectangle())
         .onTapGesture {
             if hasVoted && !isTransitioning {
@@ -75,31 +76,8 @@ struct VotingView: View {
 
     // MARK: - Subviews
 
-    private var backgroundGradient: some View {
-        ZStack {
-            LGColors.darkBackground
-                .ignoresSafeArea()
-
-            LinearGradient(
-                colors: [
-                    LGColors.darkBackgroundSecondary,
-                    LGColors.darkBackground
-                ],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-            .ignoresSafeArea()
-        }
-    }
-
-    private var headerSection: some View {
+    private var votingProgressSection: some View {
         VStack(spacing: LGSpacing.small) {
-            Text("Voting")
-                .font(LGTypography.headlineMedium)
-                .foregroundStyle(.white)
-                .accessibilityIdentifier(AccessibilityIDs.votingScreen)
-
-            // Progress bar
             VotingProgressBar(
                 current: currentVoterIndex,
                 total: store.players.count,
@@ -121,6 +99,34 @@ struct VotingView: View {
                     .foregroundStyle(LGColors.accentPrimary)
             }
         }
+    }
+
+    private var votingStageTitle: String {
+        if hasVoted {
+            return String(localized: "Vote Recorded!")
+        }
+
+        return String(localized: "Who do you think is the Imposter?")
+    }
+
+    private var votingStageSubtitle: String? {
+        if hasVoted {
+            if currentVoterIndex < store.players.count - 1 {
+                return String(localized: "Pass the device to \(nextVoterName)")
+            }
+
+            return String(localized: "All votes are in!")
+        }
+
+        return String(localized: "Vote \(currentVoterIndex + 1) of \(store.players.count)")
+    }
+
+    private var votingStageIcon: String {
+        hasVoted ? "checkmark.seal.fill" : "person.2.badge.key.fill"
+    }
+
+    private var votingStageAccentColor: Color {
+        hasVoted ? LGColors.success : LGColors.accentPrimary
     }
     
     private var progressPercentage: Int {
@@ -215,7 +221,7 @@ struct VotingView: View {
                 .modifier(PulsingOpacityModifier())
         }
         .onAppear {
-            withAnimation(.spring(response: 0.4, dampingFraction: 0.6)) {
+            animateForAccessibility(.spring(response: 0.4, dampingFraction: 0.6)) {
                 voteConfirmationScale = 1.0
             }
         }
@@ -255,7 +261,7 @@ struct VotingView: View {
             HapticManager.playImpact(.light)
         }
 
-        withAnimation(LGMaterials.springAnimation) {
+        animateForAccessibility(LGMaterials.springAnimation) {
             hasVoted = true
         }
     }
@@ -264,7 +270,7 @@ struct VotingView: View {
         HapticManager.buttonTap()
         
         // Phase 1: Hide current content
-        withAnimation(.easeOut(duration: 0.2)) {
+        animateForAccessibility(.easeOut(duration: 0.2)) {
             isTransitioning = true
             hasVoted = false
             headerOpacity = 0
@@ -290,10 +296,25 @@ struct VotingView: View {
     }
     
     private func startEntranceAnimation() {
-        withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
+        animateForAccessibility(.spring(response: 0.5, dampingFraction: 0.8)) {
             headerOpacity = 1.0
             contentOffset = 0
         }
+    }
+
+    private func animateForAccessibility(
+        _ animation: Animation?,
+        _ updates: @escaping () -> Void
+    ) {
+        if reduceMotion {
+            updates()
+        } else {
+            withAnimation(animation, updates)
+        }
+    }
+
+    private var reduceMotion: Bool {
+        systemReduceMotion || accessibilityPreferences.forceReduceMotion
     }
 }
 

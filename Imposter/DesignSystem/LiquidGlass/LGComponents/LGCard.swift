@@ -55,6 +55,9 @@ struct LGCard<Content: View>: View {
 /// A premium card with gyroscope-reactive liquid glass effects
 /// The card subtly tilts, shifts highlights, and creates depth based on device motion
 struct LGGyroCard<Content: View>: View {
+    @Environment(\.accessibilityReduceMotion) private var systemReduceMotion
+    @Environment(\.imposterAccessibilityPreferences) private var accessibilityPreferences
+
     let content: Content
     let cornerRadius: CGFloat
     let elevation: CGFloat
@@ -84,17 +87,17 @@ struct LGGyroCard<Content: View>: View {
     }
     
     private var tiltX: Double {
-        motionManager.pitch * 8 // Subtle 3D tilt effect
+        motionPitch * 8 // Subtle 3D tilt effect
     }
     
     private var tiltY: Double {
-        motionManager.roll * 8
+        motionRoll * 8
     }
     
     private var highlightOffset: CGPoint {
         CGPoint(
-            x: motionManager.roll * 100 * highlightIntensity,
-            y: motionManager.pitch * 100 * highlightIntensity
+            x: motionRoll * 100 * highlightIntensity,
+            y: motionPitch * 100 * highlightIntensity
         )
     }
     
@@ -126,13 +129,13 @@ struct LGGyroCard<Content: View>: View {
                     .strokeBorder(
                         LinearGradient(
                             colors: [
-                                Color.white.opacity(0.4 + motionManager.pitch * 0.2),
+                                Color.white.opacity(0.4 + motionPitch * 0.2),
                                 Color.white.opacity(0.1),
                                 Color.white.opacity(0.05),
-                                Color.white.opacity(0.2 + motionManager.roll * 0.15)
+                                Color.white.opacity(0.2 + motionRoll * 0.15)
                             ],
-                            startPoint: UnitPoint(x: 0.5 - motionManager.roll * 0.3, y: 0),
-                            endPoint: UnitPoint(x: 0.5 + motionManager.roll * 0.3, y: 1)
+                            startPoint: UnitPoint(x: 0.5 - motionRoll * 0.3, y: 0),
+                            endPoint: UnitPoint(x: 0.5 + motionRoll * 0.3, y: 1)
                         ),
                         lineWidth: 1.5
                     )
@@ -152,9 +155,21 @@ struct LGGyroCard<Content: View>: View {
             .shadow(
                 color: (tintColor ?? .black).opacity(0.15),
                 radius: 20,
-                x: CGFloat(motionManager.roll * 10),
-                y: CGFloat(motionManager.pitch * 10) + 8
+                x: CGFloat(motionRoll * 10),
+                y: CGFloat(motionPitch * 10) + 8
             )
+    }
+
+    private var reduceMotion: Bool {
+        systemReduceMotion || accessibilityPreferences.forceReduceMotion
+    }
+
+    private var motionPitch: Double {
+        reduceMotion ? 0 : motionManager.pitch
+    }
+
+    private var motionRoll: Double {
+        reduceMotion ? 0 : motionManager.roll
     }
 }
 
@@ -212,13 +227,16 @@ struct LiquidHighlightOverlay: View {
 
 /// Creates a subtle color refraction effect like light through glass
 struct LiquidRefractionOverlay: View {
+    @Environment(\.accessibilityReduceMotion) private var systemReduceMotion
+    @Environment(\.imposterAccessibilityPreferences) private var accessibilityPreferences
+
     let cornerRadius: CGFloat
     @State private var motionManager = MotionManager.shared
     
     var body: some View {
         GeometryReader { geometry in
-            let offsetX = motionManager.roll * 0.5
-            let offsetY = motionManager.pitch * 0.5
+            let offsetX = motionRoll * 0.5
+            let offsetY = motionPitch * 0.5
             
             ZStack {
                 // Cyan refraction edge (left/top)
@@ -245,6 +263,18 @@ struct LiquidRefractionOverlay: View {
         }
         .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
         .allowsHitTesting(false)
+    }
+
+    private var reduceMotion: Bool {
+        systemReduceMotion || accessibilityPreferences.forceReduceMotion
+    }
+
+    private var motionPitch: Double {
+        reduceMotion ? 0 : motionManager.pitch
+    }
+
+    private var motionRoll: Double {
+        reduceMotion ? 0 : motionManager.roll
     }
 }
 

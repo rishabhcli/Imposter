@@ -18,6 +18,9 @@ final class MockWordService: WordServiceProtocol, @unchecked Sendable {
     /// The word to return from selectWord
     var selectWordResult: Result<String, Error> = .success("Elephant")
 
+    /// Optional queued select-word results for multi-step flows.
+    var queuedSelectWordResults: [Result<String, Error>] = []
+
     /// The word to return from generateWord
     var generateWordResult: Result<String, Error> = .success("Giraffe")
 
@@ -56,6 +59,9 @@ final class MockWordService: WordServiceProtocol, @unchecked Sendable {
     /// Last difficulty passed to selectWord
     private(set) var lastSelectDifficulty: GameSettings.Difficulty?
 
+    /// Last avoided words passed to selectWord
+    private(set) var lastAvoidedWords: Set<String> = []
+
     /// Last prompt passed to generateWord
     private(set) var lastGeneratePrompt: String?
 
@@ -75,14 +81,20 @@ final class MockWordService: WordServiceProtocol, @unchecked Sendable {
 
     func selectWord(
         from categories: [String]?,
-        difficulty: GameSettings.Difficulty
+        difficulty: GameSettings.Difficulty,
+        avoiding avoidedWords: Set<String>
     ) async throws -> String {
         selectWordCallCount += 1
         lastSelectCategories = categories
         lastSelectDifficulty = difficulty
+        lastAvoidedWords = avoidedWords
 
         if simulatedDelay > 0 {
             try await Task.sleep(for: .seconds(simulatedDelay))
+        }
+
+        if !queuedSelectWordResults.isEmpty {
+            return try queuedSelectWordResults.removeFirst().get()
         }
 
         return try selectWordResult.get()
@@ -111,7 +123,9 @@ final class MockWordService: WordServiceProtocol, @unchecked Sendable {
         generateWordCallCount = 0
         lastSelectCategories = nil
         lastSelectDifficulty = nil
+        lastAvoidedWords = []
         lastGeneratePrompt = nil
+        queuedSelectWordResults = []
     }
 
     /// Configures the mock to fail selectWord
@@ -127,6 +141,11 @@ final class MockWordService: WordServiceProtocol, @unchecked Sendable {
     /// Configures the mock to return a specific word from selectWord
     func returnWord(_ word: String) {
         selectWordResult = .success(word)
+    }
+
+    /// Configures a sequence of words returned by consecutive selectWord calls.
+    func returnWords(_ words: [String]) {
+        queuedSelectWordResults = words.map { .success($0) }
     }
 
     /// Configures the mock to return a specific word from generateWord

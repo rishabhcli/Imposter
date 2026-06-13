@@ -589,7 +589,6 @@ final class ImageService: ImageServiceProtocol, @unchecked Sendable {
 
     // MARK: - Private Methods
 
-    @MainActor
     private func updateAvailability(from creator: ImageCreator) {
         _isAvailable = true
         _availableStyles = creator.availableStyles.compactMap { playgroundStyle in

@@ -50,33 +50,14 @@ enum WordGenerator {
         // Generate response using the language model
         let response = try await session.respond(to: fullPrompt)
 
-        // Extract the text from the response
-        let responseText = response.content
-
-        // Clean up the response - remove quotes, extra whitespace, punctuation
-        var cleanedWord = responseText
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-            .replacingOccurrences(of: "\"", with: "")
-            .replacingOccurrences(of: "'", with: "")
-            .replacingOccurrences(of: ".", with: "")
-            .replacingOccurrences(of: ":", with: "")
-
-        // Take only the first line if multiple lines
-        if let firstLine = cleanedWord.split(separator: "\n").first {
-            cleanedWord = String(firstLine).trimmingCharacters(in: .whitespacesAndNewlines)
-        }
-
-        // If the response is empty or too long, throw error
-        guard !cleanedWord.isEmpty, cleanedWord.count <= 50 else {
+        switch GeneratedWordPolicy.validate(rawResponse: response.content, prompt: prompt) {
+        case .success(let cleanedWord):
+            return cleanedWord
+        case .failure(.promptEcho):
+            throw WordGeneratorError.sameAsPrompt
+        case .failure:
             throw WordGeneratorError.invalidResponse
         }
-
-        // Make sure we don't return the exact prompt
-        if cleanedWord.lowercased() == prompt.lowercased() {
-            throw WordGeneratorError.sameAsPrompt
-        }
-
-        return cleanedWord.capitalized
     }
 
     /// The current availability status of Foundation Models

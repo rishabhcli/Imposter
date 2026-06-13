@@ -12,65 +12,36 @@ import SwiftUI
 /// Discussion phase view with optional timer
 struct DiscussionView: View {
     @Environment(GameStore.self) private var store
+    @Environment(\.accessibilityReduceMotion) private var systemReduceMotion
+    @Environment(\.imposterAccessibilityPreferences) private var accessibilityPreferences
+
     @State private var timeRemaining: Int = 60
     @State private var timerTask: Task<Void, Never>?
     @State private var isPulsing: Bool = false
     @State private var lastWarningThreshold: Int? = nil
 
     var body: some View {
-        ZStack {
-            // Background
-            ZStack {
-                LGColors.darkBackground
-                    .ignoresSafeArea()
-
-                LinearGradient(
-                    colors: [
-                        LGColors.darkBackgroundSecondary,
-                        LGColors.darkBackground
-                    ],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-                .ignoresSafeArea()
-            }
-
-            VStack(spacing: LGSpacing.extraLarge) {
-                Spacer()
-
-                // Icon
-                Image(systemName: "bubble.left.and.bubble.right.fill")
-                    .font(.system(size: 60))
-                    .foregroundStyle(.white.opacity(0.5))
-
-                // Title
-                Text("Discussion Time")
-                    .font(LGTypography.displayMedium)
-                    .foregroundStyle(.white)
-                    .accessibilityIdentifier(AccessibilityIDs.discussionScreen)
-
-                // Timer (if enabled)
+        LGPhaseStage(
+            phase: String(localized: "Discussion"),
+            title: String(localized: "Discussion Time"),
+            subtitle: String(localized: "Compare clues without saying the secret word."),
+            icon: "bubble.left.and.bubble.right.fill",
+            style: .gameplay,
+            accentColor: LGColors.accentPrimary
+        ) {
+            VStack(spacing: LGSpacing.large) {
                 if store.settings.discussionTimerEnabled {
                     timerDisplay
                 }
 
-                // Instructions
-                Text("Discuss who you think is the Imposter. Don't reveal your clues or the secret word!")
-                    .font(LGTypography.bodyMedium)
-                    .foregroundStyle(.white.opacity(0.7))
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, LGSpacing.large)
-
-                Spacer()
-
-                // Start voting button
-                LGLargeButton("Start Voting", icon: "hand.raised.fill") {
-                    store.dispatch(.startVoting)
-                }
-                .accessibilityIdentifier(AccessibilityIDs.startVotingButton)
-                .padding(.horizontal, LGSpacing.large)
-                .padding(.bottom, LGSpacing.extraLarge)
+                discussionPromptCard
             }
+            .accessibilityIdentifier(AccessibilityIDs.discussionScreen)
+        } footer: {
+            LGLargeButton(String(localized: "Start Voting"), icon: "hand.raised.fill") {
+                store.dispatch(.startVoting)
+            }
+            .accessibilityIdentifier(AccessibilityIDs.startVotingButton)
         }
         .onAppear {
             if store.settings.discussionTimerEnabled {
@@ -84,14 +55,43 @@ struct DiscussionView: View {
         }
     }
 
+    private var discussionPromptCard: some View {
+        LGCard(cornerRadius: LGSpacing.cornerRadiusLarge) {
+            VStack(alignment: .leading, spacing: LGSpacing.medium) {
+                HStack(spacing: LGSpacing.medium) {
+                    Image(systemName: "quote.bubble.fill")
+                        .font(.system(size: 20, weight: .semibold))
+                        .foregroundStyle(LGColors.accentPrimary)
+                        .frame(width: 44, height: 44)
+                        .background {
+                            Circle()
+                                .fill(LGColors.accentPrimary.opacity(0.16))
+                        }
+
+                    VStack(alignment: .leading, spacing: LGSpacing.extraSmall) {
+                        Text(String(localized: "Table Talk"))
+                            .font(LGTypography.headlineSmall)
+                            .foregroundStyle(.primary)
+
+                        Text(String(localized: "Everyone gets one clue. Challenge patterns, ask follow-ups, and keep the word private."))
+                            .font(LGTypography.bodyMedium)
+                            .foregroundStyle(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+            }
+        }
+        .accessibilityElement(children: .combine)
+    }
+
     private var timerDisplay: some View {
         VStack(spacing: LGSpacing.small) {
             Text(timeString)
                 .font(LGTypography.timer)
                 .foregroundStyle(timerColor)
                 .monospacedDigit()
-                .scaleEffect(isPulsing ? 1.1 : 1.0)
-                .animation(isPulsing ? .easeInOut(duration: 0.5).repeatForever(autoreverses: true) : .default, value: isPulsing)
+                .scaleEffect(shouldPulse ? 1.1 : 1.0)
+                .animation(shouldPulse ? .easeInOut(duration: 0.5).repeatForever(autoreverses: true) : nil, value: isPulsing)
                 .accessibilityLabel("Time remaining: \(accessibleTimeString)")
                 .accessibilityAddTraits(.updatesFrequently)
 
@@ -115,14 +115,14 @@ struct DiscussionView: View {
                         style: StrokeStyle(lineWidth: 8, lineCap: .round)
                     )
                     .rotationEffect(.degrees(-90))
-                    .animation(.linear(duration: 1), value: progress)
+                    .animation(reduceMotion ? nil : .linear(duration: 1), value: progress)
 
                 if timeRemaining <= 5 && timeRemaining > 0 {
                     Circle()
                         .stroke(LGColors.error.opacity(0.5), lineWidth: 12)
-                        .scaleEffect(isPulsing ? 1.15 : 1.0)
-                        .opacity(isPulsing ? 0 : 0.6)
-                        .animation(.easeOut(duration: 0.8).repeatForever(autoreverses: false), value: isPulsing)
+                        .scaleEffect(shouldPulse ? 1.15 : 1.0)
+                        .opacity(shouldPulse ? 0 : 0.6)
+                        .animation(shouldPulse ? .easeOut(duration: 0.8).repeatForever(autoreverses: false) : nil, value: isPulsing)
                 }
             }
             .frame(width: 120, height: 120)
@@ -171,7 +171,7 @@ struct DiscussionView: View {
                 lastWarningThreshold = threshold
                 HapticManager.timerWarning()
                 if threshold == 5 {
-                    isPulsing = true
+                    isPulsing = !reduceMotion
                 }
                 break
             }
@@ -200,6 +200,14 @@ struct DiscussionView: View {
     private var progress: Double {
         guard store.settings.discussionSeconds > 0 else { return 0 }
         return Double(timeRemaining) / Double(store.settings.discussionSeconds)
+    }
+
+    private var shouldPulse: Bool {
+        isPulsing && !reduceMotion
+    }
+
+    private var reduceMotion: Bool {
+        systemReduceMotion || accessibilityPreferences.forceReduceMotion
     }
 
     private func startTimer() {

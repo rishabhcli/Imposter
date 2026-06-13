@@ -115,6 +115,29 @@ struct GameReducerTests {
         #expect(playerIDs.contains(imposterID))
     }
 
+    @Test func createNewRoundAvoidsProvidedRecentWords() throws {
+        let animalPack = try #require(
+            WordSelector.loadWordPacks().first { $0.category == "Animals" }
+        )
+        let mediumWords = animalPack.words
+            .filter { $0.difficulty == "medium" }
+            .map(\.word)
+        let expectedWord = try #require(mediumWords.last)
+        let avoidedWords = Set(mediumWords.dropLast())
+
+        var settings = GameSettings.default
+        settings.selectedCategories = ["Animals"]
+        settings.wordPackDifficulty = .medium
+
+        let round = GameReducer.createNewRound(
+            players: TestFixtures.minimumPlayers,
+            settings: settings,
+            avoiding: avoidedWords
+        )
+
+        #expect(round.secretWord == expectedWord)
+    }
+
     // MARK: - Clue Round Tests
 
     @Test func submitClueAdvancesIndex() {

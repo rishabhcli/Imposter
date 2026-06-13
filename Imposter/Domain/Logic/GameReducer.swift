@@ -12,6 +12,7 @@ import Foundation
 /// Pure reducer that computes new GameState from current state and an action.
 /// Contains no side effects - all state changes are deterministic.
 enum GameReducer {
+    private static let recentWordAvoidanceLimit = 12
 
     // MARK: - Main Reducer
 
@@ -51,14 +52,15 @@ enum GameReducer {
 
         case .updateSettings(let settings):
             guard newState.currentPhase == .setup else { return state }
-            newState.settings = settings
+            newState.settings = GameRules.normalized(settings)
 
-        case .setGeneratedWord(let word):
+        case .setGeneratedWord(let word, let imposterWord):
             // Update the secret word in the current round (used for AI-generated words)
             guard let round = newState.roundState else { return state }
             // Create new round with the generated word but keep the same imposter and categoryHint
             newState.roundState = RoundState(
                 secretWord: word,
+                imposterWord: imposterWord ?? round.imposterWord,
                 categoryHint: round.categoryHint,
                 imposterHint: round.imposterHint,
                 imposterID: round.imposterID,
@@ -76,14 +78,22 @@ enum GameReducer {
 
         case .startGame:
             guard newState.currentPhase == .setup else { return state }
-            guard newState.players.count >= 3 else { return state }
+            let validation = GameRules.validation(settings: newState.settings, playerCount: newState.players.count)
+            guard validation.canStart else { return state }
+            newState.settings = validation.settings
             newState.roundNumber += 1
             newState.currentPhase = .roleReveal
-            newState.roundState = createNewRound(players: newState.players, settings: newState.settings)
+            newState.roundState = createNewRound(
+                players: newState.players,
+                settings: newState.settings,
+                avoiding: recentSecretWords(from: newState.gameHistory)
+            )
 
         case .startGameWithPreparedRound(let roundState):
             guard newState.currentPhase == .setup else { return state }
-            guard newState.players.count >= 3 else { return state }
+            let validation = GameRules.validation(settings: newState.settings, playerCount: newState.players.count)
+            guard validation.canStart else { return state }
+            newState.settings = validation.settings
             newState.roundNumber += 1
             newState.currentPhase = .roleReveal
             newState.roundState = roundState
@@ -213,12 +223,18 @@ enum GameReducer {
             guard newState.currentPhase == .summary else { return state }
             // Clear any lingering image from previous round
             newState.roundState?.generatedImage = nil
+            newState.settings = GameRules.normalized(newState.settings)
             newState.roundNumber += 1
             newState.currentPhase = .roleReveal
-            newState.roundState = createNewRound(players: newState.players, settings: newState.settings)
+            newState.roundState = createNewRound(
+                players: newState.players,
+                settings: newState.settings,
+                avoiding: recentSecretWords(from: newState.gameHistory)
+            )
 
         case .startNewRoundWithPreparedRound(let roundState):
             guard newState.currentPhase == .summary else { return state }
+            newState.settings = GameRules.normalized(newState.settings)
             newState.roundNumber += 1
             newState.currentPhase = .roleReveal
             newState.roundState = roundState
@@ -273,7 +289,12 @@ enum GameReducer {
 
     /// Creates a new round state with a random word and random imposter
     /// Note: When using custom prompt, sets a placeholder - GameStore will generate the actual word
-    static func createNewRound(players: [Player], settings: GameSettings) -> RoundState {
+    static func createNewRound(
+        players: [Player],
+        settings: GameSettings,
+        avoiding avoidedWords: Set<String> = []
+    ) -> RoundState {
+        let settings = GameRules.normalized(settings)
         let word: String
         let categoryHint: String
 
@@ -283,7 +304,7 @@ enum GameReducer {
             // The hint for the imposter is the user's theme/prompt
             categoryHint = settings.customWordPrompt ?? "Custom"
         } else {
-            word = WordSelector.selectWord(from: settings)
+            word = WordSelector.selectWord(from: settings, avoiding: avoidedWords)
             // The hint for the imposter is the category name(s)
             if let categories = settings.selectedCategories, !categories.isEmpty {
                 categoryHint = categories.joined(separator: ", ")
@@ -305,14 +326,11 @@ enum GameReducer {
         // In hidden mode, select a different word for the imposter
         let imposterWord: String?
         if settings.gameMode == .hidden && settings.wordSource != .customPrompt {
-            // Keep selecting until we get a different word
-            var differentWord = WordSelector.selectWord(from: settings)
-            var attempts = 0
-            while differentWord.lowercased() == word.lowercased() && attempts < 10 {
-                differentWord = WordSelector.selectWord(from: settings)
-                attempts += 1
-            }
-            imposterWord = differentWord
+            imposterWord = WordSelector.selectAlternateWord(
+                matching: word,
+                from: settings,
+                avoiding: avoidedWords
+            )
         } else {
             imposterWord = nil
         }
@@ -324,6 +342,13 @@ enum GameReducer {
             imposterID: imposter.id,
             firstPlayerIndex: firstPlayerIndex
         )
+    }
+
+    static func recentSecretWords(
+        from history: [CompletedRound],
+        limit: Int = recentWordAvoidanceLimit
+    ) -> Set<String> {
+        Set(history.suffix(limit).map(\.secretWord))
     }
 
     /// Calculates the voting result from the current round state

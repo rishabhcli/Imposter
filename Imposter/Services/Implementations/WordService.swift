@@ -40,7 +40,7 @@ final class WordService: WordServiceProtocol {
     // MARK: - WordServiceProtocol
 
     var availableCategories: [String] {
-        ["Animals", "Technology", "Objects", "People", "Movies"]
+        GameSettings.availableCategories
     }
 
     var isAIGenerationAvailable: Bool {
@@ -54,7 +54,8 @@ final class WordService: WordServiceProtocol {
 
     func selectWord(
         from categories: [String]?,
-        difficulty: GameSettings.Difficulty
+        difficulty: GameSettings.Difficulty,
+        avoiding avoidedWords: Set<String>
     ) async throws -> String {
         logger.debug("Selecting word from categories: \(categories?.joined(separator: ", ") ?? "all"), difficulty: \(difficulty.rawValue)")
 
@@ -84,14 +85,48 @@ final class WordService: WordServiceProtocol {
 
         // Use filtered words if available, otherwise use all
         let finalWords = filteredWords.isEmpty ? allWords : filteredWords
+        let freshWords = avoidedWords.isEmpty
+            ? finalWords
+            : finalWords.filter { WordSelector.isPlayableDistinctWord($0.word, from: avoidedWords) }
+        let candidateWords = freshWords.isEmpty ? finalWords : freshWords
 
-        guard let selected = finalWords.randomElement() else {
+        guard let selected = candidateWords.randomElement() else {
             logger.warning("No words found after filtering, using fallback")
             return Self.fallbackWords.randomElement() ?? "UNKNOWN"
         }
 
-        logger.info("Selected word: \(selected.word)")
-        return selected.word
+        let displayWord = selected.localizedDisplayText()
+        logger.info("Selected word: \(displayWord)")
+        return displayWord
+    }
+
+    func selectAlternateWord(
+        matching secretWord: String,
+        from categories: [String]?,
+        difficulty: GameSettings.Difficulty,
+        avoiding avoidedWords: Set<String>
+    ) async throws -> String? {
+        let packs = loadWordPacks(for: categories)
+
+        guard !packs.isEmpty else {
+            logger.warning("No word packs loaded for hidden-mode alternate selection")
+            return nil
+        }
+
+        let alternateWord = WordSelector.selectAlternateWord(
+            matching: secretWord,
+            in: packs,
+            difficulty: difficulty,
+            avoiding: avoidedWords
+        )
+
+        if let alternateWord {
+            logger.info("Selected hidden-mode alternate word: \(alternateWord)")
+        } else {
+            logger.warning("No playable hidden-mode alternate word found")
+        }
+
+        return alternateWord
     }
 
     func generateWord(from prompt: String) async throws -> String {
@@ -100,14 +135,7 @@ final class WordService: WordServiceProtocol {
     }
 
     func wordCount(for category: String) -> Int {
-        // Synchronously check cached pack
-        let fileName = "words_\(category.lowercased())"
-        guard let url = Bundle.main.url(forResource: fileName, withExtension: "json"),
-              let data = try? Data(contentsOf: url),
-              let pack = try? JSONDecoder().decode(WordPack.self, from: data) else {
-            return 0
-        }
-        return pack.words.count
+        WordSelector.wordCount(for: category)
     }
 
     // MARK: - Private Methods

@@ -26,33 +26,29 @@ struct RoleRevealView: View {
     @State private var holdProgress: CGFloat = 0
 
     var body: some View {
-        ZStack {
-            // Background
-            backgroundGradient
-
-            // Content
+        LGPhaseStage(
+            phase: String(localized: "Role Reveal"),
+            title: roleStageTitle,
+            subtitle: roleStageSubtitle,
+            icon: roleStageIcon,
+            style: .gameplay,
+            accentColor: playerColor
+        ) {
             VStack(spacing: LGSpacing.extraLarge) {
-                // Progress indicator
                 progressIndicator
 
-                Spacer()
-
                 if isTransitioning {
-                    // Empty state during player transition to prevent spoiling
                     Color.clear
+                        .frame(minHeight: 360)
                 } else if !roleRevealed {
-                    // Pass device prompt
                     passDevicePrompt
                         .transition(reduceMotion ? .identity : .opacity.combined(with: .scale(scale: 0.95)))
                 } else {
-                    // Role card
                     roleCardSection
                 }
-
-                Spacer()
             }
-            .padding(LGSpacing.large)
         }
+        .accessibilityIdentifier(AccessibilityIDs.roleRevealScreen)
         .contentShape(Rectangle())
         .onTapGesture {
             handleTap()
@@ -71,18 +67,8 @@ struct RoleRevealView: View {
 
     // MARK: - Subviews
 
-    private var backgroundGradient: some View {
-        AnimatedBackground(style: .gameplay)
-    }
-
     private var progressIndicator: some View {
         VStack(spacing: LGSpacing.small) {
-            Text("Role Reveal")
-                .font(LGTypography.headlineSmall)
-                .foregroundStyle(.white.opacity(0.7))
-                .accessibilityIdentifier(AccessibilityIDs.roleRevealScreen)
-
-            // Progress bar instead of dots for better accessibility
             RoleRevealProgressBar(
                 current: currentRevealIndex,
                 total: store.players.count
@@ -92,7 +78,43 @@ struct RoleRevealView: View {
             Text("Player \(currentRevealIndex + 1) of \(store.players.count)")
                 .font(LGTypography.labelSmall)
                 .foregroundStyle(.white.opacity(0.5))
+
+            wordGenerationStatusBanner
         }
+    }
+
+    @ViewBuilder
+    private var wordGenerationStatusBanner: some View {
+        if isWaitingForSecretWord {
+            statusBanner(
+                icon: "sparkles",
+                text: String(localized: "Creating secret word...")
+            )
+            .accessibilityIdentifier(AccessibilityIDs.wordGenerationStatus)
+        } else if case .fallback(let reason) = store.wordGenerationStatus {
+            statusBanner(
+                icon: "arrow.triangle.2.circlepath",
+                text: fallbackStatusText(for: reason)
+            )
+            .accessibilityIdentifier(AccessibilityIDs.wordGenerationStatus)
+        }
+    }
+
+    private func statusBanner(icon: String, text: String) -> some View {
+        HStack(spacing: LGSpacing.small) {
+            Image(systemName: icon)
+                .font(.system(size: 12, weight: .semibold))
+
+            Text(text)
+                .font(.system(size: 12, weight: .semibold, design: .rounded))
+                .lineLimit(2)
+                .multilineTextAlignment(.center)
+        }
+        .foregroundStyle(.white.opacity(0.74))
+        .padding(.horizontal, LGSpacing.medium)
+        .padding(.vertical, LGSpacing.small)
+        .glassEffect(.regular.tint(.cyan.opacity(0.14)), in: .capsule)
+        .accessibilityElement(children: .combine)
     }
 
     private var passDevicePrompt: some View {
@@ -164,6 +186,7 @@ struct RoleRevealView: View {
             // Reveal button with liquid glass and hold-to-reveal
             HoldToRevealButton(
                 playerColor: playerColor,
+                isDisabled: isWaitingForSecretWord,
                 onReveal: {
                     HapticManager.roleRevealed()
                     animateForAccessibility(LGMaterials.springAnimation) {
@@ -196,6 +219,7 @@ struct RoleRevealView: View {
                 isGeneratingImage: store.isGeneratingImage
             )
             .transition(reduceMotion ? .identity : .scale.combined(with: .opacity))
+            .frame(height: 560)
 
             // Continue hint with pulsing animation
             if showContinueHint {
@@ -206,6 +230,38 @@ struct RoleRevealView: View {
                     .modifier(PulsingOpacityModifier())
             }
         }
+    }
+
+    private var roleStageTitle: String {
+        if isTransitioning {
+            return String(localized: "Private - Hand device to next player")
+        }
+
+        if roleRevealed {
+            return String(localized: "Tap anywhere to continue")
+        }
+
+        if voiceOverRunning {
+            return String(localized: "Player's turn to reveal their role")
+        }
+
+        return String(localized: "Pass the device to \(currentPlayer.name)")
+    }
+
+    private var roleStageSubtitle: String? {
+        if isWaitingForSecretWord {
+            return String(localized: "Preparing Word...")
+        }
+
+        return String(localized: "Player \(currentRevealIndex + 1) of \(store.players.count)")
+    }
+
+    private var roleStageIcon: String {
+        if roleRevealed {
+            return "lock.open.fill"
+        }
+
+        return isWaitingForSecretWord ? "sparkles" : "lock.shield.fill"
     }
 
     // MARK: - Helpers
@@ -227,6 +283,11 @@ struct RoleRevealView: View {
 
     private var secretWord: String {
         store.secretWord ?? "UNKNOWN"
+    }
+
+    private var isWaitingForSecretWord: Bool {
+        store.settings.wordSource == .customPrompt &&
+            (store.isGeneratingWord || secretWord == "GENERATING...")
     }
 
     private var categoryHint: String {
@@ -257,6 +318,17 @@ struct RoleRevealView: View {
             }
         } else {
             return .informed(word: secretWord)
+        }
+    }
+
+    private func fallbackStatusText(for reason: WordGenerationFallbackReason) -> String {
+        switch reason {
+        case .generationFailed:
+            return String(localized: "Using a pack word for this round.")
+        case .duplicateRecentWord:
+            return String(localized: "Generated word repeated a recent round. Using a pack word.")
+        case .nearDuplicateWord:
+            return String(localized: "Generated word was too close to the prompt or a recent round. Using a pack word.")
         }
     }
 
@@ -362,6 +434,7 @@ struct HoldToRevealButton: View {
     @Environment(\.imposterAccessibilityPreferences) private var accessibilityPreferences
 
     let playerColor: Color
+    let isDisabled: Bool
     let onReveal: () -> Void
     
     @State private var isHolding = false
@@ -385,11 +458,11 @@ struct HoldToRevealButton: View {
                         .font(.system(size: 20, weight: .bold))
                         .symbolEffect(.pulse, options: .repeating, isActive: !reduceMotion && !isHolding && !hasRevealed)
                     
-                    Text(isHolding ? "Keep Holding..." : "Hold to Reveal")
+                    Text(buttonTitle)
                         .font(.system(size: 18, weight: .semibold, design: .rounded))
                         .contentTransition(.numericText())
                 }
-                .foregroundStyle(.white)
+                .foregroundStyle(isDisabled ? .white.opacity(0.58) : .white)
                 .frame(maxWidth: .infinity)
                 .frame(height: 56)
             }
@@ -406,6 +479,7 @@ struct HoldToRevealButton: View {
             }
         }
         .frame(height: 56)
+        .opacity(isDisabled ? 0.72 : 1)
         .scaleEffect(isHolding ? 0.97 : 1.0)
         .animation(reduceMotion ? nil : .spring(response: 0.2), value: isHolding)
         .onLongPressGesture(
@@ -420,8 +494,8 @@ struct HoldToRevealButton: View {
                 }
             }
         )
-        .accessibilityLabel("Hold to Reveal My Role")
-        .accessibilityHint("Press and hold to see your secret role")
+        .accessibilityLabel(isDisabled ? "Preparing Word..." : "Hold to Reveal My Role")
+        .accessibilityHint(isDisabled ? "Please wait until the secret word is ready." : "Press and hold to see your secret role")
         .accessibilityElement(children: .ignore)
         .accessibilityAddTraits(.isButton)
         .accessibilityAction {
@@ -431,6 +505,7 @@ struct HoldToRevealButton: View {
     }
 
     private func beginHold() {
+        guard !isDisabled else { return }
         guard !hasRevealed, !isHolding else { return }
         isHolding = true
         HapticManager.buttonTap()
@@ -460,6 +535,7 @@ struct HoldToRevealButton: View {
     }
 
     private func completeReveal() {
+        guard !isDisabled else { return }
         guard !hasRevealed else { return }
         isHolding = false
         holdProgress = 1
@@ -485,6 +561,14 @@ struct HoldToRevealButton: View {
 
     private var reduceTransparency: Bool {
         systemReduceTransparency || accessibilityPreferences.forceReduceTransparency
+    }
+
+    private var buttonTitle: String {
+        if isDisabled {
+            return String(localized: "Preparing Word...")
+        }
+
+        return isHolding ? String(localized: "Keep Holding...") : String(localized: "Hold to Reveal")
     }
 }
 

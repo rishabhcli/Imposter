@@ -19,43 +19,29 @@ struct RevealView: View {
     @State private var imposterGuess = ""
     @State private var hasGuessed = false
     @State private var guessResult: Bool?
-    @State private var titleScale: CGFloat = 0.8
     @State private var buttonOffset: CGFloat = 40
     @State private var buttonOpacity: Double = 0
 
     var body: some View {
-        ZStack {
-            // Background
-            backgroundGradient
-
-            ScrollView {
-                VStack(spacing: LGSpacing.extraLarge) {
-                    // Title with scale animation
-                    Text("The Votes Are In...")
-                        .font(LGTypography.displaySmall)
-                        .foregroundStyle(.white)
-                        .scaleEffect(titleScale)
-                        .opacity(showImposter ? 1 : 0)
-                        .animation(.spring(response: 0.6, dampingFraction: 0.7), value: showImposter)
-                        .accessibilityIdentifier(AccessibilityIDs.revealScreen)
-
-                    // Imposter reveal
-                    if showImposter {
-                        imposterRevealSection
-                    }
-
-                    // Outcome
-                    if showOutcome {
-                        outcomeSection
-                    }
-
-                    // Continue button
-                    if showOutcome {
-                        continueButton
-                    }
+        LGPhaseStage(
+            phase: String(localized: "Reveal"),
+            title: String(localized: "The Votes Are In..."),
+            subtitle: String(localized: "Reveal the table's choice, the secret word, and the final twist."),
+            icon: "person.fill.questionmark",
+            style: wasImposterCaught ? .celebration : .imposter,
+            accentColor: wasImposterCaught ? LGColors.success : LGColors.imposter
+        ) {
+            VStack(spacing: LGSpacing.extraLarge) {
+                if showImposter {
+                    imposterRevealSection
                 }
-                .padding(LGSpacing.large)
+
+                if showOutcome {
+                    outcomeSection
+                    continueButton
+                }
             }
+            .accessibilityIdentifier(AccessibilityIDs.revealScreen)
         }
         .onAppear {
             startRevealSequence()
@@ -63,23 +49,6 @@ struct RevealView: View {
     }
 
     // MARK: - Subviews
-
-    private var backgroundGradient: some View {
-        ZStack {
-            LGColors.darkBackground
-                .ignoresSafeArea()
-
-            LinearGradient(
-                colors: [
-                    LGColors.darkBackgroundSecondary,
-                    LGColors.darkBackground
-                ],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-            .ignoresSafeArea()
-        }
-    }
 
     private var imposterRevealSection: some View {
         VStack(spacing: LGSpacing.large) {
@@ -387,10 +356,8 @@ struct RevealView: View {
     private func startRevealSequence() {
         let baseDelay = reduceMotion ? 0.3 : 0.8
 
-        // Show imposter reveal with title animation
         withAnimation(.spring(response: 0.6, dampingFraction: 0.7)) {
             showImposter = true
-            titleScale = 1.0
         }
 
         // Show outcome after a delay

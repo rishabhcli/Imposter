@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "categories": [
+    {
+      "category": "Animals",
+      "iconSystemName": "pawprint.fill",
+      "safety": "general",
+      "partyEnergy": 4,
+      "ambiguity": 2,
+      "imageSuitability": 5,
+      "tags": ["family", "nature", "concrete"]
+    },
+    {
+      "category": "Technology",
+      "iconSystemName": "gamecontroller.fill",
+      "safety": "general",
+      "partyEnergy": 3,
+      "ambiguity": 3,
+      "imageSuitability": 4,
+      "tags": ["modern", "gadgets", "mixed"]
+    },
+    {
+      "category": "Objects",
+      "iconSystemName": "cube.fill",
+      "safety": "general",
+      "partyEnergy": 2,
+      "ambiguity": 2,
+      "imageSuitability": 5,
+      "tags": ["everyday", "concrete", "starter"]
+    },
+    {
+      "category": "People",
+      "iconSystemName": "star.fill",
+      "safety": "general",
+      "partyEnergy": 5,
+      "ambiguity": 4,
+      "imageSuitability": 3,
+      "tags": ["culture", "roles", "high-energy"]
+    },
+    {
+      "category": "Movies",
+      "iconSystemName": "film.fill",
+      "safety": "general",
+      "partyEnergy": 5,
+      "ambiguity": 4,
+      "imageSuitability": 4,
+      "tags": ["pop-culture", "media", "high-energy"]
+    }
+  ]
+}

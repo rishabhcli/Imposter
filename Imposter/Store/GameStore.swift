@@ -10,6 +10,21 @@ import Observation
 import OSLog
 import UIKit
 
+// MARK: - WordGenerationStatus
+
+enum WordGenerationStatus: Sendable, Equatable {
+    case idle
+    case generating
+    case generated
+    case fallback(WordGenerationFallbackReason)
+}
+
+enum WordGenerationFallbackReason: String, Sendable, Equatable {
+    case generationFailed
+    case duplicateRecentWord
+    case nearDuplicateWord
+}
+
 // MARK: - GameStore
 
 /// Central store for game state management.
@@ -17,6 +32,7 @@ import UIKit
 @Observable
 @MainActor
 final class GameStore {
+    private static let recentWordAvoidanceLimit = 12
 
     // MARK: - Properties
 
@@ -36,6 +52,9 @@ final class GameStore {
 
     /// Flag indicating if AI word generation is in progress
     private(set) var isGeneratingWord: Bool = false
+
+    /// Non-sensitive status for custom prompt word generation.
+    private(set) var wordGenerationStatus: WordGenerationStatus = .idle
 
     /// Flag indicating if game is being prepared (word/image generation in progress before start)
     private(set) var isPreparingGame: Bool = false
@@ -159,6 +178,13 @@ final class GameStore {
             break
         }
 
+        switch action {
+        case .returnToHome, .resetGame:
+            wordGenerationStatus = .idle
+        default:
+            break
+        }
+
         handleSideEffects(for: action)
     }
 
@@ -250,12 +276,18 @@ final class GameStore {
 
     private func beginRoundPreparation(for action: PreparedRoundAction) {
         isPreparingGame = true
+        wordGenerationStatus = .idle
 
         let players = state.players
-        let settings = state.settings
+        let settings = GameRules.normalized(state.settings)
+        let avoidedWords = recentSecretWords()
 
         Task { @MainActor in
-            let preparedRound = await prepareRoundState(players: players, settings: settings)
+            let preparedRound = await prepareRoundState(
+                players: players,
+                settings: settings,
+                avoiding: avoidedWords
+            )
 
             defer {
                 self.isPreparingGame = false
@@ -275,7 +307,12 @@ final class GameStore {
         }
     }
 
-    private func prepareRoundState(players: [Player], settings: GameSettings) async -> RoundState {
+    private func prepareRoundState(
+        players: [Player],
+        settings: GameSettings,
+        avoiding avoidedWords: Set<String>
+    ) async -> RoundState {
+        let settings = GameRules.normalized(settings)
         let secretWord: String
         let imposterWord: String?
         let categoryHint = categoryHint(for: settings)
@@ -284,12 +321,13 @@ final class GameStore {
             secretWord = "GENERATING..."
             imposterWord = nil
         } else {
-            secretWord = await selectRandomWord(using: settings)
+            secretWord = await selectRandomWord(using: settings, avoiding: avoidedWords)
 
             if settings.gameMode == .hidden {
                 imposterWord = await selectAlternateImposterWord(
                     using: settings,
-                    excluding: secretWord
+                    excluding: secretWord,
+                    avoiding: avoidedWords
                 )
             } else {
                 imposterWord = nil
@@ -330,11 +368,15 @@ final class GameStore {
         return "Mixed"
     }
 
-    private func selectRandomWord(using settings: GameSettings) async -> String {
+    private func selectRandomWord(
+        using settings: GameSettings,
+        avoiding avoidedWords: Set<String> = []
+    ) async -> String {
         do {
             return try await wordService.selectWord(
                 from: settings.selectedCategories,
-                difficulty: settings.wordPackDifficulty
+                difficulty: settings.wordPackDifficulty,
+                avoiding: avoidedWords
             )
         } catch {
             logger.error("Failed to select a round word: \(error.localizedDescription)")
@@ -345,17 +387,24 @@ final class GameStore {
 
     private func selectAlternateImposterWord(
         using settings: GameSettings,
-        excluding secretWord: String
+        excluding secretWord: String,
+        avoiding avoidedWords: Set<String>
     ) async -> String? {
-        for _ in 0..<10 {
-            let candidate = await selectRandomWord(using: settings)
-            if candidate.caseInsensitiveCompare(secretWord) != .orderedSame {
-                return candidate
-            }
+        do {
+            return try await wordService.selectAlternateWord(
+                matching: secretWord,
+                from: settings.selectedCategories,
+                difficulty: settings.wordPackDifficulty,
+                avoiding: avoidedWords
+            )
+        } catch {
+            logger.error("Failed to prepare hidden-mode imposter word: \(error.localizedDescription)")
+            return nil
         }
+    }
 
-        logger.error("Failed to prepare a distinct hidden-mode imposter word")
-        return nil
+    private func recentSecretWords() -> Set<String> {
+        Set(state.gameHistory.suffix(Self.recentWordAvoidanceLimit).map(\.secretWord))
     }
 
     // MARK: - AI Word Generation
@@ -364,6 +413,7 @@ final class GameStore {
     private func generateWordFromPrompt(_ prompt: String) {
         guard !isGeneratingWord else { return }
         isGeneratingWord = true
+        wordGenerationStatus = .generating
 
         Task {
             await performWordGeneration(from: prompt)
@@ -373,9 +423,10 @@ final class GameStore {
     /// Performs word generation using the injected word service with a 15-second timeout.
     private func performWordGeneration(from prompt: String) async {
         var finalWord: String
+        let avoidedWords = recentSecretWords()
 
         do {
-            finalWord = try await withThrowingTaskGroup(of: String.self) { group in
+            let generatedWord = try await withThrowingTaskGroup(of: String.self) { group in
                 group.addTask {
                     try await self.wordService.generateWord(from: prompt)
                 }
@@ -392,14 +443,29 @@ final class GameStore {
                 return result
             }
 
+            finalWord = await freshGeneratedWord(
+                generatedWord,
+                prompt: prompt,
+                avoiding: avoidedWords
+            )
             logger.debug("Generated word '\(finalWord)' from prompt '\(prompt)'")
         } catch {
             logger.error("Word generation failed: \(error.localizedDescription)")
-            finalWord = prompt.capitalized
-            showError("Word generation timed out. Using fallback word.")
+            wordGenerationStatus = .fallback(.generationFailed)
+            finalWord = await fallbackWordForGeneratedPrompt(
+                prompt,
+                avoiding: avoidedWords
+            )
+            showError("Word generation timed out. Using a pack word instead.")
         }
 
-        dispatch(.setGeneratedWord(word: finalWord))
+        let generatedImposterWord = await generatedImposterWordIfNeeded(
+            for: finalWord,
+            prompt: prompt,
+            avoiding: avoidedWords
+        )
+
+        dispatch(.setGeneratedWord(word: finalWord, imposterWord: generatedImposterWord))
         isGeneratingWord = false
 
         let category = state.settings.customWordPrompt ?? "Custom"
@@ -408,6 +474,69 @@ final class GameStore {
         }
 
         generateSecretImage(for: finalWord, category: category)
+    }
+
+    private func freshGeneratedWord(
+        _ generatedWord: String,
+        prompt: String,
+        avoiding avoidedWords: Set<String>
+    ) async -> String {
+        let generatedKey = WordSelector.normalizedWordKey(generatedWord)
+        let avoidedKeys = Set(avoidedWords.map(WordSelector.normalizedWordKey))
+
+        guard !avoidedKeys.contains(generatedKey) else {
+            logger.info("Generated word repeated recent history; using pack fallback")
+            wordGenerationStatus = .fallback(.duplicateRecentWord)
+            return await fallbackWordForGeneratedPrompt(
+                prompt,
+                avoiding: avoidedWords.union([generatedWord])
+            )
+        }
+
+        let blockedWords = avoidedWords.union([prompt])
+        guard WordSelector.isPlayableDistinctWord(generatedWord, from: blockedWords) else {
+            logger.info("Generated word was too close to prompt or recent history; using pack fallback")
+            wordGenerationStatus = .fallback(.nearDuplicateWord)
+            return await fallbackWordForGeneratedPrompt(
+                prompt,
+                avoiding: avoidedWords.union([generatedWord])
+            )
+        }
+
+        wordGenerationStatus = .generated
+        return generatedWord
+    }
+
+    private func fallbackWordForGeneratedPrompt(
+        _ prompt: String,
+        avoiding avoidedWords: Set<String>
+    ) async -> String {
+        await selectRandomWord(
+            using: state.settings,
+            avoiding: avoidedWords.union([prompt])
+        )
+    }
+
+    private func generatedImposterWordIfNeeded(
+        for secretWord: String,
+        prompt: String,
+        avoiding avoidedWords: Set<String>
+    ) async -> String? {
+        guard state.settings.gameMode == .hidden else {
+            return nil
+        }
+
+        do {
+            return try await wordService.selectAlternateWord(
+                matching: secretWord,
+                from: state.settings.selectedCategories,
+                difficulty: state.settings.wordPackDifficulty,
+                avoiding: avoidedWords.union([prompt])
+            )
+        } catch {
+            logger.error("Failed to prepare custom-prompt hidden decoy: \(error.localizedDescription)")
+            return nil
+        }
     }
 
     // MARK: - AI Hint Generation

@@ -529,6 +529,9 @@ struct RoleCardView: View {
 
 /// Animated skeleton placeholder shown while AI generates the image
 struct ImageLoadingPlaceholder: View {
+    @Environment(\.accessibilityReduceMotion) private var systemReduceMotion
+    @Environment(\.imposterAccessibilityPreferences) private var accessibilityPreferences
+
     @State private var isAnimating = false
     @State private var loadingPhase = 0
     
@@ -574,7 +577,7 @@ struct ImageLoadingPlaceholder: View {
                                     endPoint: .bottomTrailing
                                 )
                             )
-                            .symbolEffect(.pulse.wholeSymbol, options: .repeating)
+                            .symbolEffect(.pulse.wholeSymbol, options: .repeating, isActive: !reduceMotion)
                         
                         // Rotating loading message
                         Text(loadingMessages[loadingPhase % loadingMessages.count])
@@ -585,6 +588,11 @@ struct ImageLoadingPlaceholder: View {
                 }
         }
         .onAppear {
+            guard !reduceMotion else {
+                isAnimating = false
+                return
+            }
+
             // Start shimmer animation
             withAnimation(.linear(duration: 1.5).repeatForever(autoreverses: false)) {
                 isAnimating = true
@@ -601,6 +609,10 @@ struct ImageLoadingPlaceholder: View {
             }
         }
         .accessibilityLabel("Generating AI image, please wait")
+    }
+
+    private var reduceMotion: Bool {
+        systemReduceMotion || accessibilityPreferences.forceReduceMotion
     }
 }
 

@@ -39,6 +39,30 @@ final class ImposterUITests: XCTestCase {
     }
 
     @MainActor
+    func testSpanishLocalizedSetupPathUsesCriticalNavigationStrings() throws {
+        relaunch(arguments: ["-ui-testing", "-AppleLanguages", "(es)", "-AppleLocale", "es_ES"])
+
+        let newGameButton = app.buttons[UITestAccessibilityIDs.newGameButton]
+        XCTAssertTrue(newGameButton.waitForExistence(timeout: 3))
+        XCTAssertEqual(newGameButton.label, "Nuevo Juego")
+
+        newGameButton.tap()
+
+        XCTAssertTrue(app.staticTexts["Elegir fuente de palabras"].waitForExistence(timeout: 3))
+        XCTAssertTrue(app.staticTexts["Elegir categorías"].exists)
+
+        let continueButton = app.buttons[UITestAccessibilityIDs.categoryContinueButton]
+        XCTAssertTrue(continueButton.waitForExistence(timeout: 3))
+        XCTAssertEqual(continueButton.label, "Continuar")
+        continueButton.tap()
+
+        XCTAssertTrue(app.staticTexts["Ajustes del juego"].exists)
+        XCTAssertTrue(app.staticTexts["0 jugadores"].exists)
+        XCTAssertTrue(app.staticTexts["Añade al menos 3 jugadores"].exists)
+        XCTAssertEqual(app.buttons[UITestAccessibilityIDs.startGameButton].label, "Iniciar Juego")
+    }
+
+    @MainActor
     func testCompleteGameFlowBasic() throws {
         goToPlayerSetup()
 
@@ -469,13 +493,13 @@ final class ImposterUITests: XCTestCase {
         let status = app.staticTexts[UITestAccessibilityIDs.setupSubtitle]
         XCTAssertTrue(status.waitForExistence(timeout: 3), "Setup subtitle is missing", file: file, line: line)
 
-        let expectedLabel = "\(count) Players"
+        let expectedPrefix = "\(count) "
         let expectation = XCTNSPredicateExpectation(
-            predicate: NSPredicate(format: "label == %@", expectedLabel),
+            predicate: NSPredicate(format: "label BEGINSWITH %@", expectedPrefix),
             object: status
         )
         let result = XCTWaiter.wait(for: [expectation], timeout: timeout)
-        XCTAssertEqual(result, .completed, "Expected setup subtitle to be '\(expectedLabel)', got '\(status.label)'", file: file, line: line)
+        XCTAssertEqual(result, .completed, "Expected setup subtitle to start with '\(expectedPrefix)', got '\(status.label)'", file: file, line: line)
     }
 
     @MainActor

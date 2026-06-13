@@ -58,7 +58,7 @@ struct GameState: Sendable, Equatable {
 
     /// Whether we have enough players to start (3-10)
     var canStartGame: Bool {
-        players.count >= 3 && players.count <= 10
+        GameRules.validation(settings: settings, playerCount: players.count).canStart
     }
 
     /// Total number of clues expected for the current round

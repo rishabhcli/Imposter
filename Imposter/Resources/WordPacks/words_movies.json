@@ -1,149 +1,2541 @@
 {
-  "category": "Movies & TV",
+  "category": "Movies",
   "words": [
-    {"word": "Wicked", "difficulty": "easy"},
-    {"word": "Moana", "difficulty": "easy"},
-    {"word": "Deadpool", "difficulty": "easy"},
-    {"word": "Inside Out", "difficulty": "easy"},
-    {"word": "Despicable Me", "difficulty": "easy"},
-    {"word": "Dune", "difficulty": "easy"},
-    {"word": "Beetlejuice", "difficulty": "easy"},
-    {"word": "Gladiator", "difficulty": "easy"},
-    {"word": "Joker", "difficulty": "easy"},
-    {"word": "Kung Fu Panda", "difficulty": "easy"},
-    {"word": "Twisters", "difficulty": "easy"},
-    {"word": "Squid Game", "difficulty": "easy"},
-    {"word": "Stranger Things", "difficulty": "easy"},
-    {"word": "Wednesday", "difficulty": "easy"},
-    {"word": "The Bear", "difficulty": "easy"},
-    {"word": "Severance", "difficulty": "easy"},
-    {"word": "Shogun", "difficulty": "easy"},
-    {"word": "Fallout", "difficulty": "easy"},
-    {"word": "House of the Dragon", "difficulty": "easy"},
-    {"word": "The Last of Us", "difficulty": "easy"},
-    {"word": "Bridgerton", "difficulty": "easy"},
-    {"word": "Oppenheimer", "difficulty": "easy"},
-    {"word": "Barbie", "difficulty": "easy"},
-    {"word": "Spider-Man", "difficulty": "easy"},
-    {"word": "Avatar", "difficulty": "easy"},
-    {"word": "The Avengers", "difficulty": "easy"},
-    {"word": "Star Wars", "difficulty": "easy"},
-    {"word": "Harry Potter", "difficulty": "easy"},
-    {"word": "Batman", "difficulty": "easy"},
-    {"word": "Frozen", "difficulty": "easy"},
-    {"word": "The Lion King", "difficulty": "easy"},
-    {"word": "Toy Story", "difficulty": "easy"},
-    {"word": "Finding Nemo", "difficulty": "easy"},
-    {"word": "Shrek", "difficulty": "easy"},
-    {"word": "Minions", "difficulty": "easy"},
-    {"word": "Jurassic Park", "difficulty": "easy"},
-    {"word": "Titanic", "difficulty": "easy"},
-    {"word": "Iron Man", "difficulty": "easy"},
-    {"word": "Black Panther", "difficulty": "easy"},
-    {"word": "Top Gun", "difficulty": "easy"},
-    {"word": "John Wick", "difficulty": "easy"},
-    {"word": "Super Mario Bros", "difficulty": "easy"},
-    {"word": "Encanto", "difficulty": "easy"},
-    {"word": "Coco", "difficulty": "easy"},
-    {"word": "Demon Slayer", "difficulty": "easy"},
-    {"word": "Jujutsu Kaisen", "difficulty": "easy"},
-    {"word": "Attack on Titan", "difficulty": "easy"},
-    {"word": "My Hero Academia", "difficulty": "easy"},
-    {"word": "One Piece", "difficulty": "easy"},
-    {"word": "Naruto", "difficulty": "easy"},
-    {"word": "Dragon Ball", "difficulty": "easy"},
-    {"word": "Pokémon", "difficulty": "easy"},
-    {"word": "Spy x Family", "difficulty": "easy"},
-    {"word": "Solo Leveling", "difficulty": "easy"},
-    {"word": "Chainsaw Man", "difficulty": "medium"},
-    {"word": "Dandadan", "difficulty": "medium"},
-    {"word": "Kaiju No 8", "difficulty": "medium"},
-    {"word": "Frieren", "difficulty": "medium"},
-    {"word": "Oshi No Ko", "difficulty": "medium"},
-    {"word": "Bocchi the Rock", "difficulty": "medium"},
-    {"word": "Blue Lock", "difficulty": "medium"},
-    {"word": "Haikyuu", "difficulty": "medium"},
-    {"word": "Mob Psycho", "difficulty": "medium"},
-    {"word": "One Punch Man", "difficulty": "medium"},
-    {"word": "Death Note", "difficulty": "medium"},
-    {"word": "Fullmetal Alchemist", "difficulty": "medium"},
-    {"word": "Hunter x Hunter", "difficulty": "medium"},
-    {"word": "Tokyo Revengers", "difficulty": "medium"},
-    {"word": "Bleach", "difficulty": "medium"},
-    {"word": "Arcane", "difficulty": "medium"},
-    {"word": "The Penguin", "difficulty": "medium"},
-    {"word": "Agatha All Along", "difficulty": "medium"},
-    {"word": "Nobody Wants This", "difficulty": "medium"},
-    {"word": "Baby Reindeer", "difficulty": "medium"},
-    {"word": "True Detective", "difficulty": "medium"},
-    {"word": "Euphoria", "difficulty": "medium"},
-    {"word": "Succession", "difficulty": "medium"},
-    {"word": "The White Lotus", "difficulty": "medium"},
-    {"word": "Abbott Elementary", "difficulty": "medium"},
-    {"word": "Only Murders", "difficulty": "medium"},
-    {"word": "Ted Lasso", "difficulty": "medium"},
-    {"word": "Yellowstone", "difficulty": "medium"},
-    {"word": "Game of Thrones", "difficulty": "medium"},
-    {"word": "Breaking Bad", "difficulty": "medium"},
-    {"word": "The Office", "difficulty": "medium"},
-    {"word": "Friends", "difficulty": "medium"},
-    {"word": "The Matrix", "difficulty": "medium"},
-    {"word": "Inception", "difficulty": "medium"},
-    {"word": "The Dark Knight", "difficulty": "medium"},
-    {"word": "Forrest Gump", "difficulty": "medium"},
-    {"word": "The Godfather", "difficulty": "medium"},
-    {"word": "Pulp Fiction", "difficulty": "medium"},
-    {"word": "Fight Club", "difficulty": "medium"},
-    {"word": "The Shawshank Redemption", "difficulty": "medium"},
-    {"word": "Back to the Future", "difficulty": "medium"},
-    {"word": "Indiana Jones", "difficulty": "medium"},
-    {"word": "Pirates of the Caribbean", "difficulty": "medium"},
-    {"word": "The Lord of the Rings", "difficulty": "medium"},
-    {"word": "The Hunger Games", "difficulty": "medium"},
-    {"word": "Fast and Furious", "difficulty": "medium"},
-    {"word": "Mission Impossible", "difficulty": "medium"},
-    {"word": "Home Alone", "difficulty": "medium"},
-    {"word": "Mean Girls", "difficulty": "medium"},
-    {"word": "Sonic the Hedgehog", "difficulty": "medium"},
-    {"word": "Venom", "difficulty": "medium"},
-    {"word": "Godzilla", "difficulty": "medium"},
-    {"word": "Planet of the Apes", "difficulty": "medium"},
-    {"word": "Bad Boys", "difficulty": "medium"},
-    {"word": "Neon Genesis Evangelion", "difficulty": "hard"},
-    {"word": "Cowboy Bebop", "difficulty": "hard"},
-    {"word": "Spirited Away", "difficulty": "hard"},
-    {"word": "Princess Mononoke", "difficulty": "hard"},
-    {"word": "Akira", "difficulty": "hard"},
-    {"word": "Ghost in the Shell", "difficulty": "hard"},
-    {"word": "Steins Gate", "difficulty": "hard"},
-    {"word": "Vinland Saga", "difficulty": "hard"},
-    {"word": "Monster", "difficulty": "hard"},
-    {"word": "Berserk", "difficulty": "hard"},
-    {"word": "Your Name", "difficulty": "hard"},
-    {"word": "Weathering with You", "difficulty": "hard"},
-    {"word": "Suzume", "difficulty": "hard"},
-    {"word": "The Boy and the Heron", "difficulty": "hard"},
-    {"word": "La La Land", "difficulty": "hard"},
-    {"word": "Parasite", "difficulty": "hard"},
-    {"word": "Everything Everywhere", "difficulty": "hard"},
-    {"word": "Poor Things", "difficulty": "hard"},
-    {"word": "Past Lives", "difficulty": "hard"},
-    {"word": "Killers of the Flower Moon", "difficulty": "hard"},
-    {"word": "The Zone of Interest", "difficulty": "hard"},
-    {"word": "American Fiction", "difficulty": "hard"},
-    {"word": "The Holdovers", "difficulty": "hard"},
-    {"word": "Moonlight", "difficulty": "hard"},
-    {"word": "Get Out", "difficulty": "hard"},
-    {"word": "Whiplash", "difficulty": "hard"},
-    {"word": "Blade Runner", "difficulty": "hard"},
-    {"word": "The Shining", "difficulty": "hard"},
-    {"word": "Psycho", "difficulty": "hard"},
-    {"word": "Citizen Kane", "difficulty": "hard"},
-    {"word": "Schindler's List", "difficulty": "hard"},
-    {"word": "Apocalypse Now", "difficulty": "hard"},
-    {"word": "The Silence of the Lambs", "difficulty": "hard"},
-    {"word": "Memento", "difficulty": "hard"},
-    {"word": "Eternal Sunshine", "difficulty": "hard"},
-    {"word": "Oldboy", "difficulty": "hard"}
+    {
+      "id": "movies-wicked",
+      "displayText": "Wicked",
+      "word": "Wicked",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "fantasy",
+        "adventure",
+        "musical",
+        "broadway",
+        "movie",
+        "magic"
+      ],
+      "localizationKey": "word.movies.wicked",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-moana",
+      "displayText": "Moana",
+      "word": "Moana",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "animation",
+        "family",
+        "fantasy",
+        "adventure",
+        "disney",
+        "ocean"
+      ],
+      "localizationKey": "word.movies.moana",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-deadpool",
+      "displayText": "Deadpool",
+      "word": "Deadpool",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "superhero",
+        "comic-book",
+        "comedy",
+        "marvel",
+        "antihero"
+      ],
+      "localizationKey": "word.movies.deadpool",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-inside-out",
+      "displayText": "Inside Out",
+      "word": "Inside Out",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "animation",
+        "family",
+        "pixar",
+        "emotions"
+      ],
+      "localizationKey": "word.movies.inside-out",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-despicable-me",
+      "displayText": "Despicable Me",
+      "word": "Despicable Me",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "animation",
+        "family",
+        "minions",
+        "comedy"
+      ],
+      "localizationKey": "word.movies.despicable-me",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-dune",
+      "displayText": "Dune",
+      "word": "Dune",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "sci-fi",
+        "spectacle"
+      ],
+      "localizationKey": "word.movies.dune",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-beetlejuice",
+      "displayText": "Beetlejuice",
+      "word": "Beetlejuice",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "dark",
+        "thriller"
+      ],
+      "localizationKey": "word.movies.beetlejuice",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-gladiator",
+      "displayText": "Gladiator",
+      "word": "Gladiator",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "action",
+        "adventure"
+      ],
+      "localizationKey": "word.movies.gladiator",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-joker",
+      "displayText": "Joker",
+      "word": "Joker",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "dark",
+        "thriller"
+      ],
+      "localizationKey": "word.movies.joker",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-kung-fu-panda",
+      "displayText": "Kung Fu Panda",
+      "word": "Kung Fu Panda",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "animation",
+        "family"
+      ],
+      "localizationKey": "word.movies.kung-fu-panda",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-twisters",
+      "displayText": "Twisters",
+      "word": "Twisters",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "screen-title",
+        "pop-culture"
+      ],
+      "localizationKey": "word.movies.twisters",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-squid-game",
+      "displayText": "Squid Game",
+      "word": "Squid Game",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "tv-series",
+        "streaming"
+      ],
+      "localizationKey": "word.movies.squid-game",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-stranger-things",
+      "displayText": "Stranger Things",
+      "word": "Stranger Things",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "tv-series",
+        "streaming"
+      ],
+      "localizationKey": "word.movies.stranger-things",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-wednesday",
+      "displayText": "Wednesday",
+      "word": "Wednesday",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "tv-series",
+        "streaming"
+      ],
+      "localizationKey": "word.movies.wednesday",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-the-bear",
+      "displayText": "The Bear",
+      "word": "The Bear",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "tv-series",
+        "streaming"
+      ],
+      "localizationKey": "word.movies.the-bear",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-severance",
+      "displayText": "Severance",
+      "word": "Severance",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "tv-series",
+        "streaming"
+      ],
+      "localizationKey": "word.movies.severance",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-shogun",
+      "displayText": "Shogun",
+      "word": "Shogun",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "tv-series",
+        "streaming"
+      ],
+      "localizationKey": "word.movies.shogun",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-fallout",
+      "displayText": "Fallout",
+      "word": "Fallout",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "tv-series",
+        "streaming",
+        "sci-fi",
+        "spectacle"
+      ],
+      "localizationKey": "word.movies.fallout",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-house-of-the-dragon",
+      "displayText": "House of the Dragon",
+      "word": "House of the Dragon",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "tv-series",
+        "streaming",
+        "fantasy",
+        "adventure"
+      ],
+      "localizationKey": "word.movies.house-of-the-dragon",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-the-last-of-us",
+      "displayText": "The Last of Us",
+      "word": "The Last of Us",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "tv-series",
+        "streaming",
+        "sci-fi",
+        "spectacle"
+      ],
+      "localizationKey": "word.movies.the-last-of-us",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-bridgerton",
+      "displayText": "Bridgerton",
+      "word": "Bridgerton",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "tv-series",
+        "streaming"
+      ],
+      "localizationKey": "word.movies.bridgerton",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-oppenheimer",
+      "displayText": "Oppenheimer",
+      "word": "Oppenheimer",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "prestige",
+        "drama"
+      ],
+      "localizationKey": "word.movies.oppenheimer",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-barbie",
+      "displayText": "Barbie",
+      "word": "Barbie",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "prestige",
+        "drama"
+      ],
+      "localizationKey": "word.movies.barbie",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-spider-man",
+      "displayText": "Spider-Man",
+      "word": "Spider-Man",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "superhero",
+        "comic-book"
+      ],
+      "localizationKey": "word.movies.spider-man",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-avatar",
+      "displayText": "Avatar",
+      "word": "Avatar",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "sci-fi",
+        "spectacle"
+      ],
+      "localizationKey": "word.movies.avatar",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-the-avengers",
+      "displayText": "The Avengers",
+      "word": "The Avengers",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "superhero",
+        "comic-book"
+      ],
+      "localizationKey": "word.movies.the-avengers",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-star-wars",
+      "displayText": "Star Wars",
+      "word": "Star Wars",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "sci-fi",
+        "spectacle"
+      ],
+      "localizationKey": "word.movies.star-wars",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-harry-potter",
+      "displayText": "Harry Potter",
+      "word": "Harry Potter",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "fantasy",
+        "adventure"
+      ],
+      "localizationKey": "word.movies.harry-potter",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-batman",
+      "displayText": "Batman",
+      "word": "Batman",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "superhero",
+        "comic-book"
+      ],
+      "localizationKey": "word.movies.batman",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-frozen",
+      "displayText": "Frozen",
+      "word": "Frozen",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "animation",
+        "family"
+      ],
+      "localizationKey": "word.movies.frozen",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-the-lion-king",
+      "displayText": "The Lion King",
+      "word": "The Lion King",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "animation",
+        "family"
+      ],
+      "localizationKey": "word.movies.the-lion-king",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-toy-story",
+      "displayText": "Toy Story",
+      "word": "Toy Story",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "animation",
+        "family"
+      ],
+      "localizationKey": "word.movies.toy-story",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-finding-nemo",
+      "displayText": "Finding Nemo",
+      "word": "Finding Nemo",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "animation",
+        "family"
+      ],
+      "localizationKey": "word.movies.finding-nemo",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-shrek",
+      "displayText": "Shrek",
+      "word": "Shrek",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "animation",
+        "family"
+      ],
+      "localizationKey": "word.movies.shrek",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-minions",
+      "displayText": "Minions",
+      "word": "Minions",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "animation",
+        "family"
+      ],
+      "localizationKey": "word.movies.minions",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-jurassic-park",
+      "displayText": "Jurassic Park",
+      "word": "Jurassic Park",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "screen-title",
+        "pop-culture"
+      ],
+      "localizationKey": "word.movies.jurassic-park",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-titanic",
+      "displayText": "Titanic",
+      "word": "Titanic",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "screen-title",
+        "pop-culture"
+      ],
+      "localizationKey": "word.movies.titanic",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-iron-man",
+      "displayText": "Iron Man",
+      "word": "Iron Man",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "superhero",
+        "comic-book"
+      ],
+      "localizationKey": "word.movies.iron-man",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-black-panther",
+      "displayText": "Black Panther",
+      "word": "Black Panther",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "superhero",
+        "comic-book"
+      ],
+      "localizationKey": "word.movies.black-panther",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-top-gun",
+      "displayText": "Top Gun",
+      "word": "Top Gun",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "action",
+        "adventure"
+      ],
+      "localizationKey": "word.movies.top-gun",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-john-wick",
+      "displayText": "John Wick",
+      "word": "John Wick",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "action",
+        "adventure"
+      ],
+      "localizationKey": "word.movies.john-wick",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-super-mario-bros",
+      "displayText": "Super Mario Bros",
+      "word": "Super Mario Bros",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "animation",
+        "family"
+      ],
+      "localizationKey": "word.movies.super-mario-bros",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-encanto",
+      "displayText": "Encanto",
+      "word": "Encanto",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "animation",
+        "family"
+      ],
+      "localizationKey": "word.movies.encanto",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-coco",
+      "displayText": "Coco",
+      "word": "Coco",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "animation",
+        "family"
+      ],
+      "localizationKey": "word.movies.coco",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-demon-slayer",
+      "displayText": "Demon Slayer",
+      "word": "Demon Slayer",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "anime",
+        "japanese-media"
+      ],
+      "localizationKey": "word.movies.demon-slayer",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-jujutsu-kaisen",
+      "displayText": "Jujutsu Kaisen",
+      "word": "Jujutsu Kaisen",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "anime",
+        "japanese-media"
+      ],
+      "localizationKey": "word.movies.jujutsu-kaisen",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-attack-on-titan",
+      "displayText": "Attack on Titan",
+      "word": "Attack on Titan",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "anime",
+        "japanese-media"
+      ],
+      "localizationKey": "word.movies.attack-on-titan",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-my-hero-academia",
+      "displayText": "My Hero Academia",
+      "word": "My Hero Academia",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "anime",
+        "japanese-media"
+      ],
+      "localizationKey": "word.movies.my-hero-academia",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-one-piece",
+      "displayText": "One Piece",
+      "word": "One Piece",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "anime",
+        "japanese-media"
+      ],
+      "localizationKey": "word.movies.one-piece",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-naruto",
+      "displayText": "Naruto",
+      "word": "Naruto",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "anime",
+        "japanese-media"
+      ],
+      "localizationKey": "word.movies.naruto",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-dragon-ball",
+      "displayText": "Dragon Ball",
+      "word": "Dragon Ball",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "anime",
+        "japanese-media"
+      ],
+      "localizationKey": "word.movies.dragon-ball",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-pokemon",
+      "displayText": "Pokémon",
+      "word": "Pokémon",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "anime",
+        "japanese-media"
+      ],
+      "localizationKey": "word.movies.pokemon",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-spy-x-family",
+      "displayText": "Spy x Family",
+      "word": "Spy x Family",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "anime",
+        "japanese-media"
+      ],
+      "localizationKey": "word.movies.spy-x-family",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-solo-leveling",
+      "displayText": "Solo Leveling",
+      "word": "Solo Leveling",
+      "category": "Movies",
+      "difficulty": "easy",
+      "tags": [
+        "movies",
+        "easy",
+        "anime",
+        "japanese-media"
+      ],
+      "localizationKey": "word.movies.solo-leveling",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-chainsaw-man",
+      "displayText": "Chainsaw Man",
+      "word": "Chainsaw Man",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "anime",
+        "japanese-media",
+        "action",
+        "adventure",
+        "dark",
+        "thriller",
+        "horror",
+        "demon"
+      ],
+      "localizationKey": "word.movies.chainsaw-man",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-dandadan",
+      "displayText": "Dandadan",
+      "word": "Dandadan",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "anime",
+        "japanese-media",
+        "action",
+        "adventure",
+        "supernatural",
+        "comedy"
+      ],
+      "localizationKey": "word.movies.dandadan",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-kaiju-no-8",
+      "displayText": "Kaiju No 8",
+      "word": "Kaiju No 8",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "anime",
+        "japanese-media",
+        "action",
+        "adventure",
+        "monster",
+        "kaiju"
+      ],
+      "localizationKey": "word.movies.kaiju-no-8",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-frieren",
+      "displayText": "Frieren",
+      "word": "Frieren",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "anime",
+        "japanese-media",
+        "fantasy",
+        "adventure",
+        "journey",
+        "elf"
+      ],
+      "localizationKey": "word.movies.frieren",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-oshi-no-ko",
+      "displayText": "Oshi No Ko",
+      "word": "Oshi No Ko",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "anime",
+        "japanese-media",
+        "idol",
+        "drama",
+        "mystery"
+      ],
+      "localizationKey": "word.movies.oshi-no-ko",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-bocchi-the-rock",
+      "displayText": "Bocchi the Rock",
+      "word": "Bocchi the Rock",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "anime",
+        "japanese-media"
+      ],
+      "localizationKey": "word.movies.bocchi-the-rock",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-blue-lock",
+      "displayText": "Blue Lock",
+      "word": "Blue Lock",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "anime",
+        "japanese-media"
+      ],
+      "localizationKey": "word.movies.blue-lock",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-haikyuu",
+      "displayText": "Haikyuu",
+      "word": "Haikyuu",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "anime",
+        "japanese-media"
+      ],
+      "localizationKey": "word.movies.haikyuu",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-mob-psycho",
+      "displayText": "Mob Psycho",
+      "word": "Mob Psycho",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "anime",
+        "japanese-media"
+      ],
+      "localizationKey": "word.movies.mob-psycho",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-one-punch-man",
+      "displayText": "One Punch Man",
+      "word": "One Punch Man",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "anime",
+        "japanese-media"
+      ],
+      "localizationKey": "word.movies.one-punch-man",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-death-note",
+      "displayText": "Death Note",
+      "word": "Death Note",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "anime",
+        "japanese-media",
+        "dark",
+        "thriller"
+      ],
+      "localizationKey": "word.movies.death-note",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-fullmetal-alchemist",
+      "displayText": "Fullmetal Alchemist",
+      "word": "Fullmetal Alchemist",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "anime",
+        "japanese-media"
+      ],
+      "localizationKey": "word.movies.fullmetal-alchemist",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-hunter-x-hunter",
+      "displayText": "Hunter x Hunter",
+      "word": "Hunter x Hunter",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "anime",
+        "japanese-media"
+      ],
+      "localizationKey": "word.movies.hunter-x-hunter",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-tokyo-revengers",
+      "displayText": "Tokyo Revengers",
+      "word": "Tokyo Revengers",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "anime",
+        "japanese-media"
+      ],
+      "localizationKey": "word.movies.tokyo-revengers",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-bleach",
+      "displayText": "Bleach",
+      "word": "Bleach",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "anime",
+        "japanese-media"
+      ],
+      "localizationKey": "word.movies.bleach",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-arcane",
+      "displayText": "Arcane",
+      "word": "Arcane",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "tv-series",
+        "streaming"
+      ],
+      "localizationKey": "word.movies.arcane",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-the-penguin",
+      "displayText": "The Penguin",
+      "word": "The Penguin",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "superhero",
+        "comic-book",
+        "tv-series",
+        "streaming"
+      ],
+      "localizationKey": "word.movies.the-penguin",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-agatha-all-along",
+      "displayText": "Agatha All Along",
+      "word": "Agatha All Along",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "superhero",
+        "comic-book",
+        "tv-series",
+        "streaming"
+      ],
+      "localizationKey": "word.movies.agatha-all-along",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-nobody-wants-this",
+      "displayText": "Nobody Wants This",
+      "word": "Nobody Wants This",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "tv-series",
+        "streaming"
+      ],
+      "localizationKey": "word.movies.nobody-wants-this",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-baby-reindeer",
+      "displayText": "Baby Reindeer",
+      "word": "Baby Reindeer",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "tv-series",
+        "streaming"
+      ],
+      "localizationKey": "word.movies.baby-reindeer",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-true-detective",
+      "displayText": "True Detective",
+      "word": "True Detective",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "tv-series",
+        "streaming"
+      ],
+      "localizationKey": "word.movies.true-detective",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-euphoria",
+      "displayText": "Euphoria",
+      "word": "Euphoria",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "tv-series",
+        "streaming"
+      ],
+      "localizationKey": "word.movies.euphoria",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-succession",
+      "displayText": "Succession",
+      "word": "Succession",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "tv-series",
+        "streaming"
+      ],
+      "localizationKey": "word.movies.succession",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-the-white-lotus",
+      "displayText": "The White Lotus",
+      "word": "The White Lotus",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "tv-series",
+        "streaming"
+      ],
+      "localizationKey": "word.movies.the-white-lotus",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-abbott-elementary",
+      "displayText": "Abbott Elementary",
+      "word": "Abbott Elementary",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "tv-series",
+        "streaming",
+        "comedy"
+      ],
+      "localizationKey": "word.movies.abbott-elementary",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-only-murders",
+      "displayText": "Only Murders",
+      "word": "Only Murders",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "tv-series",
+        "streaming",
+        "comedy"
+      ],
+      "localizationKey": "word.movies.only-murders",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-ted-lasso",
+      "displayText": "Ted Lasso",
+      "word": "Ted Lasso",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "tv-series",
+        "streaming",
+        "comedy"
+      ],
+      "localizationKey": "word.movies.ted-lasso",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-yellowstone",
+      "displayText": "Yellowstone",
+      "word": "Yellowstone",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "tv-series",
+        "streaming"
+      ],
+      "localizationKey": "word.movies.yellowstone",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-game-of-thrones",
+      "displayText": "Game of Thrones",
+      "word": "Game of Thrones",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "tv-series",
+        "streaming",
+        "fantasy",
+        "adventure"
+      ],
+      "localizationKey": "word.movies.game-of-thrones",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-breaking-bad",
+      "displayText": "Breaking Bad",
+      "word": "Breaking Bad",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "tv-series",
+        "streaming"
+      ],
+      "localizationKey": "word.movies.breaking-bad",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-the-office",
+      "displayText": "The Office",
+      "word": "The Office",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "tv-series",
+        "streaming",
+        "comedy"
+      ],
+      "localizationKey": "word.movies.the-office",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-friends",
+      "displayText": "Friends",
+      "word": "Friends",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "tv-series",
+        "streaming",
+        "comedy"
+      ],
+      "localizationKey": "word.movies.friends",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-the-matrix",
+      "displayText": "The Matrix",
+      "word": "The Matrix",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "sci-fi",
+        "spectacle"
+      ],
+      "localizationKey": "word.movies.the-matrix",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-inception",
+      "displayText": "Inception",
+      "word": "Inception",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "sci-fi",
+        "spectacle"
+      ],
+      "localizationKey": "word.movies.inception",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-the-dark-knight",
+      "displayText": "The Dark Knight",
+      "word": "The Dark Knight",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "screen-title",
+        "pop-culture"
+      ],
+      "localizationKey": "word.movies.the-dark-knight",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-forrest-gump",
+      "displayText": "Forrest Gump",
+      "word": "Forrest Gump",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "screen-title",
+        "pop-culture"
+      ],
+      "localizationKey": "word.movies.forrest-gump",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-the-godfather",
+      "displayText": "The Godfather",
+      "word": "The Godfather",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "prestige",
+        "drama"
+      ],
+      "localizationKey": "word.movies.the-godfather",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-pulp-fiction",
+      "displayText": "Pulp Fiction",
+      "word": "Pulp Fiction",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "prestige",
+        "drama"
+      ],
+      "localizationKey": "word.movies.pulp-fiction",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-fight-club",
+      "displayText": "Fight Club",
+      "word": "Fight Club",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "prestige",
+        "drama"
+      ],
+      "localizationKey": "word.movies.fight-club",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-the-shawshank-redemption",
+      "displayText": "The Shawshank Redemption",
+      "word": "The Shawshank Redemption",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "prestige",
+        "drama"
+      ],
+      "localizationKey": "word.movies.the-shawshank-redemption",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-back-to-the-future",
+      "displayText": "Back to the Future",
+      "word": "Back to the Future",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "screen-title",
+        "pop-culture"
+      ],
+      "localizationKey": "word.movies.back-to-the-future",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-indiana-jones",
+      "displayText": "Indiana Jones",
+      "word": "Indiana Jones",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "action",
+        "adventure"
+      ],
+      "localizationKey": "word.movies.indiana-jones",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-pirates-of-the-caribbean",
+      "displayText": "Pirates of the Caribbean",
+      "word": "Pirates of the Caribbean",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "action",
+        "adventure"
+      ],
+      "localizationKey": "word.movies.pirates-of-the-caribbean",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-the-lord-of-the-rings",
+      "displayText": "The Lord of the Rings",
+      "word": "The Lord of the Rings",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "fantasy",
+        "adventure"
+      ],
+      "localizationKey": "word.movies.the-lord-of-the-rings",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-the-hunger-games",
+      "displayText": "The Hunger Games",
+      "word": "The Hunger Games",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "screen-title",
+        "pop-culture"
+      ],
+      "localizationKey": "word.movies.the-hunger-games",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-fast-and-furious",
+      "displayText": "Fast and Furious",
+      "word": "Fast and Furious",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "action",
+        "adventure"
+      ],
+      "localizationKey": "word.movies.fast-and-furious",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-mission-impossible",
+      "displayText": "Mission Impossible",
+      "word": "Mission Impossible",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "action",
+        "adventure"
+      ],
+      "localizationKey": "word.movies.mission-impossible",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-home-alone",
+      "displayText": "Home Alone",
+      "word": "Home Alone",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "comedy",
+        "screen-title",
+        "pop-culture"
+      ],
+      "localizationKey": "word.movies.home-alone",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-mean-girls",
+      "displayText": "Mean Girls",
+      "word": "Mean Girls",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "comedy",
+        "screen-title",
+        "pop-culture"
+      ],
+      "localizationKey": "word.movies.mean-girls",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-sonic-the-hedgehog",
+      "displayText": "Sonic the Hedgehog",
+      "word": "Sonic the Hedgehog",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "animation",
+        "family",
+        "pop-culture",
+        "game-adaptation"
+      ],
+      "localizationKey": "word.movies.sonic-the-hedgehog",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-venom",
+      "displayText": "Venom",
+      "word": "Venom",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "superhero",
+        "comic-book"
+      ],
+      "localizationKey": "word.movies.venom",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-godzilla",
+      "displayText": "Godzilla",
+      "word": "Godzilla",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "sci-fi",
+        "spectacle"
+      ],
+      "localizationKey": "word.movies.godzilla",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-planet-of-the-apes",
+      "displayText": "Planet of the Apes",
+      "word": "Planet of the Apes",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "sci-fi",
+        "spectacle"
+      ],
+      "localizationKey": "word.movies.planet-of-the-apes",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-bad-boys",
+      "displayText": "Bad Boys",
+      "word": "Bad Boys",
+      "category": "Movies",
+      "difficulty": "medium",
+      "tags": [
+        "movies",
+        "medium",
+        "action",
+        "adventure"
+      ],
+      "localizationKey": "word.movies.bad-boys",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-neon-genesis-evangelion",
+      "displayText": "Neon Genesis Evangelion",
+      "word": "Neon Genesis Evangelion",
+      "category": "Movies",
+      "difficulty": "hard",
+      "tags": [
+        "movies",
+        "hard",
+        "anime",
+        "japanese-media",
+        "sci-fi",
+        "spectacle",
+        "mecha",
+        "psychological"
+      ],
+      "localizationKey": "word.movies.neon-genesis-evangelion",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-cowboy-bebop",
+      "displayText": "Cowboy Bebop",
+      "word": "Cowboy Bebop",
+      "category": "Movies",
+      "difficulty": "hard",
+      "tags": [
+        "movies",
+        "hard",
+        "anime",
+        "japanese-media",
+        "space",
+        "jazz",
+        "bounty-hunter"
+      ],
+      "localizationKey": "word.movies.cowboy-bebop",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-spirited-away",
+      "displayText": "Spirited Away",
+      "word": "Spirited Away",
+      "category": "Movies",
+      "difficulty": "hard",
+      "tags": [
+        "movies",
+        "hard",
+        "anime",
+        "japanese-media",
+        "ghibli",
+        "fantasy",
+        "adventure",
+        "spirit"
+      ],
+      "localizationKey": "word.movies.spirited-away",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-princess-mononoke",
+      "displayText": "Princess Mononoke",
+      "word": "Princess Mononoke",
+      "category": "Movies",
+      "difficulty": "hard",
+      "tags": [
+        "movies",
+        "hard",
+        "anime",
+        "japanese-media",
+        "ghibli",
+        "fantasy",
+        "adventure",
+        "nature",
+        "epic"
+      ],
+      "localizationKey": "word.movies.princess-mononoke",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-akira",
+      "displayText": "Akira",
+      "word": "Akira",
+      "category": "Movies",
+      "difficulty": "hard",
+      "tags": [
+        "movies",
+        "hard",
+        "anime",
+        "japanese-media",
+        "sci-fi",
+        "spectacle",
+        "cyberpunk",
+        "motorcycle"
+      ],
+      "localizationKey": "word.movies.akira",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-ghost-in-the-shell",
+      "displayText": "Ghost in the Shell",
+      "word": "Ghost in the Shell",
+      "category": "Movies",
+      "difficulty": "hard",
+      "tags": [
+        "movies",
+        "hard",
+        "anime",
+        "japanese-media",
+        "sci-fi",
+        "spectacle"
+      ],
+      "localizationKey": "word.movies.ghost-in-the-shell",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-steins-gate",
+      "displayText": "Steins Gate",
+      "word": "Steins Gate",
+      "category": "Movies",
+      "difficulty": "hard",
+      "tags": [
+        "movies",
+        "hard",
+        "anime",
+        "japanese-media",
+        "sci-fi",
+        "spectacle"
+      ],
+      "localizationKey": "word.movies.steins-gate",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-vinland-saga",
+      "displayText": "Vinland Saga",
+      "word": "Vinland Saga",
+      "category": "Movies",
+      "difficulty": "hard",
+      "tags": [
+        "movies",
+        "hard",
+        "anime",
+        "japanese-media"
+      ],
+      "localizationKey": "word.movies.vinland-saga",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-monster",
+      "displayText": "Monster",
+      "word": "Monster",
+      "category": "Movies",
+      "difficulty": "hard",
+      "tags": [
+        "movies",
+        "hard",
+        "anime",
+        "japanese-media"
+      ],
+      "localizationKey": "word.movies.monster",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-berserk",
+      "displayText": "Berserk",
+      "word": "Berserk",
+      "category": "Movies",
+      "difficulty": "hard",
+      "tags": [
+        "movies",
+        "hard",
+        "anime",
+        "japanese-media"
+      ],
+      "localizationKey": "word.movies.berserk",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-your-name",
+      "displayText": "Your Name",
+      "word": "Your Name",
+      "category": "Movies",
+      "difficulty": "hard",
+      "tags": [
+        "movies",
+        "hard",
+        "anime",
+        "japanese-media"
+      ],
+      "localizationKey": "word.movies.your-name",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-weathering-with-you",
+      "displayText": "Weathering with You",
+      "word": "Weathering with You",
+      "category": "Movies",
+      "difficulty": "hard",
+      "tags": [
+        "movies",
+        "hard",
+        "anime",
+        "japanese-media"
+      ],
+      "localizationKey": "word.movies.weathering-with-you",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-suzume",
+      "displayText": "Suzume",
+      "word": "Suzume",
+      "category": "Movies",
+      "difficulty": "hard",
+      "tags": [
+        "movies",
+        "hard",
+        "anime",
+        "japanese-media"
+      ],
+      "localizationKey": "word.movies.suzume",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-the-boy-and-the-heron",
+      "displayText": "The Boy and the Heron",
+      "word": "The Boy and the Heron",
+      "category": "Movies",
+      "difficulty": "hard",
+      "tags": [
+        "movies",
+        "hard",
+        "anime",
+        "japanese-media",
+        "ghibli",
+        "fantasy"
+      ],
+      "localizationKey": "word.movies.the-boy-and-the-heron",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-la-la-land",
+      "displayText": "La La Land",
+      "word": "La La Land",
+      "category": "Movies",
+      "difficulty": "hard",
+      "tags": [
+        "movies",
+        "hard",
+        "musical",
+        "screen-title",
+        "pop-culture"
+      ],
+      "localizationKey": "word.movies.la-la-land",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-parasite",
+      "displayText": "Parasite",
+      "word": "Parasite",
+      "category": "Movies",
+      "difficulty": "hard",
+      "tags": [
+        "movies",
+        "hard",
+        "prestige",
+        "drama"
+      ],
+      "localizationKey": "word.movies.parasite",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-everything-everywhere",
+      "displayText": "Everything Everywhere",
+      "word": "Everything Everywhere",
+      "category": "Movies",
+      "difficulty": "hard",
+      "tags": [
+        "movies",
+        "hard",
+        "prestige",
+        "drama"
+      ],
+      "localizationKey": "word.movies.everything-everywhere",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-poor-things",
+      "displayText": "Poor Things",
+      "word": "Poor Things",
+      "category": "Movies",
+      "difficulty": "hard",
+      "tags": [
+        "movies",
+        "hard",
+        "prestige",
+        "drama"
+      ],
+      "localizationKey": "word.movies.poor-things",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-past-lives",
+      "displayText": "Past Lives",
+      "word": "Past Lives",
+      "category": "Movies",
+      "difficulty": "hard",
+      "tags": [
+        "movies",
+        "hard",
+        "prestige",
+        "drama"
+      ],
+      "localizationKey": "word.movies.past-lives",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-killers-of-the-flower-moon",
+      "displayText": "Killers of the Flower Moon",
+      "word": "Killers of the Flower Moon",
+      "category": "Movies",
+      "difficulty": "hard",
+      "tags": [
+        "movies",
+        "hard",
+        "prestige",
+        "drama"
+      ],
+      "localizationKey": "word.movies.killers-of-the-flower-moon",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-the-zone-of-interest",
+      "displayText": "The Zone of Interest",
+      "word": "The Zone of Interest",
+      "category": "Movies",
+      "difficulty": "hard",
+      "tags": [
+        "movies",
+        "hard",
+        "prestige",
+        "drama"
+      ],
+      "localizationKey": "word.movies.the-zone-of-interest",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-american-fiction",
+      "displayText": "American Fiction",
+      "word": "American Fiction",
+      "category": "Movies",
+      "difficulty": "hard",
+      "tags": [
+        "movies",
+        "hard",
+        "prestige",
+        "drama"
+      ],
+      "localizationKey": "word.movies.american-fiction",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-the-holdovers",
+      "displayText": "The Holdovers",
+      "word": "The Holdovers",
+      "category": "Movies",
+      "difficulty": "hard",
+      "tags": [
+        "movies",
+        "hard",
+        "prestige",
+        "drama"
+      ],
+      "localizationKey": "word.movies.the-holdovers",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-moonlight",
+      "displayText": "Moonlight",
+      "word": "Moonlight",
+      "category": "Movies",
+      "difficulty": "hard",
+      "tags": [
+        "movies",
+        "hard",
+        "prestige",
+        "drama"
+      ],
+      "localizationKey": "word.movies.moonlight",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-get-out",
+      "displayText": "Get Out",
+      "word": "Get Out",
+      "category": "Movies",
+      "difficulty": "hard",
+      "tags": [
+        "movies",
+        "hard",
+        "prestige",
+        "drama",
+        "dark",
+        "thriller"
+      ],
+      "localizationKey": "word.movies.get-out",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-whiplash",
+      "displayText": "Whiplash",
+      "word": "Whiplash",
+      "category": "Movies",
+      "difficulty": "hard",
+      "tags": [
+        "movies",
+        "hard",
+        "prestige",
+        "drama"
+      ],
+      "localizationKey": "word.movies.whiplash",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-blade-runner",
+      "displayText": "Blade Runner",
+      "word": "Blade Runner",
+      "category": "Movies",
+      "difficulty": "hard",
+      "tags": [
+        "movies",
+        "hard",
+        "sci-fi",
+        "spectacle"
+      ],
+      "localizationKey": "word.movies.blade-runner",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-the-shining",
+      "displayText": "The Shining",
+      "word": "The Shining",
+      "category": "Movies",
+      "difficulty": "hard",
+      "tags": [
+        "movies",
+        "hard",
+        "dark",
+        "thriller"
+      ],
+      "localizationKey": "word.movies.the-shining",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-psycho",
+      "displayText": "Psycho",
+      "word": "Psycho",
+      "category": "Movies",
+      "difficulty": "hard",
+      "tags": [
+        "movies",
+        "hard",
+        "dark",
+        "thriller"
+      ],
+      "localizationKey": "word.movies.psycho",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-citizen-kane",
+      "displayText": "Citizen Kane",
+      "word": "Citizen Kane",
+      "category": "Movies",
+      "difficulty": "hard",
+      "tags": [
+        "movies",
+        "hard",
+        "prestige",
+        "drama"
+      ],
+      "localizationKey": "word.movies.citizen-kane",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-schindler-s-list",
+      "displayText": "Schindler's List",
+      "word": "Schindler's List",
+      "category": "Movies",
+      "difficulty": "hard",
+      "tags": [
+        "movies",
+        "hard",
+        "prestige",
+        "drama"
+      ],
+      "localizationKey": "word.movies.schindler-s-list",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-apocalypse-now",
+      "displayText": "Apocalypse Now",
+      "word": "Apocalypse Now",
+      "category": "Movies",
+      "difficulty": "hard",
+      "tags": [
+        "movies",
+        "hard",
+        "prestige",
+        "drama"
+      ],
+      "localizationKey": "word.movies.apocalypse-now",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-the-silence-of-the-lambs",
+      "displayText": "The Silence of the Lambs",
+      "word": "The Silence of the Lambs",
+      "category": "Movies",
+      "difficulty": "hard",
+      "tags": [
+        "movies",
+        "hard",
+        "prestige",
+        "drama"
+      ],
+      "localizationKey": "word.movies.the-silence-of-the-lambs",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-memento",
+      "displayText": "Memento",
+      "word": "Memento",
+      "category": "Movies",
+      "difficulty": "hard",
+      "tags": [
+        "movies",
+        "hard",
+        "screen-title",
+        "pop-culture"
+      ],
+      "localizationKey": "word.movies.memento",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-eternal-sunshine",
+      "displayText": "Eternal Sunshine",
+      "word": "Eternal Sunshine",
+      "category": "Movies",
+      "difficulty": "hard",
+      "tags": [
+        "movies",
+        "hard",
+        "screen-title",
+        "pop-culture"
+      ],
+      "localizationKey": "word.movies.eternal-sunshine",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "movies-oldboy",
+      "displayText": "Oldboy",
+      "word": "Oldboy",
+      "category": "Movies",
+      "difficulty": "hard",
+      "tags": [
+        "movies",
+        "hard",
+        "screen-title",
+        "pop-culture"
+      ],
+      "localizationKey": "word.movies.oldboy",
+      "safety": {
+        "level": "general"
+      }
+    }
   ]
 }

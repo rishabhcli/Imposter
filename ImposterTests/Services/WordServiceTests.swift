@@ -94,6 +94,25 @@ final class WordServiceTests: XCTestCase {
         XCTAssertFalse(word.isEmpty)
     }
 
+    func testSelectWord_AvoidingRecentWords_ReturnsFreshCandidateWhenAvailable() async throws {
+        let animalPack = try XCTUnwrap(
+            WordSelector.loadWordPacks().first { $0.category == "Animals" }
+        )
+        let mediumWords = animalPack.words
+            .filter { $0.difficulty == "medium" }
+            .map(\.word)
+        let expectedWord = try XCTUnwrap(mediumWords.last)
+        let avoidedWords = Set(mediumWords.dropLast())
+
+        let word = try await sut.selectWord(
+            from: ["Animals"],
+            difficulty: .medium,
+            avoiding: avoidedWords
+        )
+
+        XCTAssertEqual(word, expectedWord)
+    }
+
     // MARK: - Generate Word Tests
 
     func testGenerateWord_ThrowsAINotAvailable() async {

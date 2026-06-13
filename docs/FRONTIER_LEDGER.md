@@ -3397,3 +3397,2876 @@
 - Expand the localization gate to phase-critical navigation strings: setup, clue, discussion, voting, reveal, summary, and settings.
 - Add a localized UI smoke in one non-English language once the critical path has enough translations to make the screen assertions stable.
 - Keep privacy/accessibility wording under native-speaker review before claiming App Store-grade localization.
+
+## 2026-05-15 21:59 PDT - Phase-critical localization expansion and Spanish setup smoke
+
+### Baseline Issue Or Opportunity
+- `Enormousplans.md` calls for each loop to ship a concrete, verified frontier and keep `docs/FRONTIER_LEDGER.md` current.
+- The previous frontier left localization at `2.2/5` with `40` translated strings per target locale and a next step to cover setup, clue, discussion, voting, reveal, summary, and settings navigation strings.
+- The live app already had strong privacy/role-reveal localization, but many phase-critical setup and gameplay strings still fell back to English.
+
+### Files Changed
+- `Imposter/Resources/Localizable.xcstrings`
+- `scripts/check_localization_coverage.py`
+- `ImposterUITests/ImposterUITests.swift`
+- `Imposter/Features/Home/HomeView.swift`
+- `docs/FRONTIER_LEDGER.md`
+
+### Tests Added Or Updated
+- Expanded `scripts/check_localization_coverage.py` from `10` role/privacy priority keys to `46` combined role/privacy plus phase-critical keys.
+- Raised the default minimum translated strings per target locale from `40` to `80`.
+- Added German, Spanish, French, and Japanese translations for setup, category selection, clue/discussion/voting/reveal VoiceOver phrases, core navigation buttons, settings labels, and selected reveal/error strings.
+- Localized the integrated setup subtitle with a `%lld Players` format key and made the UI test count helper parse by numeric prefix instead of the English `"Players"` suffix.
+- Added `testSpanishLocalizedSetupPathUsesCriticalNavigationStrings`, a focused Spanish UI smoke covering localized launch, category selection, continue navigation, game settings, validation, and start-game button labels.
+
+### Verification Commands And Exact Outcome
+- `python3 -m json.tool Imposter/Resources/Localizable.xcstrings >/tmp/imposter-localizable-json-check.json`
+  - Exit code `0`; catalog parsed successfully.
+- `scripts/check_localization_coverage.py`
+  - Exit code `0`.
+  - Output: source language `en`, total strings `154`, priority keys `46`.
+  - Output: `de: 99 translated strings`, `es: 99 translated strings`, `fr: 99 translated strings`, `ja: 99 translated strings`.
+  - Output: `PASS: focused localization coverage is acceptable.`
+- `python3 -m py_compile scripts/check_localization_coverage.py scripts/probe_ui_memory.py scripts/check_launch_metric.py`
+  - Exit code `0`.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -parse -target arm64-apple-ios26.0-simulator -sdk "$(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun --sdk iphonesimulator --show-sdk-path)" ImposterUITests/ImposterUITests.swift Imposter/Features/Home/HomeView.swift`
+  - Exit code `0`; the updated UI test source and localized home/setup source parsed successfully.
+- `git diff --check -- Imposter/Resources/Localizable.xcstrings scripts/check_localization_coverage.py ImposterUITests/ImposterUITests.swift Imposter/Features/Home/HomeView.swift docs/FRONTIER_LEDGER.md`
+  - Exit code `0`.
+- XcodeBuildMCP focused UI test attempt:
+  - `test_sim` for `ImposterUITests/ImposterUITests/testSpanishLocalizedSetupPathUsesCriticalNavigationStrings` timed out after `120s`.
+  - The tool left a stale `xcodebuild -list` and a focused `build-for-testing` process behind; both were killed.
+- Shell focused UI test retry:
+  - `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild test -project Imposter.xcodeproj -scheme Imposter-UITests -destination 'platform=iOS Simulator,id=A113E399-3127-41CE-AB7E-B529DB41B3B6' -only-testing:ImposterUITests/ImposterUITests/testSpanishLocalizedSetupPathUsesCriticalNavigationStrings -parallel-testing-enabled NO -resultBundlePath /tmp/imposter-spanish-localized-setup.xcresult`
+  - Stalled while `xcodebuild` was blocked in `NSFileCoordinator` reading the project package; a `sample` trace showed `-[NSFileCoordinator _blockOnAccessClaim:withAccessArbiter:]` waiting in `_dispatch_semaphore_wait_slow`.
+  - The stalled shell test was killed before it produced a result bundle.
+
+### Remaining Risk
+- The Spanish UI smoke is added and source-parse verified, but it has not yet passed in a live simulator run because the current Xcode project-read path is blocked by a file-coordination/tooling issue.
+- The new translations are functional coverage, not native-speaker reviewed App Store localization.
+- `Localizable.xcstrings` was updated through structured JSON parsing, so empty catalog entries were mechanically compacted; the catalog still parses and the checker covers placeholders.
+
+### Score Snapshot
+- Domain correctness: 4.25/5
+- Gameplay completeness: 3.95/5
+- Generative/offline AI quality: 2.5/5
+- Word/content engine: 3.0/5
+- Liquid Glass design fit: 3.15/5
+- Visual polish: 3.15/5
+- Motion/haptics: 3.15/5
+- Pass-and-play privacy: 3.72/5
+- VoiceOver/accessibility: 4.07/5
+- Dynamic Type/layout resilience: 3.2/5
+- Localization: 2.6/5
+- Persistence safety: 3.25/5
+- Testing depth: 4.87/5
+- UI automation: 4.82/5 pending live Spanish smoke proof
+- Performance/memory: 4.10/5
+- Release readiness: 3.31/5
+- Repo clarity: 4.70/5
+
+### Next Frontier
+- Clear the Xcode file-coordination/test harness blocker and run `testSpanishLocalizedSetupPathUsesCriticalNavigationStrings` on the iPhone 17 Pro simulator.
+- Continue extracting remaining visible setup/gameplay strings such as timer labels, category suggestions, and generated-image status into reviewed localized copy.
+- Continue the Enormousplans product loop with either AI fallback UX or a visible Liquid Glass phase-stage polish slice once the localized smoke is live-green.
+
+## 2026-05-15 22:06 PDT - Word pack integrity gate and category contract fix
+
+### Baseline Issue Or Opportunity
+- `Enormousplans.md` calls for a Word Universe/content-pipeline frontier with JSON validation, duplicate detection, category checks, difficulty balance checks, and at least `100` usable entries per category.
+- Live inspection showed `words_people.json` declared `"Celebrities"` while the app exposes `People`, and `words_movies.json` declared `"Movies & TV"` while the app exposes `Movies`.
+- Live inspection also found `Pokémon` duplicated across the Technology and Movies packs.
+- The Xcode project-read blocker remained active, so this loop targeted a script-verifiable content slice rather than waiting on simulator execution.
+
+### Files Changed
+- `scripts/check_word_packs.py`
+- `Imposter/Resources/WordPacks/words_people.json`
+- `Imposter/Resources/WordPacks/words_movies.json`
+- `Imposter/Resources/WordPacks/words_technology.json`
+- `docs/FRONTIER_LEDGER.md`
+
+### Tests Added Or Updated
+- Added executable `scripts/check_word_packs.py`.
+- The checker now enforces:
+  - the exact five expected pack files,
+  - expected category names matching the app-facing category contract,
+  - at least `100` words per pack,
+  - word entries as non-empty strings without leading/trailing whitespace,
+  - difficulty values limited to `easy`, `medium`, or `hard`,
+  - every pack containing all three difficulty tiers,
+  - duplicate detection within and across packs using normalized word keys.
+- Fixed pack metadata so `words_people.json` is category `People` and `words_movies.json` is category `Movies`.
+- Changed the Technology duplicate from `Pokémon` to `Pokémon Go` so the Movies pack can keep `Pokémon` as media/anime content without cross-pack duplication.
+
+### Verification Commands And Exact Outcome
+- `scripts/check_word_packs.py`
+  - Exit code `0`.
+  - Output: expected packs `5`, total words `683`, unique words `683`, duplicate normalized words `0`, minimum words per pack `100`.
+  - Output: `PASS: word packs are structurally sound.`
+- Pack count audit:
+  - `words_animals.json`: category `Animals`, `110` words, difficulties `easy: 33`, `medium: 47`, `hard: 30`.
+  - `words_technology.json`: category `Technology`, `156` words, difficulties `easy: 50`, `medium: 56`, `hard: 50`.
+  - `words_objects.json`: category `Objects`, `108` words, difficulties `easy: 35`, `medium: 44`, `hard: 29`.
+  - `words_people.json`: category `People`, `165` words, difficulties `easy: 60`, `medium: 65`, `hard: 40`.
+  - `words_movies.json`: category `Movies`, `144` words, difficulties `easy: 54`, `medium: 54`, `hard: 36`.
+- `python3 -m py_compile scripts/check_word_packs.py scripts/check_localization_coverage.py scripts/probe_ui_memory.py scripts/check_launch_metric.py`
+  - Exit code `0`.
+- `test -x scripts/check_word_packs.py`
+  - Exit code `0`.
+- Combined non-Xcode gate:
+  - `scripts/check_localization_coverage.py && scripts/check_word_packs.py && python3 -m json.tool Imposter/Resources/Localizable.xcstrings >/tmp/imposter-localizable-json-check.json && python3 -m py_compile scripts/check_word_packs.py scripts/check_localization_coverage.py scripts/probe_ui_memory.py scripts/check_launch_metric.py && git diff --check -- ...`
+  - Exit code `0`.
+  - Localization still passed with `154` total strings, `46` priority keys, and `99` translations each for `de`, `es`, `fr`, and `ja`.
+
+### Xcode/File-Coordination Blocker Follow-Up
+- Retried the Xcode project-read health probe:
+  - `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer perl -e 'alarm 45; exec @ARGV' xcodebuild -list -project Imposter.xcodeproj`
+  - It still hung after printing only the command invocation.
+- Attempted to restart the file-coordination path:
+  - `killall filecoordinationd` did not clear the blocker; the daemon remained present.
+- Attempted a clean temporary verification copy:
+  - `rsync -a --exclude='.git' --exclude='docs-html' --exclude='*.xcresult' --exclude='DerivedData' ./ /tmp/imposter-verify/`
+  - `rsync` itself stalled for over a minute before Xcode launched, reinforcing that the current blocker is filesystem/project-read coordination rather than the Spanish UI test.
+  - The stalled `rsync` process was killed; no Imposter `xcodebuild`, `rsync`, or Spanish-smoke process remained afterward.
+
+### Remaining Risk
+- The word-pack gate is script-green, but no Xcode unit/UI suite was run in this loop because project reads remain blocked.
+- The checker validates structure and duplicates, not subjective content quality, age appropriateness, or native localization of word display.
+- The app still has separate category aliases in some icon/image-service paths (`Celebrities`, `Movies & TV`) for compatibility; the bundled pack contract now follows the app-facing `People` and `Movies` names.
+
+### Score Snapshot
+- Domain correctness: 4.27/5
+- Gameplay completeness: 3.95/5
+- Generative/offline AI quality: 2.5/5
+- Word/content engine: 3.35/5
+- Liquid Glass design fit: 3.15/5
+- Visual polish: 3.15/5
+- Motion/haptics: 3.15/5
+- Pass-and-play privacy: 3.72/5
+- VoiceOver/accessibility: 4.07/5
+- Dynamic Type/layout resilience: 3.2/5
+- Localization: 2.6/5
+- Persistence safety: 3.25/5
+- Testing depth: 4.88/5
+- UI automation: 4.82/5 pending live Spanish smoke proof
+- Performance/memory: 4.10/5
+- Release readiness: 3.33/5
+- Repo clarity: 4.72/5
+
+### Next Frontier
+- Clear the filesystem/Xcode project-read blocker so simulator proofs can resume; start with a minimal `xcodebuild -list` on the real project before rerunning UI tests.
+- Add the word-pack checker to a repeatable local verification script or CI workflow once Xcode project reads are healthy.
+- Continue the Word Universe frontier with category metadata for UI display counts/difficulty balance, or shift to AI fallback UX if simulator verification remains unavailable.
+
+## 2026-05-15 22:09 PDT - Repeatable content and localization gate
+
+### Baseline Issue Or Opportunity
+- The localization and word-pack checks were green locally, but the repo did not yet have a single repeatable command or CI lane for these non-Xcode gates.
+- The Xcode project-read blocker remained unresolved, so a fast content gate gives future loops useful proof without depending on simulator availability.
+- `Enormousplans.md` calls for durable frontier infrastructure, not just one-off manual checks.
+
+### Files Changed
+- `.github/workflows/ci.yml`
+- `scripts/verify_content.sh`
+- `docs/FRONTIER_LEDGER.md`
+
+### Tests Added Or Updated
+- Added executable `scripts/verify_content.sh`.
+- The script validates `Localizable.xcstrings` JSON, byte-compiles the repo verification helpers, runs focused localization coverage, and runs word-pack integrity checks.
+- Added a `Content and Localization` CI job that runs `scripts/verify_content.sh` on pushes and pull requests before the Xcode-dependent jobs.
+
+### Verification Commands And Exact Outcome
+- `chmod +x scripts/verify_content.sh && test -x scripts/verify_content.sh`
+  - Exit code `0`; the local verification entrypoint is executable.
+- `scripts/verify_content.sh`
+  - Exit code `0`.
+  - Localization output: source language `en`, total strings `154`, priority keys `46`.
+  - Localization output: `de: 99 translated strings`, `es: 99 translated strings`, `fr: 99 translated strings`, `ja: 99 translated strings`.
+  - Localization output: `PASS: focused localization coverage is acceptable.`
+  - Word-pack output: expected packs `5`, total words `683`, unique words `683`, duplicate normalized words `0`, minimum words per pack `100`.
+  - Word-pack output: `PASS: word packs are structurally sound.`
+- `git diff --check -- .github/workflows/ci.yml scripts/verify_content.sh scripts/check_localization_coverage.py scripts/check_word_packs.py Imposter/Resources/Localizable.xcstrings Imposter/Resources/WordPacks/words_movies.json Imposter/Resources/WordPacks/words_people.json Imposter/Resources/WordPacks/words_technology.json ImposterUITests/ImposterUITests.swift Imposter/Features/Home/HomeView.swift docs/FRONTIER_LEDGER.md`
+  - Exit code `0`; no whitespace errors in the touched frontier files.
+
+### Remaining Risk
+- The new CI job has not run remotely yet; it is locally green and YAML-visible in `.github/workflows/ci.yml`.
+- The simulator/Xcode project-read blocker is still open, so the Spanish localized UI smoke remains source-parse verified but not live-green.
+- The content gate checks structure, coverage, placeholders, and duplicate words; it does not prove subjective translation quality or word-pack taste.
+
+### Score Snapshot
+- Domain correctness: 4.27/5
+- Gameplay completeness: 3.95/5
+- Generative/offline AI quality: 2.5/5
+- Word/content engine: 3.45/5
+- Liquid Glass design fit: 3.15/5
+- Visual polish: 3.15/5
+- Motion/haptics: 3.15/5
+- Pass-and-play privacy: 3.72/5
+- VoiceOver/accessibility: 4.07/5
+- Dynamic Type/layout resilience: 3.2/5
+- Localization: 2.68/5
+- Persistence safety: 3.25/5
+- Testing depth: 4.90/5
+- UI automation: 4.82/5 pending live Spanish smoke proof
+- Performance/memory: 4.10/5
+- Release readiness: 3.36/5
+- Repo clarity: 4.76/5
+
+### Next Frontier
+- Clear the filesystem/Xcode project-read blocker and rerun `testSpanishLocalizedSetupPathUsesCriticalNavigationStrings`.
+- Expand the Word Universe metadata model so category counts, difficulty balance, and pack identity can drive richer setup UI.
+- Start a visible Liquid Glass setup/category polish slice once a simulator gate is available again.
+
+## 2026-05-15 22:15 PDT - Word Universe metadata and setup category polish
+
+### Baseline Issue Or Opportunity
+- The content gate proved the bundled JSON packs were structurally sound, but the app UI still treated categories as plain strings.
+- `CategorySelectionView` referenced `CategoryTile` without a matching implementation in the checked-out source, leaving the setup surface brittle.
+- The setup screen did not expose pack counts, difficulty distribution, selected-difficulty context, or deterministic category ordering when saving settings.
+
+### Files Changed
+- `Imposter/Domain/Logic/WordSelector.swift`
+- `Imposter/Services/Implementations/WordService.swift`
+- `Imposter/Features/Setup/CategorySelectionView.swift`
+- `Imposter/Resources/Localizable.xcstrings`
+- `ImposterTests/WordSelectorTests.swift`
+- `docs/FRONTIER_LEDGER.md`
+
+### Tests Added Or Updated
+- Added `WordCategorySummary` as a Sendable, Equatable category metadata model with word counts and easy/medium/hard counts.
+- Added `WordSelector.categorySummaries` so setup can render pack metadata in the same order as `GameSettings.availableCategories`.
+- Updated `WordService.availableCategories` and `wordCount(for:)` to share the WordSelector/GameSettings contract instead of duplicating category lists.
+- Added `CategoryTile`, `SummaryPill`, and `DifficultyCountPill` to the category picker.
+- Category tiles now show category icon, localized category name, total word count, difficulty breakdown, selected state, accessibility value, and stable accessibility identifier.
+- Added a setup summary strip showing pack count, total words, and selected difficulty.
+- Added localized strings for category names, difficulty labels, pack/word stats, and new plural-style setup summary phrases.
+- Added WordSelector tests asserting summary order, category identity, minimum word counts, difficulty counts, and mixed-difficulty totals.
+
+### Verification Commands And Exact Outcome
+- `python3 -m json.tool Imposter/Resources/Localizable.xcstrings >/tmp/imposter-localizable-json-check.json && scripts/check_localization_coverage.py`
+  - Exit code `0`.
+  - Localization output: source language `en`, total strings `168`, priority keys `46`.
+  - Localization output: `de: 113 translated strings`, `es: 113 translated strings`, `fr: 113 translated strings`, `ja: 113 translated strings`.
+  - Localization output: `PASS: focused localization coverage is acceptable.`
+- `scripts/verify_content.sh`
+  - Exit code `0`.
+  - Localization output matched the `168` total strings and `113` translations per target locale above.
+  - Word-pack output remained expected packs `5`, total words `683`, unique words `683`, duplicate normalized words `0`, minimum words per pack `100`.
+  - Word-pack output: `PASS: word packs are structurally sound.`
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -parse -target arm64-apple-ios26.0-simulator -sdk "$(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun --sdk iphonesimulator --show-sdk-path)" $(find Imposter -name '*.swift' -print)`
+  - Exit code `0`; all app Swift sources parsed successfully outside the Xcode project-read path.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -parse -module-name Imposter -target arm64-apple-ios26.0-simulator -sdk "$(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun --sdk iphonesimulator --show-sdk-path)" $(find Imposter -name '*.swift' -print) ImposterTests/WordSelectorTests.swift`
+  - Exit code `0`; the updated WordSelector test file parsed with the app module.
+- Xcode project-read re-probe:
+  - `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer perl -e 'alarm 35; exec @ARGV' xcodebuild -list -project Imposter.xcodeproj`
+  - Timed out after printing only the command invocation, so the filesystem/Xcode project-read blocker remains active.
+- `git diff --check -- .github/workflows/ci.yml scripts/verify_content.sh Imposter/Domain/Logic/WordSelector.swift Imposter/Services/Implementations/WordService.swift Imposter/Features/Setup/CategorySelectionView.swift Imposter/Resources/Localizable.xcstrings ImposterTests/WordSelectorTests.swift docs/FRONTIER_LEDGER.md`
+  - Exit code `0`; no whitespace errors in the touched Swift and verification files.
+
+### Remaining Risk
+- This loop used `swiftc -parse` and script verification because the Xcode project-read blocker is still open; it did not produce a full simulator build or rendered screenshot.
+- The new setup strings have functional translations, but they have not been native-speaker reviewed.
+- `WordCategorySummary` exposes counts and difficulty balance, but the UI does not yet let players filter by per-category difficulty availability beyond the global difficulty picker.
+
+### Score Snapshot
+- Domain correctness: 4.32/5
+- Gameplay completeness: 3.96/5
+- Generative/offline AI quality: 2.5/5
+- Word/content engine: 3.65/5
+- Liquid Glass design fit: 3.25/5
+- Visual polish: 3.30/5
+- Motion/haptics: 3.15/5
+- Pass-and-play privacy: 3.72/5
+- VoiceOver/accessibility: 4.12/5
+- Dynamic Type/layout resilience: 3.25/5
+- Localization: 2.78/5
+- Persistence safety: 3.25/5
+- Testing depth: 4.91/5
+- UI automation: 4.82/5 pending live Spanish smoke proof
+- Performance/memory: 4.10/5
+- Release readiness: 3.40/5
+- Repo clarity: 4.80/5
+
+### Next Frontier
+- Clear the Xcode project-read blocker and capture a rendered category picker screenshot on the iPhone 17 Pro simulator.
+- Add UI automation assertions for category tile identifiers, selected-state values, and localized category names.
+- Continue the Word Universe frontier by adding richer category metadata such as age band, party energy, ambiguity score, and AI image suitability.
+
+## 2026-05-15 22:21 PDT - Last-N word avoidance through round preparation
+
+### Baseline Issue Or Opportunity
+- `Enormousplans.md` explicitly calls for last-N word avoidance as a Word Universe first slice.
+- Random pack selection could repeat a recently completed secret word during a multi-round party session.
+- The app has two round-creation paths: the modern `GameStore` async preparation path and the reducer's direct path used by tests and fallback actions.
+
+### Files Changed
+- `Imposter/Services/Protocols/WordServiceProtocol.swift`
+- `Imposter/Domain/Logic/WordSelector.swift`
+- `Imposter/Services/Implementations/WordService.swift`
+- `Imposter/Services/Implementations/AIWordService.swift`
+- `Imposter/Services/Mocks/MockWordService.swift`
+- `Imposter/Domain/Logic/GameReducer.swift`
+- `Imposter/Store/GameStore.swift`
+- `ImposterTests/WordSelectorTests.swift`
+- `ImposterTests/GameReducerTests.swift`
+- `ImposterTests/Services/WordServiceTests.swift`
+- `ImposterTests/Services/MockServicesTests.swift`
+- `ImposterTests/GameStoreTests.swift`
+- `docs/FRONTIER_LEDGER.md`
+
+### Tests Added Or Updated
+- Added an `avoiding` word set to `WordServiceProtocol.selectWord`.
+- Kept the previous two-argument protocol call shape through a protocol extension for compatibility.
+- Added normalized, case/diacritic-insensitive avoidance in `WordSelector` and `WordService`.
+- Avoidance now falls back to the full filtered candidate pool if every candidate is exhausted, so small packs never strand a round.
+- `AIWordService` forwards avoidance to its random-pack fallback service.
+- `MockWordService` tracks `lastAvoidedWords`.
+- `GameStore` passes the last `12` completed secret words into random word selection for new rounds and next rounds.
+- Hidden-mode alternate imposter word selection avoids both recent history and the current secret word where possible.
+- `GameReducer.createNewRound` accepts an avoidance set and direct `.startGame`/`.startNewRound` use recent completed history.
+- Added WordSelector tests for deterministic fresh-word selection and exhausted-avoidance fallback.
+- Added WordService test for deterministic fresh candidate selection with an avoidance set.
+- Added MockWordService test coverage for avoidance parameter tracking and reset behavior.
+- Added GameReducer test for direct round creation with avoidance.
+- Added GameStore test proving completed-round history is passed into the injected word service when starting the next round.
+
+### Verification Commands And Exact Outcome
+- `scripts/verify_content.sh`
+  - Exit code `0`.
+  - Localization output: source language `en`, total strings `168`, priority keys `46`.
+  - Localization output: `de: 113 translated strings`, `es: 113 translated strings`, `fr: 113 translated strings`, `ja: 113 translated strings`.
+  - Word-pack output: expected packs `5`, total words `683`, unique words `683`, duplicate normalized words `0`, minimum words per pack `100`.
+  - Word-pack output: `PASS: word packs are structurally sound.`
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -parse -target arm64-apple-ios26.0-simulator -sdk "$(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun --sdk iphonesimulator --show-sdk-path)" $(find Imposter -name '*.swift' -print)`
+  - Exit code `0`; all app Swift sources parsed successfully.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -parse -module-name Imposter -target arm64-apple-ios26.0-simulator -sdk "$(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun --sdk iphonesimulator --show-sdk-path)" $(find Imposter -name '*.swift' -print) ImposterTests/WordSelectorTests.swift ImposterTests/GameReducerTests.swift ImposterTests/Services/WordServiceTests.swift ImposterTests/Services/MockServicesTests.swift ImposterTests/GameStoreTests.swift ImposterTests/Helpers/TestFixtures.swift`
+  - Exit code `0`; the updated test sources parsed with the app module.
+- `git diff --check -- Imposter/Services/Protocols/WordServiceProtocol.swift Imposter/Domain/Logic/WordSelector.swift Imposter/Services/Implementations/WordService.swift Imposter/Services/Implementations/AIWordService.swift Imposter/Services/Mocks/MockWordService.swift Imposter/Domain/Logic/GameReducer.swift Imposter/Store/GameStore.swift ImposterTests/WordSelectorTests.swift ImposterTests/GameReducerTests.swift ImposterTests/Services/WordServiceTests.swift ImposterTests/Services/MockServicesTests.swift ImposterTests/GameStoreTests.swift docs/FRONTIER_LEDGER.md`
+  - Exit code `0`; no whitespace errors in the touched avoidance files.
+
+### Remaining Risk
+- This loop is source-parse and script verified; the full Xcode unit suite was not run because the project-read blocker is still unresolved.
+- Avoidance currently uses completed-round secret words only; generated custom prompts still use their generation path and are not yet de-duplicated against history after generation.
+- The avoidance window is a fixed `12` recent completed words and is not yet user-configurable or surfaced in setup UI.
+
+### Score Snapshot
+- Domain correctness: 4.40/5
+- Gameplay completeness: 4.00/5
+- Generative/offline AI quality: 2.55/5
+- Word/content engine: 3.85/5
+- Liquid Glass design fit: 3.25/5
+- Visual polish: 3.30/5
+- Motion/haptics: 3.15/5
+- Pass-and-play privacy: 3.72/5
+- VoiceOver/accessibility: 4.12/5
+- Dynamic Type/layout resilience: 3.25/5
+- Localization: 2.78/5
+- Persistence safety: 3.25/5
+- Testing depth: 4.93/5
+- UI automation: 4.82/5 pending live Spanish smoke proof
+- Performance/memory: 4.10/5
+- Release readiness: 3.43/5
+- Repo clarity: 4.83/5
+
+### Next Frontier
+- Clear the Xcode project-read blocker so the new avoidance tests can run in the real `Imposter-UnitTests` scheme.
+- Extend duplicate avoidance into generated custom-prompt words and hidden-mode semantic distance.
+- Add pack metadata fields for content safety, party energy, ambiguity, and AI image suitability.
+
+## 2026-05-15 22:23 PDT - Custom prompt generation fallback and duplicate avoidance
+
+### Baseline Issue Or Opportunity
+- `Enormousplans.md` calls for deterministic fallback from word packs, generated word duplicate avoidance, and custom prompt cleanup.
+- The custom prompt path previously used `prompt.capitalized` after generation failure, which could turn a theme into the secret word rather than falling back to validated content.
+- A generated word could repeat a recently completed secret word because history avoidance only covered random pack selection.
+
+### Files Changed
+- `Imposter/Store/GameStore.swift`
+- `ImposterTests/GameStoreTests.swift`
+- `docs/FRONTIER_LEDGER.md`
+
+### Tests Added Or Updated
+- `performWordGeneration(from:)` now captures recent completed secret words before generation.
+- If generated content repeats recent history after normalized comparison, the store falls back to random pack selection with the recent word and prompt in the avoidance set.
+- If generation throws or times out, the store falls back to a pack word instead of using the prompt text itself.
+- Added `testCustomPromptGenerationFailureFallsBackToPackWord`.
+- Added `testCustomPromptDuplicateGeneratedWordFallsBackToPackWord`.
+
+### Verification Commands And Exact Outcome
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -parse -target arm64-apple-ios26.0-simulator -sdk "$(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun --sdk iphonesimulator --show-sdk-path)" $(find Imposter -name '*.swift' -print)`
+  - Exit code `0`; all app Swift sources parsed successfully.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -parse -module-name Imposter -target arm64-apple-ios26.0-simulator -sdk "$(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun --sdk iphonesimulator --show-sdk-path)" $(find Imposter -name '*.swift' -print) ImposterTests/GameStoreTests.swift ImposterTests/Helpers/TestFixtures.swift`
+  - Exit code `0`; the updated GameStore tests parsed with the app module.
+- `git diff --check -- Imposter/Store/GameStore.swift ImposterTests/GameStoreTests.swift docs/FRONTIER_LEDGER.md`
+  - Exit code `0`; no whitespace errors in the touched custom-prompt files.
+
+### Remaining Risk
+- Full Xcode execution remains blocked by the project-read issue, so these tests are parse-verified but not run in the real scheme yet.
+- The fallback chooses a validated pack word but does not yet communicate to the host that the generated theme was replaced by pack content.
+- Duplicate avoidance is lexical, not semantic; near-duplicates and related concepts still need a hidden-mode/generative distance heuristic.
+
+### Score Snapshot
+- Domain correctness: 4.42/5
+- Gameplay completeness: 4.01/5
+- Generative/offline AI quality: 2.75/5
+- Word/content engine: 3.90/5
+- Liquid Glass design fit: 3.25/5
+- Visual polish: 3.30/5
+- Motion/haptics: 3.15/5
+- Pass-and-play privacy: 3.72/5
+- VoiceOver/accessibility: 4.12/5
+- Dynamic Type/layout resilience: 3.25/5
+- Localization: 2.78/5
+- Persistence safety: 3.25/5
+- Testing depth: 4.94/5
+- UI automation: 4.82/5 pending live Spanish smoke proof
+- Performance/memory: 4.10/5
+- Release readiness: 3.45/5
+- Repo clarity: 4.84/5
+
+### Next Frontier
+- Surface generation fallback state in the UI so the host knows a pack word replaced the generated prompt result.
+- Clear the Xcode project-read blocker and run the new `GameStoreTests` in `Imposter-UnitTests`.
+- Add semantic/near-duplicate distance checks for hidden-mode decoy words and generated custom words.
+
+## 2026-05-15 22:28 PDT - Visible generation status and reveal readiness gate
+
+### Baseline Issue Or Opportunity
+- The previous custom-prompt slice made fallback behavior safer, but fallback reasons only lived in logs and tests.
+- Role reveal could still expose the placeholder `GENERATING...` if a player revealed before custom prompt generation finished.
+- `Enormousplans.md` calls for a generation status model and unavailable/fallback UI copy.
+
+### Files Changed
+- `Imposter/Store/GameStore.swift`
+- `Imposter/Features/RoleReveal/RoleRevealView.swift`
+- `Imposter/Utilities/AccessibilityIDs.swift`
+- `Imposter/Resources/Localizable.xcstrings`
+- `ImposterTests/GameStoreTests.swift`
+- `docs/FRONTIER_LEDGER.md`
+
+### Tests Added Or Updated
+- Added `WordGenerationStatus` and `WordGenerationFallbackReason`.
+- `GameStore` now tracks `.generating`, `.generated`, and `.fallback` states for custom prompt word generation.
+- Generation failure sets `.fallback(.generationFailed)`.
+- Duplicate generated words set `.fallback(.duplicateRecentWord)`.
+- Role reveal now shows a non-sensitive status banner while the custom prompt word is being created.
+- Role reveal now shows a non-sensitive fallback banner when a pack word replaces generated content.
+- `HoldToRevealButton` now accepts `isDisabled` and blocks both long-press and accessibility reveal actions while the secret word is pending.
+- Added `AccessibilityIDs.wordGenerationStatus` for future UI automation.
+- Added localized strings for generation status, fallback status, disabled reveal title, and disabled reveal hint.
+- Updated GameStore tests to assert generation status for success, generation failure fallback, and duplicate fallback.
+
+### Verification Commands And Exact Outcome
+- `python3 -m json.tool Imposter/Resources/Localizable.xcstrings >/tmp/imposter-localizable-json-check.json && scripts/check_localization_coverage.py`
+  - Exit code `0`.
+  - Localization output: source language `en`, total strings `173`, priority keys `46`.
+  - Localization output: `de: 118 translated strings`, `es: 118 translated strings`, `fr: 118 translated strings`, `ja: 118 translated strings`.
+  - Localization output: `PASS: focused localization coverage is acceptable.`
+- `scripts/verify_content.sh`
+  - Exit code `0`.
+  - Localization output matched `173` total strings and `118` translations per target locale.
+  - Word-pack output remained expected packs `5`, total words `683`, unique words `683`, duplicate normalized words `0`, minimum words per pack `100`.
+  - Word-pack output: `PASS: word packs are structurally sound.`
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -parse -target arm64-apple-ios26.0-simulator -sdk "$(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun --sdk iphonesimulator --show-sdk-path)" $(find Imposter -name '*.swift' -print)`
+  - Exit code `0`; all app Swift sources parsed successfully.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -parse -module-name Imposter -target arm64-apple-ios26.0-simulator -sdk "$(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun --sdk iphonesimulator --show-sdk-path)" $(find Imposter -name '*.swift' -print) ImposterTests/GameStoreTests.swift ImposterTests/Helpers/TestFixtures.swift`
+  - Exit code `0`; the updated GameStore tests parsed with the app module.
+- `git diff --check -- Imposter/Store/GameStore.swift Imposter/Features/RoleReveal/RoleRevealView.swift Imposter/Utilities/AccessibilityIDs.swift Imposter/Resources/Localizable.xcstrings ImposterTests/GameStoreTests.swift docs/FRONTIER_LEDGER.md`
+  - Exit code `0`; no whitespace errors in the touched generation-status files.
+
+### Remaining Risk
+- This is still parse-verified rather than Xcode-run because project reads remain blocked.
+- The status banner is source-verified but not screenshot-verified on device or simulator.
+- Fallback copy is functional localization, not native-speaker reviewed.
+
+### Score Snapshot
+- Domain correctness: 4.44/5
+- Gameplay completeness: 4.03/5
+- Generative/offline AI quality: 2.95/5
+- Word/content engine: 3.92/5
+- Liquid Glass design fit: 3.30/5
+- Visual polish: 3.36/5
+- Motion/haptics: 3.15/5
+- Pass-and-play privacy: 3.76/5
+- VoiceOver/accessibility: 4.16/5
+- Dynamic Type/layout resilience: 3.27/5
+- Localization: 2.86/5
+- Persistence safety: 3.25/5
+- Testing depth: 4.95/5
+- UI automation: 4.82/5 pending live Spanish smoke proof
+- Performance/memory: 4.10/5
+- Release readiness: 3.48/5
+- Repo clarity: 4.86/5
+
+### Next Frontier
+- Clear the Xcode project-read blocker and screenshot the custom prompt generation status path.
+- Add UI automation for `wordGenerationStatus` once simulator execution is healthy.
+- Add semantic/near-duplicate distance checks for hidden-mode decoy words and generated custom words.
+
+## 2026-05-15 22:31 PDT - Validated category metadata and setup pack personality
+
+### Baseline Issue Or Opportunity
+- `Enormousplans.md` calls for content safety metadata, category metadata, AI image suitability, and a pack browser UI rather than raw category names.
+- The previous setup category tiles had counts and difficulty distribution, but category personality was still hardcoded or absent.
+- The word-pack checker validated pack shape but did not validate a scalable metadata contract.
+
+### Files Changed
+- `Imposter/Resources/WordPacks/category_metadata.json`
+- `scripts/check_word_packs.py`
+- `Imposter/Domain/Logic/WordSelector.swift`
+- `Imposter/Features/Setup/CategorySelectionView.swift`
+- `Imposter/Resources/Localizable.xcstrings`
+- `ImposterTests/WordSelectorTests.swift`
+- `docs/FRONTIER_LEDGER.md`
+
+### Tests Added Or Updated
+- Added `category_metadata.json` with one metadata entry for each bundled category.
+- Metadata includes `iconSystemName`, `safety`, `partyEnergy`, `ambiguity`, `imageSuitability`, and `tags`.
+- Expanded `scripts/check_word_packs.py` to validate the metadata file, exact category coverage, duplicate metadata categories, safety levels, score ranges, and tag shape.
+- Added `WordCategoryMetadata` and `WordCategoryMetadataCatalog`.
+- Expanded `WordCategorySummary` with safety, party energy, ambiguity, image suitability, and tags.
+- `WordSelector.categorySummaries` now loads metadata from the bundle and falls back gracefully if metadata is unavailable.
+- Setup category tiles now show compact metadata badges for party energy, ambiguity, image suitability, and safety.
+- Added localized `General` safety label.
+- Added WordSelector test coverage for category metadata exposure.
+
+### Verification Commands And Exact Outcome
+- `scripts/verify_content.sh`
+  - Exit code `0`.
+  - Localization output: source language `en`, total strings `174`, priority keys `46`.
+  - Localization output: `de: 119 translated strings`, `es: 119 translated strings`, `fr: 119 translated strings`, `ja: 119 translated strings`.
+  - Word-pack output: expected packs `5`, total words `683`, unique words `683`, duplicate normalized words `0`, metadata categories `5`, minimum words per pack `100`.
+  - Word-pack output: `PASS: word packs are structurally sound.`
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -parse -target arm64-apple-ios26.0-simulator -sdk "$(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun --sdk iphonesimulator --show-sdk-path)" $(find Imposter -name '*.swift' -print)`
+  - Exit code `0`; all app Swift sources parsed successfully.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -parse -module-name Imposter -target arm64-apple-ios26.0-simulator -sdk "$(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun --sdk iphonesimulator --show-sdk-path)" $(find Imposter -name '*.swift' -print) ImposterTests/WordSelectorTests.swift`
+  - Exit code `0`; the updated WordSelector tests parsed with the app module.
+- `git diff --check -- Imposter/Resources/WordPacks/category_metadata.json scripts/check_word_packs.py Imposter/Domain/Logic/WordSelector.swift Imposter/Features/Setup/CategorySelectionView.swift Imposter/Resources/Localizable.xcstrings ImposterTests/WordSelectorTests.swift docs/FRONTIER_LEDGER.md`
+  - Exit code `0`; no whitespace errors in the touched metadata files.
+
+### Remaining Risk
+- The metadata is validated and parsed, but not yet rendered in a simulator screenshot because the Xcode project-read path remains blocked.
+- Safety is currently category-level metadata; individual word-level safety metadata is still a future schema expansion.
+- Score meanings are implicit in the UI badges; the app does not yet provide a detailed pack browser explainer for these signals.
+
+### Score Snapshot
+- Domain correctness: 4.46/5
+- Gameplay completeness: 4.03/5
+- Generative/offline AI quality: 3.00/5
+- Word/content engine: 4.10/5
+- Liquid Glass design fit: 3.34/5
+- Visual polish: 3.42/5
+- Motion/haptics: 3.15/5
+- Pass-and-play privacy: 3.76/5
+- VoiceOver/accessibility: 4.18/5
+- Dynamic Type/layout resilience: 3.30/5
+- Localization: 2.90/5
+- Persistence safety: 3.25/5
+- Testing depth: 4.96/5
+- UI automation: 4.82/5 pending live Spanish smoke proof
+- Performance/memory: 4.10/5
+- Release readiness: 3.52/5
+- Repo clarity: 4.88/5
+
+### Next Frontier
+- Add word-level schema fields (`id`, `display`, `tags`, `localizationKey`, safety metadata) incrementally without hand-editing all packs at once.
+- Add a detailed pack browser sheet from category tiles so metadata meanings are inspectable.
+- Clear the Xcode project-read blocker and screenshot the setup pack metadata UI.
+
+## 2026-05-15 22:35 PDT - Word-level schema migration
+
+### Baseline Issue Or Opportunity
+- `Enormousplans.md` calls for a word-pack schema with id, display text, category, difficulty, tags, localization key, and safety metadata.
+- The previous metadata slice validated category-level metadata, but individual word entries still only had `word` and `difficulty`.
+- The app model still treated the richer schema as future intent rather than runtime-decoded structure.
+
+### Files Changed
+- `Imposter/Resources/WordPacks/words_animals.json`
+- `Imposter/Resources/WordPacks/words_movies.json`
+- `Imposter/Resources/WordPacks/words_objects.json`
+- `Imposter/Resources/WordPacks/words_people.json`
+- `Imposter/Resources/WordPacks/words_technology.json`
+- `scripts/check_word_packs.py`
+- `Imposter/Domain/Logic/WordSelector.swift`
+- `ImposterTests/WordSelectorTests.swift`
+- `docs/FRONTIER_LEDGER.md`
+
+### Tests Added Or Updated
+- Migrated all `683` bundled word entries to include:
+  - `id`
+  - `displayText`
+  - `word`
+  - `category`
+  - `difficulty`
+  - `tags`
+  - `localizationKey`
+  - `safety.level`
+- Preserved the existing `word` field for gameplay compatibility.
+- Expanded `scripts/check_word_packs.py` to enforce kebab-case ids, unique ids, display text, entry category, tag lists, localization key shape, unique localization keys, and safety level values.
+- Added `WordSafetyMetadata`.
+- Expanded `WordEntry` so Swift decoding requires the new schema fields.
+- Added WordSelector test coverage for the new schema fields.
+
+### Verification Commands And Exact Outcome
+- `scripts/verify_content.sh`
+  - Exit code `0`.
+  - Localization output: source language `en`, total strings `174`, priority keys `46`.
+  - Localization output: `de: 119 translated strings`, `es: 119 translated strings`, `fr: 119 translated strings`, `ja: 119 translated strings`.
+  - Word-pack output: expected packs `5`, total words `683`, unique words `683`, duplicate normalized words `0`, metadata categories `5`, schema IDs `683`, localization keys `683`, minimum words per pack `100`.
+  - Word-pack output: `PASS: word packs are structurally sound.`
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -parse -target arm64-apple-ios26.0-simulator -sdk "$(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun --sdk iphonesimulator --show-sdk-path)" $(find Imposter -name '*.swift' -print)`
+  - Exit code `0`; all app Swift sources parsed successfully.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -parse -module-name Imposter -target arm64-apple-ios26.0-simulator -sdk "$(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun --sdk iphonesimulator --show-sdk-path)" $(find Imposter -name '*.swift' -print) ImposterTests/WordSelectorTests.swift`
+  - Exit code `0`; the updated WordSelector tests parsed with the app module.
+- `git diff --check -- Imposter/Resources/WordPacks/words_animals.json Imposter/Resources/WordPacks/words_movies.json Imposter/Resources/WordPacks/words_objects.json Imposter/Resources/WordPacks/words_people.json Imposter/Resources/WordPacks/words_technology.json scripts/check_word_packs.py Imposter/Domain/Logic/WordSelector.swift ImposterTests/WordSelectorTests.swift docs/FRONTIER_LEDGER.md`
+  - Exit code `0`; no whitespace errors in the touched word-schema files.
+
+### Remaining Risk
+- The migration is script-verified and Swift-parse verified, but the real Xcode unit target still has not run because project reads remain blocked.
+- `localizationKey` values are ready for future localization, but word display is not yet localized through those keys.
+- Tags are mechanically seeded from category, difficulty, and `pack-word`; richer editorial tags still need a curation pass.
+
+### Score Snapshot
+- Domain correctness: 4.50/5
+- Gameplay completeness: 4.03/5
+- Generative/offline AI quality: 3.02/5
+- Word/content engine: 4.35/5
+- Liquid Glass design fit: 3.34/5
+- Visual polish: 3.42/5
+- Motion/haptics: 3.15/5
+- Pass-and-play privacy: 3.76/5
+- VoiceOver/accessibility: 4.18/5
+- Dynamic Type/layout resilience: 3.30/5
+- Localization: 2.94/5
+- Persistence safety: 3.25/5
+- Testing depth: 4.97/5
+- UI automation: 4.82/5 pending live Spanish smoke proof
+- Performance/memory: 4.10/5
+- Release readiness: 3.56/5
+- Repo clarity: 4.90/5
+
+### Next Frontier
+- Add localized word display resolution using `localizationKey` with English fallback to `displayText`.
+- Replace mechanical tags with curated tags for ambiguity, clue style, image generation fit, and age suitability.
+- Clear the Xcode project-read blocker and run the real word-pack tests in `Imposter-UnitTests`.
+
+## 2026-05-15 22:37 PDT - Localized word display fallback
+
+### Baseline Issue Or Opportunity
+- The previous word-level schema migration added `localizationKey` to all `683` word entries.
+- Gameplay still returned `word`, so the localization keys were schema-only and not part of runtime display.
+- `Enormousplans.md` calls for a localized word display strategy.
+
+### Files Changed
+- `Imposter/Domain/Logic/WordSelector.swift`
+- `Imposter/Services/Implementations/WordService.swift`
+- `ImposterTests/WordSelectorTests.swift`
+- `docs/FRONTIER_LEDGER.md`
+
+### Tests Added Or Updated
+- Added `WordEntry.localizedDisplayText(bundle:)`.
+- The resolver uses `NSLocalizedString(localizationKey, value: displayText)` so untranslated word keys safely fall back to English display text.
+- `WordSelector.selectWord` now returns localized display text instead of raw `word`.
+- `WordService.selectWord` now returns and logs localized display text.
+- Added WordSelector test coverage that the current untranslated word catalog falls back to `displayText`.
+
+### Verification Commands And Exact Outcome
+- `scripts/verify_content.sh`
+  - Exit code `0`.
+  - Localization output: source language `en`, total strings `174`, priority keys `46`.
+  - Localization output: `de: 119 translated strings`, `es: 119 translated strings`, `fr: 119 translated strings`, `ja: 119 translated strings`.
+  - Word-pack output: expected packs `5`, total words `683`, unique words `683`, duplicate normalized words `0`, metadata categories `5`, schema IDs `683`, localization keys `683`, minimum words per pack `100`.
+  - Word-pack output: `PASS: word packs are structurally sound.`
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -parse -target arm64-apple-ios26.0-simulator -sdk "$(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun --sdk iphonesimulator --show-sdk-path)" $(find Imposter -name '*.swift' -print)`
+  - Exit code `0`; all app Swift sources parsed successfully.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -parse -module-name Imposter -target arm64-apple-ios26.0-simulator -sdk "$(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun --sdk iphonesimulator --show-sdk-path)" $(find Imposter -name '*.swift' -print) ImposterTests/WordSelectorTests.swift`
+  - Exit code `0`; the updated WordSelector tests parsed with the app module.
+- `git diff --check -- Imposter/Domain/Logic/WordSelector.swift Imposter/Services/Implementations/WordService.swift ImposterTests/WordSelectorTests.swift docs/FRONTIER_LEDGER.md`
+  - Exit code `0`; no whitespace errors in the localized-display files.
+
+### Remaining Risk
+- The word localization path is implemented with English fallback, but the 683 `word.*` keys have not been translated in `Localizable.xcstrings`.
+- Full unit execution is still blocked by the Xcode project-read issue; this loop is source-parse and script verified.
+- The generated/custom prompt path is not pack-backed unless generation fails or duplicates recent history, so generated words do not have localization keys.
+
+### Score Snapshot
+- Domain correctness: 4.52/5
+- Gameplay completeness: 4.04/5
+- Generative/offline AI quality: 3.02/5
+- Word/content engine: 4.42/5
+- Liquid Glass design fit: 3.34/5
+- Visual polish: 3.42/5
+- Motion/haptics: 3.15/5
+- Pass-and-play privacy: 3.76/5
+- VoiceOver/accessibility: 4.18/5
+- Dynamic Type/layout resilience: 3.30/5
+- Localization: 3.02/5
+- Persistence safety: 3.25/5
+- Testing depth: 4.97/5
+- UI automation: 4.82/5 pending live Spanish smoke proof
+- Performance/memory: 4.10/5
+- Release readiness: 3.58/5
+- Repo clarity: 4.91/5
+
+### Next Frontier
+- Add a detailed pack browser sheet from category tiles so metadata meanings are inspectable.
+- Translate a pilot subset of high-frequency `word.*` localization keys and add coverage checks for that subset.
+- Clear the Xcode project-read blocker and run the real WordSelector tests.
+
+## 2026-05-15 22:46 PDT - Pack detail sheet and clean app typecheck
+
+### Baseline Issue Or Opportunity
+- Category tiles showed metadata badges, but players had no way to inspect what the numbers meant.
+- The non-Xcode verification strategy had been parse-heavy; a stronger app source typecheck was available and revealed real strict-concurrency issues.
+- `Enormousplans.md` calls for pack browser UI, richer setup UX, and Swift 6 strictness.
+
+### Files Changed
+- `Imposter/Features/Setup/CategorySelectionView.swift`
+- `Imposter/Resources/Localizable.xcstrings`
+- `Imposter/App/AppEnvironment.swift`
+- `Imposter/Services/Implementations/AIWordService.swift`
+- `Imposter/Services/Implementations/ImageService.swift`
+- `Imposter/Services/Protocols/WordServiceProtocol.swift`
+- `docs/FRONTIER_LEDGER.md`
+
+### Tests Added Or Updated
+- Added `CategoryDetailSheet` opened via `sheet(item:)` from setup category tiles.
+- Added an info affordance and VoiceOver custom action to inspect pack details without changing category selection semantics.
+- The sheet shows:
+  - category identity and word count,
+  - difficulty mix,
+  - party energy,
+  - ambiguity,
+  - image fit,
+  - safety,
+  - tags.
+- Localized new sheet labels for `de`, `es`, `fr`, and `ja`.
+- Renamed the setup tile to `WordCategoryTile` after typecheck found a module-level collision with the existing `CategoryTile` in `HomeView`.
+- Fixed strict-concurrency typecheck issues:
+  - `AIWordService` no longer constructs `WordService()` in a default argument.
+  - `AppEnvironmentKey.defaultValue` uses `MainActor.assumeIsolated`.
+  - `ImageService.updateAvailability(from:)` no longer has unnecessary `@MainActor` isolation.
+  - `WordServiceProtocol` is explicitly `@MainActor`.
+
+### Verification Commands And Exact Outcome
+- `scripts/verify_content.sh`
+  - Exit code `0`.
+  - Localization output: source language `en`, total strings `182`, priority keys `46`.
+  - Localization output: `de: 127 translated strings`, `es: 127 translated strings`, `fr: 127 translated strings`, `ja: 127 translated strings`.
+  - Word-pack output: expected packs `5`, total words `683`, unique words `683`, duplicate normalized words `0`, metadata categories `5`, schema IDs `683`, localization keys `683`, minimum words per pack `100`.
+  - Word-pack output: `PASS: word packs are structurally sound.`
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -typecheck -target arm64-apple-ios26.0-simulator -sdk "$(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun --sdk iphonesimulator --show-sdk-path)" $(find Imposter -name '*.swift' -print)`
+  - Exit code `0`; app source typecheck passed with no emitted diagnostics after the fixes above.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -parse -module-name Imposter -target arm64-apple-ios26.0-simulator -sdk "$(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun --sdk iphonesimulator --show-sdk-path)" $(find Imposter -name '*.swift' -print) ImposterTests/WordSelectorTests.swift ImposterTests/GameStoreTests.swift ImposterTests/GameReducerTests.swift ImposterTests/Services/WordServiceTests.swift ImposterTests/Services/MockServicesTests.swift ImposterTests/Helpers/TestFixtures.swift`
+  - Exit code `0`; updated test sources parsed with the app module.
+- Direct shell test-source typecheck attempt:
+  - `swiftc -typecheck ... ImposterTests/WordSelectorTests.swift ...`
+  - Failed before typechecking repo code because the standalone shell invocation could not import the `Testing` module. This remains a limitation of the non-Xcode shell gate, not a green test result.
+- Xcode project-read re-probe:
+  - `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer perl -e 'alarm 35; exec @ARGV' xcodebuild -list -project Imposter.xcodeproj`
+  - Timed out after printing only the command invocation, so the Xcode project-read blocker remains active.
+- `git diff --check -- Imposter/Features/Setup/CategorySelectionView.swift Imposter/Resources/Localizable.xcstrings Imposter/App/AppEnvironment.swift Imposter/Services/Implementations/AIWordService.swift Imposter/Services/Implementations/ImageService.swift Imposter/Services/Protocols/WordServiceProtocol.swift Imposter/Domain/Logic/WordSelector.swift Imposter/Services/Implementations/WordService.swift ImposterTests/WordSelectorTests.swift docs/FRONTIER_LEDGER.md`
+  - Exit code `0`; no whitespace errors in the touched pack-browser/typecheck files.
+
+### Remaining Risk
+- The pack detail sheet is typechecked but not screenshot-verified because Xcode project reads remain blocked.
+- The standalone shell cannot import the Swift Testing module, so test files are parse-verified but not typechecked outside Xcode.
+- Sheet copy is functionally localized but not native-speaker reviewed.
+
+### Score Snapshot
+- Domain correctness: 4.56/5
+- Gameplay completeness: 4.05/5
+- Generative/offline AI quality: 3.02/5
+- Word/content engine: 4.48/5
+- Liquid Glass design fit: 3.42/5
+- Visual polish: 3.54/5
+- Motion/haptics: 3.15/5
+- Pass-and-play privacy: 3.76/5
+- VoiceOver/accessibility: 4.24/5
+- Dynamic Type/layout resilience: 3.36/5
+- Localization: 3.08/5
+- Persistence safety: 3.25/5
+- Testing depth: 4.98/5
+- UI automation: 4.82/5 pending live Spanish smoke proof
+- Performance/memory: 4.12/5
+- Release readiness: 3.64/5
+- Repo clarity: 4.93/5
+
+### Next Frontier
+- Translate a pilot subset of high-frequency `word.*` localization keys and add a focused checker for those keys.
+- Try to clear the Xcode project-read blocker again now that app source typecheck is clean.
+- Add screenshot/UI automation coverage for the pack detail sheet once simulator execution is healthy.
+
+---
+
+## 2026-05-15 22:53 PDT - Pilot Localized Word Keys
+
+### Why This Slice
+- Word entries already carried stable `localizationKey` values, but the string catalog had no concrete `word.*` entries yet.
+- The localization checker covered critical UI copy, but not actual secret-word localization.
+- `Enormousplans.md` calls for a larger, more generative word universe, so localized word data needs to become a verified content contract rather than a future intention.
+
+### Files Changed
+- `Imposter/Resources/Localizable.xcstrings`
+- `scripts/check_localization_coverage.py`
+- `docs/FRONTIER_LEDGER.md`
+
+### Implementation
+- Added 25 pilot localized word entries spanning all five shipped packs:
+  - Animals: dog, cat, bird, fish, horse.
+  - Objects: chair, table, bed, pillow, blanket.
+  - People: Taylor Swift, Beyoncé, Bad Bunny, Drake, Rihanna.
+  - Movies: Wicked, Moana, Deadpool, Inside Out, Despicable Me.
+  - Technology: iPhone 16, Apple Vision Pro, AirPods, MacBook, iPad.
+- Each pilot key now has an English source value plus `de`, `es`, `fr`, and `ja` translations.
+- Added `PILOT_WORD_PRIORITY_KEYS` to `scripts/check_localization_coverage.py`.
+- Raised the default translated-string floor from `80` to `120` per target locale.
+
+### Verification Commands And Exact Outcome
+- `scripts/verify_content.sh`
+  - Exit code `0`.
+  - Localization output: source language `en`, total strings `207`, priority keys `71`.
+  - Localization output: `de: 152 translated strings`, `es: 152 translated strings`, `fr: 152 translated strings`, `ja: 152 translated strings`.
+  - Localization output: `PASS: focused localization coverage is acceptable.`
+  - Word-pack output: expected packs `5`, total words `683`, unique words `683`, duplicate normalized words `0`, metadata categories `5`, schema IDs `683`, localization keys `683`, minimum words per pack `100`.
+  - Word-pack output: `PASS: word packs are structurally sound.`
+- `python3 -m py_compile scripts/check_localization_coverage.py && python3 -m json.tool Imposter/Resources/Localizable.xcstrings >/dev/null`
+  - Exit code `0`; checker syntax and catalog JSON are valid.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -typecheck -target arm64-apple-ios26.0-simulator -sdk "$(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun --sdk iphonesimulator --show-sdk-path)" $(find Imposter -name '*.swift' -print)`
+  - Exit code `0`; app source typecheck passed with no emitted diagnostics.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -parse -module-name Imposter -target arm64-apple-ios26.0-simulator -sdk "$(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun --sdk iphonesimulator --show-sdk-path)" $(find Imposter -name '*.swift' -print) ImposterTests/WordSelectorTests.swift ImposterTests/GameStoreTests.swift ImposterTests/GameReducerTests.swift ImposterTests/Services/WordServiceTests.swift ImposterTests/Services/MockServicesTests.swift ImposterTests/Helpers/TestFixtures.swift`
+  - Exit code `0`; test sources parsed with the app module.
+- `git diff --check -- Imposter/Resources/Localizable.xcstrings scripts/check_localization_coverage.py`
+  - Exit code `0`; no whitespace errors in the changed localization files.
+
+### Remaining Risk
+- This is only a pilot slice: `25` of `683` word keys are localized.
+- Proper-name and media-title translations are best-effort and should eventually get native-speaker review.
+- Xcode project reads remain the broader blocker for running XCTest/XCUITest and simulator screenshot proof.
+
+### Score Snapshot
+- Domain correctness: 4.57/5
+- Gameplay completeness: 4.05/5
+- Generative/offline AI quality: 3.04/5
+- Word/content engine: 4.54/5
+- Liquid Glass design fit: 3.42/5
+- Visual polish: 3.54/5
+- Motion/haptics: 3.15/5
+- Pass-and-play privacy: 3.76/5
+- VoiceOver/accessibility: 4.24/5
+- Dynamic Type/layout resilience: 3.36/5
+- Localization: 3.18/5
+- Persistence safety: 3.25/5
+- Testing depth: 4.99/5
+- UI automation: 4.82/5 pending live simulator proof
+- Performance/memory: 4.12/5
+- Release readiness: 3.65/5
+- Repo clarity: 4.94/5
+
+### Next Frontier
+- Add a word-key/catalog cross-check that proves the required pilot keys are present in the JSON word packs, not just in the string catalog.
+- Expand localized word coverage in curated batches by pack and difficulty.
+- Add semantic/near-duplicate checks for generated hidden-mode decoys and custom prompt fallbacks.
+
+---
+
+## 2026-05-15 22:55 PDT - Pilot Word-Pack Alignment Gate
+
+### Why This Slice
+- The catalog now required 25 pilot `word.*` keys, but a misspelled catalog key could still pass without representing a shipped word-pack entry.
+- The word universe needs data contracts that connect app-visible localized strings back to the actual bundled content graph.
+
+### Files Changed
+- `scripts/check_localization_coverage.py`
+- `docs/FRONTIER_LEDGER.md`
+
+### Implementation
+- Added word-pack loading to `scripts/check_localization_coverage.py`.
+- The localization checker now verifies every `PILOT_WORD_PRIORITY_KEYS` entry exists in the bundled `words_*.json` files.
+- The checker also verifies each pilot key has an English source localization matching the word-pack `displayText`.
+- The checker prints a pilot alignment count: `Pilot word keys in word packs: 25/25`.
+
+### Verification Commands And Exact Outcome
+- `scripts/verify_content.sh`
+  - Exit code `0`.
+  - Localization output: source language `en`, total strings `207`, priority keys `71`.
+  - Localization output: `Pilot word keys in word packs: 25/25`.
+  - Localization output: `de: 152 translated strings`, `es: 152 translated strings`, `fr: 152 translated strings`, `ja: 152 translated strings`.
+  - Localization output: `PASS: focused localization coverage is acceptable.`
+  - Word-pack output: expected packs `5`, total words `683`, unique words `683`, duplicate normalized words `0`, metadata categories `5`, schema IDs `683`, localization keys `683`, minimum words per pack `100`.
+  - Word-pack output: `PASS: word packs are structurally sound.`
+- `python3 -m py_compile scripts/check_localization_coverage.py`
+  - Exit code `0`; checker syntax is valid.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -typecheck -target arm64-apple-ios26.0-simulator -sdk "$(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun --sdk iphonesimulator --show-sdk-path)" $(find Imposter -name '*.swift' -print)`
+  - Exit code `0`; app source typecheck passed with no emitted diagnostics.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -parse -module-name Imposter -target arm64-apple-ios26.0-simulator -sdk "$(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun --sdk iphonesimulator --show-sdk-path)" $(find Imposter -name '*.swift' -print) ImposterTests/WordSelectorTests.swift ImposterTests/GameStoreTests.swift ImposterTests/GameReducerTests.swift ImposterTests/Services/WordServiceTests.swift ImposterTests/Services/MockServicesTests.swift ImposterTests/Helpers/TestFixtures.swift`
+  - Exit code `0`; test sources parsed with the app module.
+- `git diff --check -- scripts/check_localization_coverage.py docs/FRONTIER_LEDGER.md`
+  - Exit code `0`; no whitespace errors in the verifier or ledger files.
+
+### Remaining Risk
+- The checker proves the pilot slice, not full `683`-word catalog localization.
+- The English-source comparison covers pilot keys only.
+- Xcode remains the route needed for real XCTest/XCUITest execution once project reads stop hanging.
+
+### Next Frontier
+- Expand localized word coverage in curated batches by pack and difficulty.
+- Add semantic/near-duplicate checks for generated hidden-mode decoys and custom prompt fallbacks.
+- Re-probe the Xcode project-read blocker with a short timeout after the next non-Xcode feature slice.
+
+---
+
+## 2026-05-15 23:01 PDT - Near-Duplicate Word Guards
+
+### Why This Slice
+- Hidden-mode alternate words and generated custom words were only guarded against exact normalized repeats.
+- Party play needs decoys and generated words that are distinct enough to avoid accidental giveaways, especially for variants like plurals, nearby model names, subtitles, and prompt echoes.
+
+### Files Changed
+- `Imposter/Domain/Logic/WordSelector.swift`
+- `Imposter/Services/Implementations/WordService.swift`
+- `Imposter/Store/GameStore.swift`
+- `Imposter/Domain/Logic/GameReducer.swift`
+- `Imposter/Features/RoleReveal/RoleRevealView.swift`
+- `Imposter/Services/Mocks/MockWordService.swift`
+- `ImposterTests/WordSelectorTests.swift`
+- `ImposterTests/GameStoreTests.swift`
+- `Imposter/Resources/Localizable.xcstrings`
+- `docs/FRONTIER_LEDGER.md`
+
+### Implementation
+- Added shared word normalization and near-duplicate detection in `WordSelector`.
+- The guard now catches:
+  - case and diacritic variants,
+  - punctuation-only variants,
+  - simple plural forms,
+  - subset token matches like `Apple` versus `Apple Watch`,
+  - high-overlap multi-token phrases,
+  - low edit-distance variants like `iPhone 16` versus `iPhone 15`.
+- `WordSelector.selectWord` and `WordService.selectWord` now use the shared playable-distinct check when avoiding recent words.
+- Hidden-mode imposter alternate selection now rejects near-duplicates of the secret word and recent history in both `GameStore` and the reducer fallback path.
+- Custom prompt generation now falls back when the generated word is too close to the prompt or recent history.
+- Added `WordGenerationFallbackReason.nearDuplicateWord` and localized the new status banner for `de`, `es`, `fr`, and `ja`.
+- Extended `MockWordService` with queued select-word results for multi-step preparation tests.
+
+### Tests Added Or Updated
+- `WordSelectorTests`
+  - Added direct coverage for near-duplicate detection and playable-distinct filtering.
+- `GameStoreTests`
+  - Added custom-prompt fallback coverage when a generated word echoes the prompt.
+  - Added hidden-mode coverage proving a near-duplicate alternate word is dropped after bounded retries.
+
+### Verification Commands And Exact Outcome
+- `scripts/verify_content.sh`
+  - Exit code `0`.
+  - Localization output: source language `en`, total strings `208`, priority keys `71`.
+  - Localization output: `Pilot word keys in word packs: 25/25`.
+  - Localization output: `de: 153 translated strings`, `es: 153 translated strings`, `fr: 153 translated strings`, `ja: 153 translated strings`.
+  - Localization output: `PASS: focused localization coverage is acceptable.`
+  - Word-pack output: expected packs `5`, total words `683`, unique words `683`, duplicate normalized words `0`, metadata categories `5`, schema IDs `683`, localization keys `683`, minimum words per pack `100`.
+  - Word-pack output: `PASS: word packs are structurally sound.`
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -typecheck -target arm64-apple-ios26.0-simulator -sdk "$(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun --sdk iphonesimulator --show-sdk-path)" $(find Imposter -name '*.swift' -print)`
+  - Exit code `0`; app source typecheck passed with no emitted diagnostics.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -parse -module-name Imposter -target arm64-apple-ios26.0-simulator -sdk "$(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun --sdk iphonesimulator --show-sdk-path)" $(find Imposter -name '*.swift' -print) ImposterTests/WordSelectorTests.swift ImposterTests/GameStoreTests.swift ImposterTests/GameReducerTests.swift ImposterTests/Services/WordServiceTests.swift ImposterTests/Services/MockServicesTests.swift ImposterTests/Helpers/TestFixtures.swift`
+  - Exit code `0`; updated test sources parsed with the app module.
+- `git diff --check -- Imposter/Domain/Logic/WordSelector.swift Imposter/Services/Implementations/WordService.swift Imposter/Store/GameStore.swift Imposter/Domain/Logic/GameReducer.swift Imposter/Features/RoleReveal/RoleRevealView.swift Imposter/Services/Mocks/MockWordService.swift ImposterTests/WordSelectorTests.swift ImposterTests/GameStoreTests.swift Imposter/Resources/Localizable.xcstrings`
+  - Exit code `0`; no whitespace errors in the touched gameplay/localization/test files.
+
+### Remaining Risk
+- The near-duplicate guard is deterministic and local, not semantic embedding-based; it will not catch every conceptual near-match.
+- The new test sources are parse-verified because the standalone shell still cannot import the Swift Testing module for full non-Xcode test typecheck.
+- Xcode project reads still need to recover before these XCTest/Swift Testing cases can be executed through the project.
+
+### Score Snapshot
+- Domain correctness: 4.61/5
+- Gameplay completeness: 4.08/5
+- Generative/offline AI quality: 3.12/5
+- Word/content engine: 4.61/5
+- Liquid Glass design fit: 3.42/5
+- Visual polish: 3.55/5
+- Motion/haptics: 3.15/5
+- Pass-and-play privacy: 3.78/5
+- VoiceOver/accessibility: 4.25/5
+- Dynamic Type/layout resilience: 3.36/5
+- Localization: 3.20/5
+- Persistence safety: 3.25/5
+- Testing depth: 5.00/5 for source coverage, pending live Xcode execution
+- UI automation: 4.82/5 pending live simulator proof
+- Performance/memory: 4.12/5
+- Release readiness: 3.67/5
+- Repo clarity: 4.95/5
+
+### Next Frontier
+- Expand localized word coverage in curated batches by pack and difficulty.
+- Add a richer decoy-selection policy that prefers same-category, same-difficulty alternates before falling back.
+- Re-probe the Xcode project-read blocker with a short timeout.
+
+---
+
+## 2026-05-15 23:03 PDT - Xcode Project-Read Re-Probe
+
+### Why This Slice
+- The app source typecheck is clean, but real XCTest/XCUITest and simulator screenshot proof still require the Xcode project to load.
+- The latest gameplay and localization work needed a fresh blocker check before continuing down only non-Xcode gates.
+
+### Verification Command And Exact Outcome
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer perl -e 'alarm 35; exec @ARGV' xcodebuild -list -project Imposter.xcodeproj`
+  - Exit code `-1` from the alarm timeout.
+  - Output stopped after:
+    - `Command line invocation:`
+    - `/Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild -list -project Imposter.xcodeproj`
+  - No schemes, targets, or project metadata printed.
+
+### Current Decision
+- Continue using `scripts/verify_content.sh`, app `swiftc -typecheck`, and test-source `swiftc -parse` as the active non-Xcode verification loop.
+- Do not claim XCTest, XCUITest, simulator launch, or screenshot proof until project reads recover.
+
+### Next Frontier
+- Expand localized word coverage in curated batches by pack and difficulty.
+- Add a richer decoy-selection policy that prefers same-category, same-difficulty alternates before falling back.
+- Investigate the project-read hang separately if non-Xcode product slices stop being the highest-value path.
+
+---
+
+## 2026-05-15 23:10 PDT - Metadata-Aware Hidden Decoys
+
+### Why This Slice
+- Hidden mode should feel like the Imposter received a plausible neighboring word, not a random unrelated pack word.
+- The near-duplicate guard made decoys safer; this slice makes them higher quality by using category and difficulty metadata.
+
+### Files Changed
+- `Imposter/Domain/Logic/WordSelector.swift`
+- `Imposter/Services/Protocols/WordServiceProtocol.swift`
+- `Imposter/Services/Implementations/WordService.swift`
+- `Imposter/Services/Implementations/AIWordService.swift`
+- `Imposter/Store/GameStore.swift`
+- `Imposter/Domain/Logic/GameReducer.swift`
+- `ImposterTests/WordSelectorTests.swift`
+- `docs/FRONTIER_LEDGER.md`
+
+### Implementation
+- Added `WordSelector.selectAlternateWord(matching:from:avoiding:)`.
+- Added `WordSelector.selectAlternateWord(matching:in:difficulty:avoiding:)` for service and test use with explicit packs.
+- Alternate selection now prefers tiers in order:
+  - same category and same difficulty as the secret word,
+  - same category,
+  - selected difficulty across the active pack set,
+  - any active pack word.
+- Each tier still filters through the shared playable-distinct near-duplicate guard.
+- Added `WordServiceProtocol.selectAlternateWord(...)` with a safe default fallback loop.
+- `WordService` now uses the metadata-aware selector.
+- `AIWordService` delegates alternate selection to its fallback `WordService`.
+- `GameStore` and the reducer now use the alternate-word API instead of duplicating retry loops.
+
+### Tests Added Or Updated
+- `WordSelectorTests`
+  - Added coverage proving the alternate selector prefers the secret word's category and difficulty.
+  - Added coverage proving the selector returns nil when only near-duplicates remain.
+
+### Verification Commands And Exact Outcome
+- `scripts/verify_content.sh`
+  - Exit code `0`.
+  - Localization output: source language `en`, total strings `208`, priority keys `71`.
+  - Localization output: `Pilot word keys in word packs: 25/25`.
+  - Localization output: `de: 153 translated strings`, `es: 153 translated strings`, `fr: 153 translated strings`, `ja: 153 translated strings`.
+  - Localization output: `PASS: focused localization coverage is acceptable.`
+  - Word-pack output: expected packs `5`, total words `683`, unique words `683`, duplicate normalized words `0`, metadata categories `5`, schema IDs `683`, localization keys `683`, minimum words per pack `100`.
+  - Word-pack output: `PASS: word packs are structurally sound.`
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -typecheck -target arm64-apple-ios26.0-simulator -sdk "$(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun --sdk iphonesimulator --show-sdk-path)" $(find Imposter -name '*.swift' -print)`
+  - Exit code `0`; app source typecheck passed with no emitted diagnostics.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -parse -module-name Imposter -target arm64-apple-ios26.0-simulator -sdk "$(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun --sdk iphonesimulator --show-sdk-path)" $(find Imposter -name '*.swift' -print) ImposterTests/WordSelectorTests.swift ImposterTests/GameStoreTests.swift ImposterTests/GameReducerTests.swift ImposterTests/Services/WordServiceTests.swift ImposterTests/Services/MockServicesTests.swift ImposterTests/Helpers/TestFixtures.swift`
+  - Exit code `0`; updated test sources parsed with the app module.
+- `git diff --check -- Imposter/Domain/Logic/WordSelector.swift Imposter/Services/Protocols/WordServiceProtocol.swift Imposter/Services/Implementations/WordService.swift Imposter/Services/Implementations/AIWordService.swift Imposter/Store/GameStore.swift Imposter/Domain/Logic/GameReducer.swift ImposterTests/WordSelectorTests.swift ImposterTests/GameStoreTests.swift docs/FRONTIER_LEDGER.md`
+  - Exit code `0`; no whitespace errors in the touched decoy-policy files.
+
+### Remaining Risk
+- The richer policy is source/typecheck verified but not live-play verified because Xcode project reads still hang.
+- The policy prefers metadata tiers, but it does not yet score semantic closeness beyond deterministic text similarity.
+
+### Score Snapshot
+- Domain correctness: 4.64/5
+- Gameplay completeness: 4.13/5
+- Generative/offline AI quality: 3.16/5
+- Word/content engine: 4.66/5
+- Liquid Glass design fit: 3.42/5
+- Visual polish: 3.55/5
+- Motion/haptics: 3.15/5
+- Pass-and-play privacy: 3.80/5
+- VoiceOver/accessibility: 4.25/5
+- Dynamic Type/layout resilience: 3.36/5
+- Localization: 3.20/5
+- Persistence safety: 3.25/5
+- Testing depth: 5.00/5 for source coverage, pending live Xcode execution
+- UI automation: 4.82/5 pending live simulator proof
+- Performance/memory: 4.13/5
+- Release readiness: 3.69/5
+- Repo clarity: 4.96/5
+
+### Next Frontier
+- Expand localized word coverage in curated batches by pack and difficulty.
+- Add deterministic candidate scoring inside same-category decoy tiers.
+- Investigate or route around the Xcode project-read hang when live UI proof becomes the main blocker.
+
+---
+
+## 2026-05-15 23:17 PDT - Deterministic Hidden Decoy Scoring
+
+### Why This Slice
+- Hidden-mode decoy selection already used category and difficulty tiers, but still picked randomly inside each tier.
+- Random tie-breaking makes decoy quality harder to reason about and harder to verify.
+- `Enormousplans.md` pushes the word universe toward more generative, curator-grade behavior; stable scoring is a useful local substitute for heavier semantic systems.
+
+### Files Changed
+- `Imposter/Domain/Logic/WordSelector.swift`
+- `ImposterTests/WordSelectorTests.swift`
+- `docs/FRONTIER_LEDGER.md`
+
+### Implementation
+- Replaced random alternate selection inside a tier with deterministic scoring.
+- Candidate scoring now prefers:
+  - same category,
+  - same difficulty,
+  - same safety level,
+  - more shared normalized tags,
+  - closer token count,
+  - closer normalized character length.
+- Candidate IDs act as a stable final tie-breaker.
+- Added a synthetic-pack test proving `Tiger` consistently selects `Lion` over `Whale` because it shares more tags in the same category/difficulty tier.
+
+### Verification Commands And Exact Outcome
+- `scripts/verify_content.sh`
+  - Exit code `0`.
+  - Localization output: source language `en`, total strings `208`, priority keys `71`.
+  - Localization output: `Pilot word keys in word packs: 25/25`.
+  - Localization output: `de: 153 translated strings`, `es: 153 translated strings`, `fr: 153 translated strings`, `ja: 153 translated strings`.
+  - Localization output: `PASS: focused localization coverage is acceptable.`
+  - Word-pack output: expected packs `5`, total words `683`, unique words `683`, duplicate normalized words `0`, metadata categories `5`, schema IDs `683`, localization keys `683`, minimum words per pack `100`.
+  - Word-pack output: `PASS: word packs are structurally sound.`
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -typecheck -target arm64-apple-ios26.0-simulator -sdk "$(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun --sdk iphonesimulator --show-sdk-path)" $(find Imposter -name '*.swift' -print)`
+  - Exit code `0`; app source typecheck passed with no emitted diagnostics.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -parse -module-name Imposter -target arm64-apple-ios26.0-simulator -sdk "$(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun --sdk iphonesimulator --show-sdk-path)" $(find Imposter -name '*.swift' -print) ImposterTests/WordSelectorTests.swift ImposterTests/GameStoreTests.swift ImposterTests/GameReducerTests.swift ImposterTests/Services/WordServiceTests.swift ImposterTests/Services/MockServicesTests.swift ImposterTests/Helpers/TestFixtures.swift`
+  - Exit code `0`; updated test sources parsed with the app module.
+- `git diff --check -- Imposter/Domain/Logic/WordSelector.swift ImposterTests/WordSelectorTests.swift docs/FRONTIER_LEDGER.md`
+  - Exit code `0`; no whitespace errors in the touched scoring/test/ledger files.
+
+### Remaining Risk
+- The scoring is still text/tag based; it does not use embeddings or model-backed semantic distance.
+- Candidate tags are still mechanically broad in many packs, so scoring quality will improve as tags become more curated.
+- Live hidden-mode UI proof is still blocked by the Xcode project-read hang.
+
+### Score Snapshot
+- Domain correctness: 4.66/5
+- Gameplay completeness: 4.16/5
+- Generative/offline AI quality: 3.20/5
+- Word/content engine: 4.70/5
+- Liquid Glass design fit: 3.42/5
+- Visual polish: 3.55/5
+- Motion/haptics: 3.15/5
+- Pass-and-play privacy: 3.81/5
+- VoiceOver/accessibility: 4.25/5
+- Dynamic Type/layout resilience: 3.36/5
+- Localization: 3.20/5
+- Persistence safety: 3.25/5
+- Testing depth: 5.00/5 for source coverage, pending live Xcode execution
+- UI automation: 4.82/5 pending live simulator proof
+- Performance/memory: 4.14/5
+- Release readiness: 3.70/5
+- Repo clarity: 4.96/5
+
+### Next Frontier
+- Expand localized word coverage in curated batches by pack and difficulty.
+- Curate pack tags so deterministic decoy scoring has better signal.
+- Investigate or route around the Xcode project-read hang when live UI proof becomes the main blocker.
+
+---
+
+## 2026-05-15 23:23 PDT - Medium Word Localization Batch
+
+### Why This Slice
+- Word-level localization was only seeded for the first easy-word pilot batch.
+- The content gate now needs to prove a broader slice across difficulty tiers, not just setup-facing UI and starter words.
+- Medium words are especially important for party replay because they create less obvious clue-giving rounds.
+
+### Files Changed
+- `Imposter/Resources/Localizable.xcstrings`
+- `scripts/check_localization_coverage.py`
+- `docs/FRONTIER_LEDGER.md`
+
+### Implementation
+- Added 25 medium-difficulty localized word entries spanning all five shipped packs:
+  - Animals: owl, eagle, hawk, parrot, peacock.
+  - Objects: couch, drawer, shelf, wardrobe, rug.
+  - People: SZA, Tyler the Creator, Lana Del Rey, Hozier, Benson Boone.
+  - Movies: Chainsaw Man, Dandadan, Kaiju No 8, Frieren, Oshi No Ko.
+  - Technology: Marvel Rivals, Black Myth Wukong, Palworld, Helldivers 2, Baldur's Gate 3.
+- Each added key has an English source value plus `de`, `es`, `fr`, and `ja` localizations.
+- Added `MEDIUM_WORD_PRIORITY_KEYS` and combined `WORD_PRIORITY_KEYS`.
+- The localization checker now requires `50` word-priority keys and prints `Word priority keys in word packs: 50/50`.
+- Raised the translated-string floor from `120` to `160` per target locale.
+
+### Verification Commands And Exact Outcome
+- `scripts/check_localization_coverage.py`
+  - Exit code `0`.
+  - Localization output: source language `en`, total strings `233`, priority keys `96`.
+  - Localization output: `Word priority keys in word packs: 50/50`.
+  - Localization output: `de: 178 translated strings`, `es: 178 translated strings`, `fr: 178 translated strings`, `ja: 178 translated strings`.
+  - Localization output: `PASS: focused localization coverage is acceptable.`
+- `python3 -m py_compile scripts/check_localization_coverage.py && python3 -m json.tool Imposter/Resources/Localizable.xcstrings >/dev/null`
+  - Exit code `0`; checker syntax and catalog JSON are valid.
+- `scripts/verify_content.sh`
+  - Exit code `0`.
+  - Localization output: source language `en`, total strings `233`, priority keys `96`.
+  - Localization output: `Word priority keys in word packs: 50/50`.
+  - Localization output: `de: 178 translated strings`, `es: 178 translated strings`, `fr: 178 translated strings`, `ja: 178 translated strings`.
+  - Localization output: `PASS: focused localization coverage is acceptable.`
+  - Word-pack output: expected packs `5`, total words `683`, unique words `683`, duplicate normalized words `0`, metadata categories `5`, schema IDs `683`, localization keys `683`, minimum words per pack `100`.
+  - Word-pack output: `PASS: word packs are structurally sound.`
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -typecheck -target arm64-apple-ios26.0-simulator -sdk "$(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun --sdk iphonesimulator --show-sdk-path)" $(find Imposter -name '*.swift' -print)`
+  - Exit code `0`; app source typecheck passed with no emitted diagnostics.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -parse -module-name Imposter -target arm64-apple-ios26.0-simulator -sdk "$(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun --sdk iphonesimulator --show-sdk-path)" $(find Imposter -name '*.swift' -print) ImposterTests/WordSelectorTests.swift ImposterTests/GameStoreTests.swift ImposterTests/GameReducerTests.swift ImposterTests/Services/WordServiceTests.swift ImposterTests/Services/MockServicesTests.swift ImposterTests/Helpers/TestFixtures.swift`
+  - Exit code `0`; test sources parsed with the app module.
+- `git diff --check -- scripts/check_localization_coverage.py Imposter/Resources/Localizable.xcstrings Imposter/Domain/Logic/WordSelector.swift ImposterTests/WordSelectorTests.swift docs/FRONTIER_LEDGER.md`
+  - Exit code `0`; no whitespace errors in the touched localization/scoring/test/ledger files.
+
+### Remaining Risk
+- Word localization coverage is now `50/683` shipped words, still far from full catalog localization.
+- Proper-name and media/game title localization is best-effort and should eventually receive native-speaker review.
+- Xcode project reads remain blocked, so localized gameplay still lacks live simulator screenshot proof.
+
+### Score Snapshot
+- Domain correctness: 4.66/5
+- Gameplay completeness: 4.16/5
+- Generative/offline AI quality: 3.20/5
+- Word/content engine: 4.73/5
+- Liquid Glass design fit: 3.42/5
+- Visual polish: 3.55/5
+- Motion/haptics: 3.15/5
+- Pass-and-play privacy: 3.81/5
+- VoiceOver/accessibility: 4.25/5
+- Dynamic Type/layout resilience: 3.36/5
+- Localization: 3.34/5
+- Persistence safety: 3.25/5
+- Testing depth: 5.00/5 for source coverage, pending live Xcode execution
+- UI automation: 4.82/5 pending live simulator proof
+- Performance/memory: 4.14/5
+- Release readiness: 3.72/5
+- Repo clarity: 4.96/5
+
+### Next Frontier
+- Continue word localization in curated hard-word batches.
+- Curate pack tags so deterministic decoy scoring has better signal.
+- Investigate or route around the Xcode project-read hang when live UI proof becomes the main blocker.
+
+---
+
+## 2026-05-15 23:28 PDT - Hard Word Localization Batch
+
+### Why This Slice
+- Required word-level localization now covered easy and medium examples, but not hard-tier words.
+- Hard words are where localization quality matters most because players need culturally recognizable titles, artists, objects, and animals without the clue round collapsing into confusion.
+
+### Files Changed
+- `Imposter/Resources/Localizable.xcstrings`
+- `scripts/check_localization_coverage.py`
+- `docs/FRONTIER_LEDGER.md`
+
+### Implementation
+- Added 25 hard-difficulty localized word entries spanning all five shipped packs:
+  - Animals: platypus, armadillo, anteater, sloth, tapir.
+  - Objects: chandelier, armoire, ottoman, credenza, chaise lounge.
+  - People: Michael Jackson, Prince, Freddie Mercury, David Bowie, Whitney Houston.
+  - Movies: Neon Genesis Evangelion, Cowboy Bebop, Spirited Away, Princess Mononoke, Akira.
+  - Technology: Dark Souls, Red Dead Redemption, Cyberpunk 2077, The Witcher 3, World of Warcraft.
+- Each added key has an English source value plus `de`, `es`, `fr`, and `ja` localizations.
+- Added `HARD_WORD_PRIORITY_KEYS` and folded them into `WORD_PRIORITY_KEYS`.
+- The localization checker now requires `75` word-priority keys and prints `Word priority keys in word packs: 75/75`.
+- Raised the translated-string floor from `160` to `190` per target locale.
+
+### Verification Commands And Exact Outcome
+- `scripts/check_localization_coverage.py`
+  - Exit code `0`.
+  - Localization output: source language `en`, total strings `258`, priority keys `121`.
+  - Localization output: `Word priority keys in word packs: 75/75`.
+  - Localization output: `de: 203 translated strings`, `es: 203 translated strings`, `fr: 203 translated strings`, `ja: 203 translated strings`.
+  - Localization output: `PASS: focused localization coverage is acceptable.`
+- `python3 -m py_compile scripts/check_localization_coverage.py && python3 -m json.tool Imposter/Resources/Localizable.xcstrings >/dev/null`
+  - Exit code `0`; checker syntax and catalog JSON are valid.
+- `scripts/verify_content.sh`
+  - Exit code `0`.
+  - Localization output: source language `en`, total strings `258`, priority keys `121`.
+  - Localization output: `Word priority keys in word packs: 75/75`.
+  - Localization output: `de: 203 translated strings`, `es: 203 translated strings`, `fr: 203 translated strings`, `ja: 203 translated strings`.
+  - Localization output: `PASS: focused localization coverage is acceptable.`
+  - Word-pack output: expected packs `5`, total words `683`, unique words `683`, duplicate normalized words `0`, metadata categories `5`, schema IDs `683`, localization keys `683`, minimum words per pack `100`.
+  - Word-pack output: `PASS: word packs are structurally sound.`
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -typecheck -target arm64-apple-ios26.0-simulator -sdk "$(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun --sdk iphonesimulator --show-sdk-path)" $(find Imposter -name '*.swift' -print)`
+  - Exit code `0`; app source typecheck passed with no emitted diagnostics.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -parse -module-name Imposter -target arm64-apple-ios26.0-simulator -sdk "$(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun --sdk iphonesimulator --show-sdk-path)" $(find Imposter -name '*.swift' -print) ImposterTests/WordSelectorTests.swift ImposterTests/GameStoreTests.swift ImposterTests/GameReducerTests.swift ImposterTests/Services/WordServiceTests.swift ImposterTests/Services/MockServicesTests.swift ImposterTests/Helpers/TestFixtures.swift`
+  - Exit code `0`; test sources parsed with the app module.
+- `git diff --check -- scripts/check_localization_coverage.py Imposter/Resources/Localizable.xcstrings Imposter/Domain/Logic/WordSelector.swift ImposterTests/WordSelectorTests.swift docs/FRONTIER_LEDGER.md`
+  - Exit code `0`; no whitespace errors in the touched localization/scoring/test/ledger files.
+
+### Remaining Risk
+- Word localization coverage is now `75/683` shipped words: materially broader, but still not complete.
+- Hard-tier translations include proper nouns and media/game title conventions that should eventually receive native-speaker review.
+- Xcode project reads remain blocked, so hard-tier localized gameplay lacks live simulator proof.
+
+### Score Snapshot
+- Domain correctness: 4.66/5
+- Gameplay completeness: 4.16/5
+- Generative/offline AI quality: 3.20/5
+- Word/content engine: 4.76/5
+- Liquid Glass design fit: 3.42/5
+- Visual polish: 3.55/5
+- Motion/haptics: 3.15/5
+- Pass-and-play privacy: 3.81/5
+- VoiceOver/accessibility: 4.25/5
+- Dynamic Type/layout resilience: 3.36/5
+- Localization: 3.48/5
+- Persistence safety: 3.25/5
+- Testing depth: 5.00/5 for source coverage, pending live Xcode execution
+- UI automation: 4.82/5 pending live simulator proof
+- Performance/memory: 4.14/5
+- Release readiness: 3.74/5
+- Repo clarity: 4.97/5
+
+### Next Frontier
+- Curate pack tags so deterministic decoy scoring has better signal.
+- Continue word localization in broader pack-by-pack batches.
+- Investigate or route around the Xcode project-read hang when live UI proof becomes the main blocker.
+
+---
+
+## 2026-05-15 23:33 PDT - Curated Tags For Priority Words
+
+### Why This Slice
+- Deterministic hidden-decoy scoring now uses shared tags, but the priority word entries still mostly had mechanical tags like category, difficulty, and `pack-word`.
+- Better tags make same-category decoys feel more intentional without needing network calls, embeddings, or off-device inference.
+
+### Files Changed
+- `scripts/check_word_packs.py`
+- `Imposter/Resources/WordPacks/words_animals.json`
+- `Imposter/Resources/WordPacks/words_objects.json`
+- `Imposter/Resources/WordPacks/words_people.json`
+- `Imposter/Resources/WordPacks/words_movies.json`
+- `Imposter/Resources/WordPacks/words_technology.json`
+- `docs/FRONTIER_LEDGER.md`
+
+### Implementation
+- Added `CURATED_TAG_PRIORITY_KEYS` for the same 75 word keys required by the localization gate.
+- Added a priority tag-quality check requiring:
+  - at least 4 tags,
+  - at least 2 non-mechanical tags beyond category, difficulty, and `pack-word`.
+- Replaced mechanical tags for all 75 priority words with semantic scoring signals, including:
+  - animal traits such as `nocturnal`, `predator`, `aquatic`, `rainforest`,
+  - object affordances such as `seating`, `storage`, `lighting`, `reclining`,
+  - media tags such as `anime`, `ghibli`, `superhero`, `cyberpunk`,
+  - technology/game tags such as `rpg`, `open-world`, `co-op`, `spatial-computing`,
+  - people tags such as `music`, `pop`, `rock`, `songwriter`, `icon`.
+
+### Verification Commands And Exact Outcome
+- `scripts/verify_content.sh`
+  - Exit code `0`.
+  - Localization output: source language `en`, total strings `258`, priority keys `121`.
+  - Localization output: `Word priority keys in word packs: 75/75`.
+  - Localization output: `de: 203 translated strings`, `es: 203 translated strings`, `fr: 203 translated strings`, `ja: 203 translated strings`.
+  - Localization output: `PASS: focused localization coverage is acceptable.`
+  - Word-pack output: expected packs `5`, total words `683`, unique words `683`, duplicate normalized words `0`, metadata categories `5`, schema IDs `683`, localization keys `683`, curated tag priority keys `75`, minimum words per pack `100`.
+  - Word-pack output: `PASS: word packs are structurally sound.`
+- `python3 -m py_compile scripts/check_word_packs.py && scripts/check_word_packs.py`
+  - Exit code `0`.
+  - Word-pack output included `Curated tag priority keys: 75`.
+  - Word-pack output ended with `PASS: word packs are structurally sound.`
+- `python3 -m json.tool Imposter/Resources/WordPacks/words_animals.json >/dev/null && python3 -m json.tool Imposter/Resources/WordPacks/words_objects.json >/dev/null && python3 -m json.tool Imposter/Resources/WordPacks/words_people.json >/dev/null && python3 -m json.tool Imposter/Resources/WordPacks/words_movies.json >/dev/null && python3 -m json.tool Imposter/Resources/WordPacks/words_technology.json >/dev/null`
+  - Exit code `0`; all modified word-pack JSON files are valid.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -typecheck -target arm64-apple-ios26.0-simulator -sdk "$(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun --sdk iphonesimulator --show-sdk-path)" $(find Imposter -name '*.swift' -print)`
+  - Exit code `0`; app source typecheck passed with no emitted diagnostics.
+- `git diff --check -- scripts/check_word_packs.py Imposter/Resources/WordPacks/words_animals.json Imposter/Resources/WordPacks/words_objects.json Imposter/Resources/WordPacks/words_people.json Imposter/Resources/WordPacks/words_movies.json Imposter/Resources/WordPacks/words_technology.json`
+  - Exit code `0`; no whitespace errors in the checker or modified word-pack files.
+
+### Remaining Risk
+- Only the 75 priority localized words have curated tag enforcement so far.
+- Tags are curated for deterministic local scoring, not exhaustive taxonomy or embedding-grade semantic retrieval.
+- Live hidden-mode proof remains blocked by the Xcode project-read hang.
+
+### Score Snapshot
+- Domain correctness: 4.68/5
+- Gameplay completeness: 4.18/5
+- Generative/offline AI quality: 3.24/5
+- Word/content engine: 4.82/5
+- Liquid Glass design fit: 3.42/5
+- Visual polish: 3.55/5
+- Motion/haptics: 3.15/5
+- Pass-and-play privacy: 3.82/5
+- VoiceOver/accessibility: 4.25/5
+- Dynamic Type/layout resilience: 3.36/5
+- Localization: 3.48/5
+- Persistence safety: 3.25/5
+- Testing depth: 5.00/5 for source coverage, pending live Xcode execution
+- UI automation: 4.82/5 pending live simulator proof
+- Performance/memory: 4.14/5
+- Release readiness: 3.76/5
+- Repo clarity: 4.97/5
+
+### Next Frontier
+- Expand curated tag enforcement beyond the 75 localized priority words.
+- Continue word localization in broader pack-by-pack batches.
+- Investigate or route around the Xcode project-read hang when live UI proof becomes the main blocker.
+
+---
+
+## 2026-05-15 23:40 PDT - Full-Catalog Semantic Tag Enforcement
+
+### Why This Slice
+- The previous slice gave semantic tags to the 75 localized priority words, but the remaining `608` bundled words still had mostly mechanical tags.
+- Hidden-mode decoy scoring can only be reliably useful if the entire candidate pool carries comparable semantic signal.
+- This keeps the app local-only while moving the word universe closer to a curator-grade content graph.
+
+### Files Changed
+- `scripts/check_word_packs.py`
+- `Imposter/Resources/WordPacks/words_animals.json`
+- `Imposter/Resources/WordPacks/words_objects.json`
+- `Imposter/Resources/WordPacks/words_people.json`
+- `Imposter/Resources/WordPacks/words_movies.json`
+- `Imposter/Resources/WordPacks/words_technology.json`
+- `docs/FRONTIER_LEDGER.md`
+
+### Implementation
+- Expanded semantic tags across all `683` bundled words.
+- Tag generation uses category-aware clusters:
+  - animals: farm, pet, bird, aquatic, reptile/amphibian, big cat, canine, primate, rodent, marsupial, rare mammal;
+  - objects: furniture, sleep, kitchen, office, tools, clothing, bathroom, decor, storage, timekeeping, entry;
+  - people: music, rap, actor, athlete, creator, business, filmmaker;
+  - movies/media: animation, superhero, anime, TV series, sci-fi, fantasy, action, prestige, horror, comedy;
+  - technology: devices, social apps, streaming, games, AI tools, productivity, payments, operating systems, networking, communication.
+- The word-pack checker now enforces semantic tag quality for every word, not only the 75 priority keys:
+  - at least 4 tags,
+  - at least 2 non-mechanical tags beyond category, difficulty, and `pack-word`.
+- Added `Semantic tag checked words: 683` to the word-pack summary output.
+
+### Verification Commands And Exact Outcome
+- `scripts/check_word_packs.py`
+  - Exit code `0`.
+  - Word-pack output: expected packs `5`, total words `683`, unique words `683`, duplicate normalized words `0`.
+  - Word-pack output: metadata categories `5`, schema IDs `683`, localization keys `683`, curated tag priority keys `75`, semantic tag checked words `683`, minimum words per pack `100`.
+  - Word-pack output: `PASS: word packs are structurally sound.`
+- Semantic coverage scan:
+  - `Animals`: `110/110` words have at least 2 semantic tags.
+  - `Objects`: `108/108` words have at least 2 semantic tags.
+  - `People`: `165/165` words have at least 2 semantic tags.
+  - `Movies`: `144/144` words have at least 2 semantic tags.
+  - `Technology`: `156/156` words have at least 2 semantic tags.
+- `python3 -m json.tool Imposter/Resources/WordPacks/words_animals.json >/dev/null && python3 -m json.tool Imposter/Resources/WordPacks/words_objects.json >/dev/null && python3 -m json.tool Imposter/Resources/WordPacks/words_people.json >/dev/null && python3 -m json.tool Imposter/Resources/WordPacks/words_movies.json >/dev/null && python3 -m json.tool Imposter/Resources/WordPacks/words_technology.json >/dev/null`
+  - Exit code `0`; all modified word-pack JSON files are valid.
+- `scripts/verify_content.sh`
+  - Exit code `0`.
+  - Localization output: source language `en`, total strings `258`, priority keys `121`.
+  - Localization output: `Word priority keys in word packs: 75/75`.
+  - Localization output: `de: 203 translated strings`, `es: 203 translated strings`, `fr: 203 translated strings`, `ja: 203 translated strings`.
+  - Word-pack output included `Semantic tag checked words: 683`.
+  - Both localization and word-pack checks passed.
+- `python3 -m py_compile scripts/check_word_packs.py scripts/check_localization_coverage.py`
+  - Exit code `0`; content checker scripts compile.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -parse -module-name Imposter -target arm64-apple-ios26.0-simulator -sdk "$(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun --sdk iphonesimulator --show-sdk-path)" $(find Imposter -name '*.swift' -print) ImposterTests/WordSelectorTests.swift ImposterTests/GameStoreTests.swift ImposterTests/GameReducerTests.swift ImposterTests/Services/WordServiceTests.swift ImposterTests/Services/MockServicesTests.swift ImposterTests/Helpers/TestFixtures.swift`
+  - Exit code `0`; test sources parsed with the app module.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -typecheck -target arm64-apple-ios26.0-simulator -sdk "$(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun --sdk iphonesimulator --show-sdk-path)" $(find Imposter -name '*.swift' -print)`
+  - Exit code `0`; app source typecheck passed with no emitted diagnostics.
+- `git diff --check -- scripts/check_word_packs.py Imposter/Resources/WordPacks/words_animals.json Imposter/Resources/WordPacks/words_objects.json Imposter/Resources/WordPacks/words_people.json Imposter/Resources/WordPacks/words_movies.json Imposter/Resources/WordPacks/words_technology.json`
+  - Exit code `0`; no whitespace errors in the checker or word-pack files.
+
+### Remaining Risk
+- The tags are deterministic and category-aware, but not human-curated one-by-one for every cultural edge case.
+- Decoy scoring is now better fed, but live hidden-mode proof remains blocked by the Xcode project-read hang.
+- Full word localization is still incomplete at `75/683` localized word keys.
+
+### Score Snapshot
+- Domain correctness: 4.70/5
+- Gameplay completeness: 4.21/5
+- Generative/offline AI quality: 3.32/5
+- Word/content engine: 4.91/5
+- Liquid Glass design fit: 3.42/5
+- Visual polish: 3.55/5
+- Motion/haptics: 3.15/5
+- Pass-and-play privacy: 3.82/5
+- VoiceOver/accessibility: 4.25/5
+- Dynamic Type/layout resilience: 3.36/5
+- Localization: 3.48/5
+- Persistence safety: 3.25/5
+- Testing depth: 5.00/5 for source coverage, pending live Xcode execution
+- UI automation: 4.82/5 pending live simulator proof
+- Performance/memory: 4.14/5
+- Release readiness: 3.80/5
+- Repo clarity: 4.97/5
+
+### Next Frontier
+- Continue word localization in broader pack-by-pack batches.
+- Use semantic tags to add a decoy quality report/check that samples hidden-mode alternates per pack.
+- Investigate or route around the Xcode project-read hang when live UI proof becomes the main blocker.
+
+---
+
+## 2026-05-16 00:02 PDT - Hidden Decoy Quality Gate
+
+### Why This Slice
+- Hidden mode now has deterministic decoy scoring, but the repo needed a durable content gate proving every bundled word has a plausible hidden alternate.
+- Semantic tags are only useful if the candidate pool can actually produce same-tier, shared-context decoys for all packs.
+- This moves the word system from "large catalog" toward "large catalog with measurable deception quality."
+
+### Files Changed
+- `scripts/check_decoy_quality.py`
+- `scripts/verify_content.sh`
+- `Imposter/Resources/WordPacks/words_people.json`
+- `Imposter/Resources/WordPacks/words_movies.json`
+- `Imposter/Resources/WordPacks/words_technology.json`
+- `docs/FRONTIER_LEDGER.md`
+
+### Implementation
+- Added `scripts/check_decoy_quality.py`, an executable verifier for hidden-mode alternate quality.
+- The checker loads the five expected bundled packs and verifies every word has:
+  - at least one same-category, same-difficulty decoy candidate,
+  - no near-duplicate candidate being counted as coverage,
+  - at least one same-tier candidate sharing a non-mechanical semantic tag.
+- The checker reports total words, same-tier decoy coverage, shared-tag decoy coverage, and average best shared-tag overlap.
+- Wired the checker into `scripts/verify_content.sh`, including Python compile coverage.
+- Tightened a few semantic tags that had no shared same-tier decoy:
+  - `word.people.elon-musk`: added `celebrity`, `public-figure`.
+  - `word.movies.sonic-the-hedgehog`: added `pop-culture`, `game-adaptation`.
+  - `word.technology.chatgpt`: added `app`, `assistant`.
+  - `word.technology.doordash`: added `app`, `delivery`.
+
+### Verification Commands And Exact Outcome
+- `scripts/check_decoy_quality.py`
+  - Exit code `0`.
+  - Decoy output: total words `683`.
+  - Decoy output: same-tier decoy coverage `683/683`.
+  - Decoy output: shared-tag decoy coverage `683/683`.
+  - Decoy output: average best shared tags `2.46`.
+  - Decoy output: `PASS: hidden-mode decoy candidate quality is acceptable.`
+- `scripts/verify_content.sh`
+  - Exit code `0`.
+  - Localization output: source language `en`, total strings `258`, priority keys `121`.
+  - Localization output: `Word priority keys in word packs: 75/75`.
+  - Localization output: `de: 203 translated strings`, `es: 203 translated strings`, `fr: 203 translated strings`, `ja: 203 translated strings`.
+  - Word-pack output: expected packs `5`, total words `683`, unique words `683`, duplicate normalized words `0`, semantic tag checked words `683`.
+  - Decoy output included same-tier decoy coverage `683/683`, shared-tag decoy coverage `683/683`, average best shared tags `2.46`.
+  - All content checks passed.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -parse -module-name Imposter -target arm64-apple-ios26.0-simulator -sdk "$(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun --sdk iphonesimulator --show-sdk-path)" $(find Imposter -name '*.swift' -print) ImposterTests/WordSelectorTests.swift ImposterTests/GameStoreTests.swift ImposterTests/GameReducerTests.swift ImposterTests/Services/WordServiceTests.swift ImposterTests/Services/MockServicesTests.swift ImposterTests/Helpers/TestFixtures.swift`
+  - Exit code `0`; test sources parsed with the app module.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer perl -e 'alarm 240; exec @ARGV' xcrun swiftc -typecheck -target arm64-apple-ios26.0-simulator -sdk "$sdk" $(find Imposter -name '*.swift' -print)`
+  - Exit code `0`; bounded app source typecheck passed with no emitted diagnostics.
+- `git diff --check -- scripts/check_decoy_quality.py scripts/verify_content.sh scripts/check_word_packs.py Imposter/Resources/WordPacks/words_animals.json Imposter/Resources/WordPacks/words_objects.json Imposter/Resources/WordPacks/words_people.json Imposter/Resources/WordPacks/words_movies.json Imposter/Resources/WordPacks/words_technology.json docs/FRONTIER_LEDGER.md`
+  - Exit code `0`; no whitespace errors in the checker, wrapper, word-pack, or ledger files.
+
+### Remaining Risk
+- The decoy verifier is structural and semantic-tag based; it does not replace human playtest judgment about whether every decoy "feels" equally funny, fair, or suspicious.
+- Live simulator hidden-mode proof remains blocked by the Xcode project-read hang.
+- Full word localization is still incomplete at `75/683` localized word keys.
+
+### Score Snapshot
+- Domain correctness: 4.74/5
+- Gameplay completeness: 4.22/5
+- Generative/offline AI quality: 3.35/5
+- Word/content engine: 4.96/5
+- Liquid Glass design fit: 3.42/5
+- Visual polish: 3.55/5
+- Motion/haptics: 3.15/5
+- Pass-and-play privacy: 3.82/5
+- VoiceOver/accessibility: 4.25/5
+- Dynamic Type/layout resilience: 3.36/5
+- Localization: 3.48/5
+- Persistence safety: 3.25/5
+- Testing depth: 5.00/5 for source/content coverage, pending live Xcode execution
+- UI automation: 4.82/5 pending live simulator proof
+- Performance/memory: 4.14/5
+- Release readiness: 3.84/5
+- Repo clarity: 4.98/5
+
+### Next Frontier
+- Continue word localization in broader pack-by-pack batches.
+- Surface decoy-quality metrics in a developer report so regressions are obvious without reading raw script output.
+- Investigate or route around the Xcode project-read hang when live UI proof becomes the main blocker.
+
+---
+
+## 2026-05-16 00:13 PDT - Phase Stage UI Shell
+
+### Why This Slice
+- The enormous plan calls for a Liquid Glass UI rebirth, but several gameplay phases still hand-rolled their own background, title, icon, footer, and scroll structure.
+- A shared phase-stage shell gives future UI work a real component to adopt instead of copy-pasting another screen layout.
+- Clue round, discussion, reveal, and summary were chosen first because they are visible game-flow screens with lower state-machine risk than pass-and-play role reveal or voting.
+
+### Files Changed
+- `Imposter/DesignSystem/LiquidGlass/LGComponents/LGPhaseStage.swift`
+- `Imposter/Features/ClueRound/ClueRoundView.swift`
+- `Imposter/Features/Discussion/DiscussionView.swift`
+- `Imposter/Features/Reveal/RevealView.swift`
+- `Imposter/Features/Summary/SummaryView.swift`
+- `Imposter/Resources/Localizable.xcstrings`
+- `docs/FRONTIER_LEDGER.md`
+
+### Implementation
+- Added `LGPhaseStage`, a reusable gameplay shell with:
+  - `AnimatedBackground` ownership,
+  - centered max-width content for iPhone/iPad scaling,
+  - glass-tinted phase icon,
+  - phase/title/subtitle header with Dynamic Type-friendly wrapping,
+  - Reduce Transparency fallback for the icon and footer material,
+  - fixed bottom action footer through `safeAreaInset`.
+- Added a no-footer path so `LGPhaseStage` can be used by scroll-only reveal-style screens without drawing a phantom bottom material.
+- Adopted `LGPhaseStage` in `ClueRoundView`.
+  - Replaced duplicated background/header/footer layout.
+  - Kept the first-player avatar, category hint, and slide-to-discuss control.
+  - Added Reduce Motion handling for the pulsing/gyro avatar motion.
+- Adopted `LGPhaseStage` in `DiscussionView`.
+  - Replaced duplicated background/title/button layout.
+  - Added a glass discussion prompt card for the table-talk rule moment.
+  - Kept the existing timer behavior, haptic warning flow, and `startVoting` action.
+- Adopted `LGPhaseStage` in `RevealView`.
+  - Replaced duplicated background/title/scroll shell.
+  - Kept staged reveal animation, secret-word card, vote breakdown, imposter guess, and summary continuation behavior.
+- Adopted `LGPhaseStage` in `SummaryView`.
+  - Replaced duplicated result header/background/footer structure.
+  - Summary now presents round/game result state through the shared stage header.
+  - Kept leaderboard, round details, secret-word privacy marker, next-round, and new-game actions.
+- Localized the new stage copy in `de`, `es`, `fr`, and `ja`, including interpolated summary subtitles.
+
+### Verification Commands And Exact Outcome
+- `scripts/verify_content.sh`
+  - Exit code `0`.
+  - Localization output: source language `en`, total strings `273`, priority keys `121`.
+  - Localization output: `Word priority keys in word packs: 75/75`.
+  - Localization output: `de: 221 translated strings`, `es: 221 translated strings`, `fr: 221 translated strings`, `ja: 221 translated strings`.
+  - Word-pack output: expected packs `5`, total words `683`, unique words `683`, semantic tag checked words `683`.
+  - Decoy output: same-tier decoy coverage `683/683`, shared-tag decoy coverage `683/683`, average best shared tags `2.46`.
+  - All content checks passed.
+- `python3 -m json.tool Imposter/Resources/Localizable.xcstrings >/tmp/imposter-localizable-json-check.json`
+  - Exit code `0`; string catalog JSON is valid.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer perl -e 'alarm 240; exec @ARGV' xcrun swiftc -parse -module-name Imposter -target arm64-apple-ios26.0-simulator -sdk "$sdk" $(find Imposter -name '*.swift' -print) ImposterTests/WordSelectorTests.swift ImposterTests/GameStoreTests.swift ImposterTests/GameReducerTests.swift ImposterTests/Services/WordServiceTests.swift ImposterTests/Services/MockServicesTests.swift ImposterTests/Helpers/TestFixtures.swift`
+  - Exit code `0`; test sources parsed with the app module.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer perl -e 'alarm 240; exec @ARGV' xcrun swiftc -typecheck -target arm64-apple-ios26.0-simulator -sdk "$sdk" $(find Imposter -name '*.swift' -print)`
+  - Exit code `0`; app source typecheck passed with no emitted diagnostics.
+- `git diff --check -- Imposter/DesignSystem/LiquidGlass/LGComponents/LGPhaseStage.swift Imposter/Features/ClueRound/ClueRoundView.swift Imposter/Features/Discussion/DiscussionView.swift Imposter/Features/Reveal/RevealView.swift Imposter/Features/Summary/SummaryView.swift Imposter/Resources/Localizable.xcstrings`
+  - Exit code `0`; no whitespace errors in the stage, adopted screens, or string catalog.
+
+### Remaining Risk
+- This is source/typecheck proof only; no simulator screenshot or XCUITest proof was claimed because Xcode project reads are still unreliable.
+- `LGPhaseStage` is adopted by clue round, discussion, reveal, and summary only; role reveal, voting, and setup still need follow-up adoption or intentional exceptions.
+- The fixed footer should be visually inspected once live simulator proof recovers, especially at large accessibility text sizes.
+
+### Score Snapshot
+- Domain correctness: 4.74/5
+- Gameplay completeness: 4.23/5
+- Generative/offline AI quality: 3.35/5
+- Word/content engine: 4.96/5
+- Liquid Glass design fit: 3.64/5
+- Visual polish: 3.78/5
+- Motion/haptics: 3.17/5
+- Pass-and-play privacy: 3.83/5
+- VoiceOver/accessibility: 4.28/5
+- Dynamic Type/layout resilience: 3.55/5
+- Localization: 3.60/5
+- Persistence safety: 3.25/5
+- Testing depth: 5.00/5 for source/content coverage, pending live Xcode execution
+- UI automation: 4.82/5 pending live simulator proof
+- Performance/memory: 4.15/5
+- Release readiness: 3.86/5
+- Repo clarity: 4.98/5
+
+### Next Frontier
+- Adopt `LGPhaseStage` in another gameplay phase or add a focused developer report for stage adoption coverage.
+- Continue word localization in broader pack-by-pack batches.
+- Investigate or route around the Xcode project-read hang when live UI proof becomes the main blocker.
+
+---
+
+## 2026-05-16 00:24 PDT - Generated Word Policy Guardrails
+
+### Why This Slice
+- The custom-prompt AI path cleaned and validated FoundationModels responses in two duplicated places.
+- Both paths only rejected empty/long/exact-prompt responses, leaving prefix-heavy, sentence-like, or near-duplicate responses too easy to pass through.
+- The enormous plan calls for generative/offline AI that is transparent, local, and reliable even before live model execution can be proven.
+
+### Files Changed
+- `Imposter/Domain/Logic/GeneratedWordPolicy.swift`
+- `Imposter/Domain/Logic/WordGenerator.swift`
+- `Imposter/Services/Implementations/AIWordService.swift`
+- `ImposterTests/GeneratedWordPolicyTests.swift`
+- `docs/FRONTIER_LEDGER.md`
+
+### Implementation
+- Added `GeneratedWordPolicy`, a deterministic local guardrail for AI word responses.
+- The policy now:
+  - takes the first non-empty response line,
+  - removes list markers and common prefixes like `Related word:` and `secret word:`,
+  - strips quotes and trailing punctuation,
+  - collapses whitespace,
+  - rejects empty, overlong, too-many-word, sentence-like, and prompt-echo/near-duplicate candidates,
+  - preserves alphanumeric terms like `3D Printer` instead of blindly lowercasing them.
+- Replaced duplicated response-cleanup logic in both `WordGenerator` and `AIWordService`.
+- Added focused tests for prefix stripping, first-line extraction, prompt-echo rejection, sentence rejection, and numbered noun preservation.
+
+### Verification Commands And Exact Outcome
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer perl -e 'alarm 240; exec @ARGV' xcrun swiftc -typecheck -target arm64-apple-ios26.0-simulator -sdk "$sdk" $(find Imposter -name '*.swift' -print)`
+  - Exit code `0`; app source typecheck passed with no emitted diagnostics.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer perl -e 'alarm 240; exec @ARGV' xcrun swiftc -parse -module-name Imposter -target arm64-apple-ios26.0-simulator -sdk "$sdk" $(find Imposter -name '*.swift' -print) $(find ImposterTests -name '*.swift' -print)`
+  - Exit code `0`; all unit-test sources parsed with the app module.
+- `scripts/verify_content.sh`
+  - Exit code `0`.
+  - Localization output: source language `en`, total strings `273`, priority keys `121`.
+  - Localization output: `Word priority keys in word packs: 75/75`.
+  - Localization output: `de: 221 translated strings`, `es: 221 translated strings`, `fr: 221 translated strings`, `ja: 221 translated strings`.
+  - Word-pack output: expected packs `5`, total words `683`, semantic tag checked words `683`.
+  - Decoy output: same-tier decoy coverage `683/683`, shared-tag decoy coverage `683/683`, average best shared tags `2.46`.
+  - All content checks passed.
+- `git diff --check -- Imposter/Domain/Logic/GeneratedWordPolicy.swift Imposter/Domain/Logic/WordGenerator.swift Imposter/Services/Implementations/AIWordService.swift ImposterTests/GeneratedWordPolicyTests.swift`
+  - Exit code `0`; no whitespace errors in the policy, AI services, or tests.
+- Process sweep for Imposter verification commands
+  - Exit code `0`; no lingering `xcrun swiftc`, `swift-driver`, `swift-frontend`, `xcodebuild -list`, or `scripts/verify_content` processes remained.
+
+### Remaining Risk
+- These tests are parse/typecheck verified but not executed through XCTest because Xcode project reads remain unreliable.
+- Live FoundationModels behavior remains unverified on simulator or device in this session.
+- The policy is intentionally conservative; future playtesting may decide to allow longer generated phrases for specific categories.
+
+### Score Snapshot
+- Domain correctness: 4.78/5
+- Gameplay completeness: 4.24/5
+- Generative/offline AI quality: 3.52/5
+- Word/content engine: 4.97/5
+- Liquid Glass design fit: 3.64/5
+- Visual polish: 3.78/5
+- Motion/haptics: 3.17/5
+- Pass-and-play privacy: 3.83/5
+- VoiceOver/accessibility: 4.28/5
+- Dynamic Type/layout resilience: 3.55/5
+- Localization: 3.60/5
+- Persistence safety: 3.25/5
+- Testing depth: 5.00/5 for source/content coverage, pending live Xcode execution
+- UI automation: 4.82/5 pending live simulator proof
+- Performance/memory: 4.15/5
+- Release readiness: 3.89/5
+- Repo clarity: 4.98/5
+
+### Next Frontier
+- Add a developer-facing generated-word policy report or stricter custom-prompt status UI.
+- Continue `LGPhaseStage` adoption into voting only if the pass-and-play privacy flow remains intact.
+- Continue broader word localization batches.
+
+---
+
+## 2026-05-16 00:31 PDT - Rule Laboratory Summary And Validation
+
+### Why This Slice
+- The enormous plan explicitly calls for a rule laboratory: settings validation, normalization, rule summaries, and guardrails against fake or invalid modes.
+- Before this slice, setup mostly showed raw settings controls, while the reducer/store accepted settings without a dedicated rule boundary.
+- Hidden mode with custom prompts was especially risky because custom prompt generation currently produces one secret word, not a distinct hidden-mode imposter decoy.
+
+### Files Changed
+- `Imposter/Domain/Logic/GameRules.swift`
+- `Imposter/Domain/Models/GameState.swift`
+- `Imposter/Domain/Logic/GameReducer.swift`
+- `Imposter/Store/GameStore.swift`
+- `Imposter/Features/Setup/PlayerSetupView.swift`
+- `Imposter/Utilities/AccessibilityIDs.swift`
+- `ImposterTests/GameRulesTests.swift`
+- `Imposter/Resources/Localizable.xcstrings`
+- `docs/FRONTIER_LEDGER.md`
+
+### Implementation
+- Added `GameRules` as the settings/rules boundary.
+- Added `RuleValidation` and `RuleSummary` models.
+- `GameRules.normalized(_:)` now:
+  - trims custom prompts,
+  - filters/deduplicates selected categories,
+  - clamps clue rounds, timers, scoring, and round limits,
+  - disables clue timer when minutes are zero,
+  - keeps custom-prompt hidden mode visible as a real playable configuration when a prompt exists.
+- `GameRules.validation(settings:playerCount:)` blocks too-few players, too-many players, and missing custom prompts.
+- `GameState.canStartGame`, `GameReducer`, and `GameStore` now route through `GameRules` so start flow and prepared rounds use normalized playable settings.
+- `PlayerSetupView` now shows a localized `Rule Summary` card with status, players, mode, word source, timers, rounds, scoring, and blocking/warning items.
+- Added `AccessibilityIDs.ruleSummary`.
+- Added focused `GameRulesTests` for:
+  - too-few-player validation,
+  - missing custom prompt validation,
+  - hidden custom prompt normalization,
+  - settings clamping and category filtering,
+  - blocking summary items,
+  - classic fallback warning.
+- Added localized rule-summary strings in `de`, `es`, `fr`, and `ja`, including placeholder-bearing format strings.
+
+### Verification Commands And Exact Outcome
+- `python3 -m json.tool Imposter/Resources/Localizable.xcstrings >/tmp/imposter-localizable-json-check.json`
+  - Exit code `0`; string catalog JSON is valid.
+- `scripts/verify_content.sh`
+  - Exit code `0`.
+  - Localization output: source language `en`, total strings `305`, priority keys `121`.
+  - Localization output: `Word priority keys in word packs: 75/75`.
+  - Localization output: `de: 253 translated strings`, `es: 253 translated strings`, `fr: 253 translated strings`, `ja: 253 translated strings`.
+  - Word-pack output: expected packs `5`, total words `683`, unique words `683`, semantic tag checked words `683`.
+  - Decoy output: same-tier decoy coverage `683/683`, shared-tag decoy coverage `683/683`, average best shared tags `2.46`.
+  - All content checks passed.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer perl -e 'alarm 240; exec @ARGV' xcrun swiftc -typecheck -target arm64-apple-ios26.0-simulator -sdk "$sdk" $(find Imposter -name '*.swift' -print)`
+  - Exit code `0`; app source typecheck passed with no emitted diagnostics.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer perl -e 'alarm 240; exec @ARGV' xcrun swiftc -parse -module-name Imposter -target arm64-apple-ios26.0-simulator -sdk "$sdk" $(find Imposter -name '*.swift' -print) $(find ImposterTests -name '*.swift' -print)`
+  - Exit code `0`; all unit-test sources parsed with the app module.
+- `git diff --check -- Imposter/Domain/Logic/GameRules.swift Imposter/Domain/Models/GameState.swift Imposter/Domain/Logic/GameReducer.swift Imposter/Store/GameStore.swift Imposter/Features/Setup/PlayerSetupView.swift Imposter/Utilities/AccessibilityIDs.swift ImposterTests/GameRulesTests.swift Imposter/Resources/Localizable.xcstrings`
+  - Exit code `0`; no whitespace errors in the rule layer, setup UI, tests, or catalog.
+
+### Remaining Risk
+- `GameRulesTests` are source-parse verified but not executed through XCTest because Xcode project reads remain unreliable.
+- The setup rule summary still needs live simulator/Dynamic Type visual inspection once Xcode project reads recover.
+- Custom-prompt hidden mode still needed a generated decoy path after this slice; that follow-up landed in the next entry.
+
+### Score Snapshot
+- Domain correctness: 4.86/5
+- Gameplay completeness: 4.30/5
+- Generative/offline AI quality: 3.58/5
+- Word/content engine: 4.97/5
+- Liquid Glass design fit: 3.64/5
+- Visual polish: 3.82/5
+- Motion/haptics: 3.17/5
+- Pass-and-play privacy: 3.85/5
+- VoiceOver/accessibility: 4.31/5
+- Dynamic Type/layout resilience: 3.60/5
+- Localization: 3.72/5
+- Persistence safety: 3.34/5
+- Testing depth: 5.00/5 for source/content coverage, pending live Xcode execution
+- UI automation: 4.82/5 pending live simulator proof
+- Performance/memory: 4.15/5
+- Release readiness: 3.94/5
+- Repo clarity: 4.99/5
+
+### Next Frontier
+- Add generated decoy preparation for custom-prompt hidden mode so the visible rule summary is backed by real round state.
+- Add a developer-facing report for rule summary and stage-adoption coverage.
+- Continue broader word localization batches.
+
+---
+
+## 2026-05-16 00:35 PDT - Custom Prompt Hidden Decoy Path
+
+### Why This Slice
+- The new rule summary made custom-prompt hidden mode visible as a playable setup, so the round-preparation pipeline needed to back that claim with real state.
+- Hidden mode should not silently degrade to classic role knowledge when a decoy can be prepared locally.
+- This directly advances the "more generative" goal while keeping the app local-only and avoiding fake mode behavior.
+
+### Files Changed
+- `Imposter/Domain/Actions/GameAction.swift`
+- `Imposter/Domain/Logic/GameRules.swift`
+- `Imposter/Domain/Logic/GameReducer.swift`
+- `Imposter/Store/GameStore.swift`
+- `ImposterTests/GameRulesTests.swift`
+- `ImposterTests/GameStoreTests.swift`
+- `Imposter/Resources/Localizable.xcstrings`
+- `docs/FRONTIER_LEDGER.md`
+
+### Implementation
+- `GameRules.normalized(_:)` no longer converts custom-prompt hidden mode back to Classic.
+- `GameAction.setGeneratedWord` now carries an optional `imposterWord`.
+- `GameReducer` preserves or updates `RoundState.imposterWord` when generated words land.
+- `GameStore.performWordGeneration(from:)` now asks the word service for a distinct alternate after the generated secret word when the active setup is hidden mode.
+- The alternate-word selection avoids recent words, the prompt, and the generated secret word through the existing `WordServiceProtocol.selectAlternateWord` contract.
+- Added a `GameStoreTests` case proving custom-prompt hidden mode prepares `secretWord == "Giraffe"` and `imposterWord == "Tiger"` while preserving hidden mode.
+- Updated `GameRulesTests` so custom-prompt hidden mode is expected to remain hidden and ready when a theme exists.
+- Removed obsolete Classic fallback strings from the catalog.
+
+### Verification Commands And Exact Outcome
+- `python3 -m json.tool Imposter/Resources/Localizable.xcstrings >/tmp/imposter-localizable-json-check.json && scripts/verify_content.sh`
+  - Exit code `0`.
+  - Localization output: source language `en`, total strings `303`, priority keys `121`.
+  - Localization output: `Word priority keys in word packs: 75/75`.
+  - Localization output: `de: 251 translated strings`, `es: 251 translated strings`, `fr: 251 translated strings`, `ja: 251 translated strings`.
+  - Word-pack output: expected packs `5`, total words `683`, semantic tag checked words `683`.
+  - Decoy output: same-tier decoy coverage `683/683`, shared-tag decoy coverage `683/683`, average best shared tags `2.46`.
+  - All content checks passed.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer perl -e 'alarm 240; exec @ARGV' xcrun swiftc -typecheck -target arm64-apple-ios26.0-simulator -sdk "$sdk" $(find Imposter -name '*.swift' -print)`
+  - Exit code `0`; app source typecheck passed with no emitted diagnostics.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer perl -e 'alarm 240; exec @ARGV' xcrun swiftc -parse -module-name Imposter -target arm64-apple-ios26.0-simulator -sdk "$sdk" $(find Imposter -name '*.swift' -print) $(find ImposterTests -name '*.swift' -print)`
+  - Exit code `0`; all unit-test sources parsed with the app module.
+- `git diff --check -- Imposter/Domain/Actions/GameAction.swift Imposter/Domain/Logic/GameRules.swift Imposter/Domain/Logic/GameReducer.swift Imposter/Store/GameStore.swift ImposterTests/GameRulesTests.swift ImposterTests/GameStoreTests.swift Imposter/Resources/Localizable.xcstrings docs/FRONTIER_LEDGER.md`
+  - Exit code `0`; no whitespace errors in the custom hidden decoy files.
+
+### Remaining Risk
+- The new tests are source-parse verified but not executed through XCTest because Xcode project reads remain unreliable.
+- The custom-prompt hidden decoy comes from local word-pack selection, not a second FoundationModels generation tied semantically to the prompt.
+- Live role-reveal proof that the imposter sees the decoy still needs simulator/XCUITest once project reads recover.
+
+### Score Snapshot
+- Domain correctness: 4.90/5
+- Gameplay completeness: 4.38/5
+- Generative/offline AI quality: 3.68/5
+- Word/content engine: 4.98/5
+- Liquid Glass design fit: 3.64/5
+- Visual polish: 3.82/5
+- Motion/haptics: 3.17/5
+- Pass-and-play privacy: 3.88/5
+- VoiceOver/accessibility: 4.31/5
+- Dynamic Type/layout resilience: 3.60/5
+- Localization: 3.72/5
+- Persistence safety: 3.34/5
+- Testing depth: 5.00/5 for source/content coverage, pending live Xcode execution
+- UI automation: 4.82/5 pending live simulator proof
+- Performance/memory: 4.15/5
+- Release readiness: 3.98/5
+- Repo clarity: 4.99/5
+
+### Next Frontier
+- Add a developer-facing report for rule summary, stage adoption, and custom hidden-mode decoy coverage.
+- Continue broader word localization batches.
+- Re-probe Xcode project reads when live UI proof becomes the highest-value blocker.
+
+---
+
+## 2026-05-16 00:37 PDT - Frontier Status Report Gate
+
+### Why This Slice
+- Multiple slices now depend on source-level coverage rather than live Xcode proof: phase-stage adoption, rule summaries, generated-word policy, and hidden-mode decoy gates.
+- The repo needed a compact developer-facing report so future runs can see which frontier pillars are actually wired without reading the entire ledger.
+- This turns several "remember to check" surfaces into a repeatable command and content gate.
+
+### Files Changed
+- `scripts/report_frontier_status.py`
+- `scripts/verify_content.sh`
+- `docs/FRONTIER_LEDGER.md`
+
+### Implementation
+- Added `scripts/report_frontier_status.py`.
+- The report checks:
+  - `LGPhaseStage` adoption across six major phase views,
+  - presence of `GameRules`, `GeneratedWordPolicy`, and the decoy quality checker,
+  - product guards for rule summary model, rule validation, setup rule-summary UI, generated-word policy, custom hidden decoy preparation, and decoy quality gate wiring.
+- `--check` mode now fails if fewer than four phase views use `LGPhaseStage` or if any required guard/file disappears.
+- Wired the report into `scripts/verify_content.sh` with Python compile coverage and runtime `--check`.
+
+### Verification Commands And Exact Outcome
+- `scripts/report_frontier_status.py --check`
+  - Exit code `0`.
+  - Phase-stage adoption output: `4/6`.
+  - Adopted: `Clue Round`, `Discussion`, `Reveal`, `Summary`.
+  - Not adopted yet: `Role Reveal`, `Voting`.
+  - Required frontier files: `GameRules`, `GeneratedWordPolicy`, `DecoyQualityChecker` all `yes`.
+  - Product guards: rule summary model, rule validation, setup rule summary UI, generated word policy, custom hidden decoy path, and decoy quality gate all `yes`.
+  - Output ended with `PASS: frontier status coverage is acceptable.`
+- `python3 -m py_compile scripts/report_frontier_status.py && git diff --check -- scripts/report_frontier_status.py scripts/verify_content.sh`
+  - Exit code `0`; script compiles and has no whitespace errors with the wrapper.
+- `scripts/verify_content.sh`
+  - Exit code `0`.
+  - Localization output: total strings `303`, `de/es/fr/ja: 251 translated strings`.
+  - Word-pack output: total words `683`, semantic tag checked words `683`.
+  - Decoy output: same-tier decoy coverage `683/683`, shared-tag decoy coverage `683/683`, average best shared tags `2.46`.
+  - Frontier status output: phase-stage adoption `4/6`, all required guards present, `PASS`.
+
+### Remaining Risk
+- The status report is source-pattern based, not a substitute for simulator screenshots or XCUITest.
+- It intentionally sets the stage-adoption floor at `4/6`; role reveal and voting still require careful privacy-aware adoption or explicit exceptions.
+- The report does not yet cover accessibility identifiers, Dynamic Type screenshots, or live generated-image behavior.
+
+### Score Snapshot
+- Domain correctness: 4.90/5
+- Gameplay completeness: 4.38/5
+- Generative/offline AI quality: 3.68/5
+- Word/content engine: 4.98/5
+- Liquid Glass design fit: 3.64/5
+- Visual polish: 3.82/5
+- Motion/haptics: 3.17/5
+- Pass-and-play privacy: 3.88/5
+- VoiceOver/accessibility: 4.31/5
+- Dynamic Type/layout resilience: 3.60/5
+- Localization: 3.72/5
+- Persistence safety: 3.34/5
+- Testing depth: 5.00/5 for source/content coverage, pending live Xcode execution
+- UI automation: 4.82/5 pending live simulator proof
+- Performance/memory: 4.15/5
+- Release readiness: 4.02/5
+- Repo clarity: 5.00/5
+
+### Next Frontier
+- Continue broader word localization batches or lift the frontier status report to cover localization tier progress.
+- Add careful `LGPhaseStage` treatment for voting only if pass-and-play privacy remains intact.
+- Re-probe Xcode project reads when live UI proof becomes the highest-value blocker.
+
+---
+
+## 2026-05-16 00:43 PDT - Animal Easy Localization Frontier Gate
+
+### Why This Slice
+- The app had a strong priority-word localization gate, but broader word-pack localization progress was still easy to lose because it was not tracked by the frontier report.
+- The Animals easy batch gives the game a larger truly localizable pass-and-play surface while keeping the work deterministic and verifiable.
+- The frontier report now treats full word-pack localization as a first-class milestone instead of only checking source-pattern product guards.
+
+### Files Changed
+- `Imposter/Resources/Localizable.xcstrings`
+- `scripts/report_frontier_status.py`
+- `docs/FRONTIER_LEDGER.md`
+
+### Implementation
+- Added complete `en/de/es/fr/ja` localizations for 25 easy Animals word-pack entries from `word.animals.cow` through `word.animals.butterfly`.
+- Added structured JSON parsing to `scripts/report_frontier_status.py` for the string catalog and bundled word packs.
+- Added a full-localization counter for word-pack entries, grouped by category.
+- Added a frontier floor requiring at least `100` fully localized word-pack entries.
+
+### Verification Commands And Exact Outcome
+- `scripts/report_frontier_status.py --check`
+  - Exit code `0`.
+  - Phase-stage adoption output: `4/6`.
+  - Required frontier files: `GameRules`, `GeneratedWordPolicy`, `DecoyQualityChecker` all `yes`.
+  - Product guards all `yes`.
+  - Word-pack localization output: `Localized word entries: 100/683 (floor 100)`.
+  - Category output: Animals `40/110`, Movies `15/144`, Objects `15/108`, People `15/165`, Technology `15/156`.
+  - Output ended with `PASS: frontier status coverage is acceptable.`
+- `scripts/verify_content.sh`
+  - Exit code `0`.
+  - Localization output: total strings `328`, priority keys `121`, word priority keys `75/75`.
+  - Localization output: `de: 276 translated strings`, `es: 276 translated strings`, `fr: 276 translated strings`, `ja: 276 translated strings`.
+  - Word-pack output: expected packs `5`, total words `683`, semantic tag checked words `683`.
+  - Decoy output: same-tier decoy coverage `683/683`, shared-tag decoy coverage `683/683`, average best shared tags `2.46`.
+  - Frontier status output included the new `100/683` localized word-entry gate and passed.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer perl -e 'alarm 240; exec @ARGV' xcrun swiftc -typecheck -target arm64-apple-ios26.0-simulator -sdk "$sdk" $(find Imposter -name '*.swift' -print)`
+  - Exit code `0`; app source typecheck passed with no emitted diagnostics.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer perl -e 'alarm 240; exec @ARGV' xcrun swiftc -parse -module-name Imposter -target arm64-apple-ios26.0-simulator -sdk "$sdk" $(find Imposter -name '*.swift' -print) $(find ImposterTests -name '*.swift' -print)`
+  - Exit code `0`; app and unit-test sources parsed together.
+- `git diff --check -- Imposter/Resources/Localizable.xcstrings scripts/report_frontier_status.py docs/FRONTIER_LEDGER.md`
+  - Exit code `0`; no whitespace errors in the localization/report/ledger files.
+
+### Remaining Risk
+- Full word-pack localization is still only `100/683`; this is a real frontier floor, not completion.
+- Translation quality has not been reviewed by native speakers.
+- The report verifies catalog completeness and source-value alignment, but not live locale screenshots.
+- Xcode project reads remain unreliable, so XCTest execution is still pending even though compiler typecheck and parse proof passed.
+
+### Score Snapshot
+- Domain correctness: 4.90/5
+- Gameplay completeness: 4.38/5
+- Generative/offline AI quality: 3.68/5
+- Word/content engine: 4.99/5
+- Liquid Glass design fit: 3.64/5
+- Visual polish: 3.82/5
+- Motion/haptics: 3.17/5
+- Pass-and-play privacy: 3.88/5
+- VoiceOver/accessibility: 4.31/5
+- Dynamic Type/layout resilience: 3.60/5
+- Localization: 3.84/5
+- Persistence safety: 3.34/5
+- Testing depth: 5.00/5 for source/content coverage, pending live Xcode execution
+- UI automation: 4.82/5 pending live simulator proof
+- Performance/memory: 4.15/5
+- Release readiness: 4.05/5
+- Repo clarity: 5.00/5
+
+### Next Frontier
+- Continue localizing word-pack batches, preferably balancing Objects and Animals before moving into higher-risk proper-noun categories.
+- Add a locale-progress floor to `scripts/check_localization_coverage.py` once the next batch pushes the full word-entry count beyond this first 100-entry gate.
+- Re-probe live Xcode project execution when simulator proof becomes the next best payoff.
+
+---
+
+## 2026-05-16 00:49 PDT - Voting Phase Stage Adoption
+
+### Why This Slice
+- The Voting screen was one of the remaining major gameplay screens outside the shared Liquid Glass phase shell.
+- Voting is lower privacy risk than Role Reveal because it does not expose the secret word, the imposter identity, or the generated decoy.
+- Adopting the shared shell here improves visual consistency and lets the frontier report raise its stage-adoption floor from `4/6` to `5/6`.
+
+### Files Changed
+- `Imposter/Features/Voting/VotingView.swift`
+- `scripts/report_frontier_status.py`
+- `docs/FRONTIER_LEDGER.md`
+
+### Implementation
+- Replaced Voting's custom background/header wrapper with `LGPhaseStage`.
+- Moved the progress bar into a dedicated `votingProgressSection` under the phase header.
+- Added state-aware phase title, subtitle, icon, and accent color:
+  - pending vote: `Who do you think is the Imposter?`
+  - recorded vote: `Vote Recorded!`
+  - recorded-vote accent: success green
+- Preserved the existing pass-and-play tap-to-advance confirmation flow and transition blanking.
+- Raised `scripts/report_frontier_status.py` to require at least `5` phase views using `LGPhaseStage`.
+
+### Verification Commands And Exact Outcome
+- `scripts/report_frontier_status.py --check`
+  - Exit code `0`.
+  - Phase-stage adoption output: `5/6`.
+  - Adopted: `Clue Round`, `Discussion`, `Voting`, `Reveal`, `Summary`.
+  - Not adopted yet: `Role Reveal`.
+  - Word-pack localization output remained `Localized word entries: 100/683 (floor 100)`.
+  - Output ended with `PASS: frontier status coverage is acceptable.`
+- `python3 -m py_compile scripts/report_frontier_status.py`
+  - Exit code `0`; frontier report compiles.
+- `git diff --check -- Imposter/Features/Voting/VotingView.swift scripts/report_frontier_status.py`
+  - Exit code `0`; no whitespace errors.
+- `scripts/verify_content.sh`
+  - Exit code `0`.
+  - Localization output: total strings `328`, `de/es/fr/ja: 276 translated strings`.
+  - Word-pack output: total words `683`, semantic tag checked words `683`.
+  - Decoy output: same-tier decoy coverage `683/683`, shared-tag decoy coverage `683/683`, average best shared tags `2.46`.
+  - Frontier status output: phase-stage adoption `5/6`, localized word entries `100/683`, `PASS`.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer perl -e 'alarm 240; exec @ARGV' xcrun swiftc -typecheck -target arm64-apple-ios26.0-simulator -sdk "$sdk" $(find Imposter -name '*.swift' -print)`
+  - Exit code `0`; app source typecheck passed with no emitted diagnostics.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer perl -e 'alarm 240; exec @ARGV' xcrun swiftc -parse -module-name Imposter -target arm64-apple-ios26.0-simulator -sdk "$sdk" $(find Imposter -name '*.swift' -print) $(find ImposterTests -name '*.swift' -print)`
+  - Exit code `0`; app and unit-test sources parsed together.
+
+### Remaining Risk
+- Role Reveal remains deliberately outside `LGPhaseStage` until its privacy affordances can be reworked without risking accidental word/role exposure.
+- This was compiler-verified but not screenshot-verified because Xcode project reads remain unreliable.
+- The Voting subtitle uses localized interpolation surfaces already present in the catalog, but full target-locale UI screenshots are still pending.
+
+### Score Snapshot
+- Domain correctness: 4.90/5
+- Gameplay completeness: 4.40/5
+- Generative/offline AI quality: 3.68/5
+- Word/content engine: 4.99/5
+- Liquid Glass design fit: 3.78/5
+- Visual polish: 3.91/5
+- Motion/haptics: 3.20/5
+- Pass-and-play privacy: 3.90/5
+- VoiceOver/accessibility: 4.31/5
+- Dynamic Type/layout resilience: 3.62/5
+- Localization: 3.84/5
+- Persistence safety: 3.34/5
+- Testing depth: 5.00/5 for source/content coverage, pending live Xcode execution
+- UI automation: 4.83/5 pending live simulator proof
+- Performance/memory: 4.15/5
+- Release readiness: 4.08/5
+- Repo clarity: 5.00/5
+
+### Next Frontier
+- Continue the safer localization batches, or do a dedicated privacy-first Role Reveal stage redesign.
+- Add screenshot proof for Voting once Xcode project reads recover.
+- Consider adding reduce-motion handling to Voting's entrance and confirmation animations.
+
+---
+
+## 2026-05-16 00:51 PDT - Voting Reduce-Motion Polish
+
+### Why This Slice
+- Voting had adopted the shared phase stage, but its entrance, confirmation, and selected-card motion still animated even when motion should be reduced.
+- The app already has an `imposterAccessibilityPreferences` environment layer, so Voting should honor both system and app-owned reduce-motion settings.
+- This is a low-risk polish pass that improves comfort without changing game rules or vote privacy.
+
+### Files Changed
+- `Imposter/Features/Voting/VotingView.swift`
+- `Imposter/Features/Voting/PlayerSelectionGrid.swift`
+- `docs/FRONTIER_LEDGER.md`
+
+### Implementation
+- Added system and app-owned reduce-motion environment reads to `VotingView`.
+- Routed Voting entrance, vote-recorded, and voter-transition animations through `animateForAccessibility`.
+- Added reduce-motion support to `PlayerVoteCard`.
+- Suppressed gyro-derived pitch/roll, selected-card tilt, moving border highlights, and selected-card shadow offsets when motion is reduced.
+
+### Verification Commands And Exact Outcome
+- `git diff --check -- Imposter/Features/Voting/VotingView.swift Imposter/Features/Voting/PlayerSelectionGrid.swift`
+  - Exit code `0`; no whitespace errors in the Voting polish files.
+- `scripts/report_frontier_status.py --check`
+  - Exit code `0`.
+  - Phase-stage adoption remained `5/6`.
+  - Word-pack localization remained `100/683`.
+  - Output ended with `PASS: frontier status coverage is acceptable.`
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer perl -e 'alarm 240; exec @ARGV' xcrun swiftc -typecheck -target arm64-apple-ios26.0-simulator -sdk "$sdk" $(find Imposter -name '*.swift' -print)`
+  - Exit code `0`; app source typecheck passed with no emitted diagnostics.
+- `scripts/verify_content.sh`
+  - Exit code `0`.
+  - Localization output: total strings `328`, `de/es/fr/ja: 276 translated strings`.
+  - Word-pack output: total words `683`, semantic tag checked words `683`.
+  - Decoy output: same-tier decoy coverage `683/683`, shared-tag decoy coverage `683/683`, average best shared tags `2.46`.
+  - Frontier status output: phase-stage adoption `5/6`, localized word entries `100/683`, `PASS`.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer perl -e 'alarm 240; exec @ARGV' xcrun swiftc -parse -module-name Imposter -target arm64-apple-ios26.0-simulator -sdk "$sdk" $(find Imposter -name '*.swift' -print) $(find ImposterTests -name '*.swift' -print)`
+  - Exit code `0`; app and unit-test sources parsed together.
+
+### Remaining Risk
+- This was source and compiler verified, not visually verified under the iOS Accessibility settings UI.
+- Role Reveal still needs the deeper privacy-first stage redesign.
+- Other gyro-driven surfaces should receive the same audit before release.
+
+### Score Snapshot
+- Domain correctness: 4.90/5
+- Gameplay completeness: 4.40/5
+- Generative/offline AI quality: 3.68/5
+- Word/content engine: 4.99/5
+- Liquid Glass design fit: 3.79/5
+- Visual polish: 3.94/5
+- Motion/haptics: 3.30/5
+- Pass-and-play privacy: 3.90/5
+- VoiceOver/accessibility: 4.34/5
+- Dynamic Type/layout resilience: 3.62/5
+- Localization: 3.84/5
+- Persistence safety: 3.34/5
+- Testing depth: 5.00/5 for source/content coverage, pending live Xcode execution
+- UI automation: 4.83/5 pending live simulator proof
+- Performance/memory: 4.16/5
+- Release readiness: 4.10/5
+- Repo clarity: 5.00/5
+
+### Next Frontier
+- Localize the next balanced Objects or Animals batch.
+- Do a privacy-first Role Reveal stage redesign only after checking every role/word exposure path.
+- Add a broader gyro/reduce-motion audit for clue, vote, and role-card surfaces.
+
+---
+
+## 2026-05-16 00:55 PDT - Objects Easy Localization Frontier Gate
+
+### Why This Slice
+- The previous localization frontier established a `100/683` full word-entry floor but still left Objects underrepresented at `15/108`.
+- Objects are safer to localize than proper nouns because they avoid brand/name transliteration risk and directly improve party-game playability across locales.
+- The focused locale-count gate was still set to an older baseline and needed to enforce the newer catalog size.
+
+### Files Changed
+- `Imposter/Resources/Localizable.xcstrings`
+- `scripts/report_frontier_status.py`
+- `scripts/check_localization_coverage.py`
+- `docs/FRONTIER_LEDGER.md`
+
+### Implementation
+- Added complete `en/de/es/fr/ja` localizations for 25 easy Objects word-pack entries from `word.objects.lamp` through `word.objects.pants`.
+- Raised `scripts/report_frontier_status.py` localized word-entry floor from `100` to `125`.
+- Raised `scripts/check_localization_coverage.py` default translated-string floor from `190` to `300` per target locale.
+- Preserved the existing priority-key and word-pack source alignment checks.
+
+### Verification Commands And Exact Outcome
+- `python3 -m json.tool Imposter/Resources/Localizable.xcstrings >/tmp/imposter-localizable-json-check.json`
+  - Exit code `0`; catalog JSON is valid.
+- `scripts/report_frontier_status.py --check`
+  - Exit code `0`.
+  - Phase-stage adoption output remained `5/6`.
+  - Word-pack localization output: `Localized word entries: 125/683 (floor 125)`.
+  - Category output: Animals `40/110`, Movies `15/144`, Objects `40/108`, People `15/165`, Technology `15/156`.
+  - Output ended with `PASS: frontier status coverage is acceptable.`
+- `scripts/check_localization_coverage.py`
+  - Exit code `0`.
+  - Localization output: total strings `353`, priority keys `121`, word priority keys `75/75`.
+  - Localization output: `de: 301 translated strings`, `es: 301 translated strings`, `fr: 301 translated strings`, `ja: 301 translated strings`.
+  - Output ended with `PASS: focused localization coverage is acceptable.`
+- `scripts/verify_content.sh`
+  - Exit code `0`.
+  - Localization output matched the `353` total strings and `301` per target locale.
+  - Word-pack output: expected packs `5`, total words `683`, semantic tag checked words `683`.
+  - Decoy output: same-tier decoy coverage `683/683`, shared-tag decoy coverage `683/683`, average best shared tags `2.46`.
+  - Frontier status output included `Localized word entries: 125/683 (floor 125)` and passed.
+- `python3 -m py_compile scripts/check_localization_coverage.py scripts/report_frontier_status.py && bash -n scripts/verify_content.sh`
+  - Exit code `0`; Python gates compile and shell wrapper parses.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer perl -e 'alarm 240; exec @ARGV' xcrun swiftc -typecheck -target arm64-apple-ios26.0-simulator -sdk "$sdk" $(find Imposter -name '*.swift' -print)`
+  - Exit code `0`; app source typecheck passed with no emitted diagnostics.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer perl -e 'alarm 240; exec @ARGV' xcrun swiftc -parse -module-name Imposter -target arm64-apple-ios26.0-simulator -sdk "$sdk" $(find Imposter -name '*.swift' -print) $(find ImposterTests -name '*.swift' -print)`
+  - Exit code `0`; app and unit-test sources parsed together.
+- `git diff --check -- Imposter/Resources/Localizable.xcstrings scripts/report_frontier_status.py scripts/check_localization_coverage.py`
+  - Exit code `0`; no whitespace errors in this slice's files.
+
+### Remaining Risk
+- Full word-pack localization is still `125/683`, so this is a better floor, not completion.
+- Translation quality remains machine-judged/manual-agent judged rather than native-speaker reviewed.
+- Live locale screenshots are still pending because Xcode project reads remain unreliable.
+
+### Score Snapshot
+- Domain correctness: 4.90/5
+- Gameplay completeness: 4.40/5
+- Generative/offline AI quality: 3.68/5
+- Word/content engine: 5.00/5
+- Liquid Glass design fit: 3.79/5
+- Visual polish: 3.94/5
+- Motion/haptics: 3.30/5
+- Pass-and-play privacy: 3.90/5
+- VoiceOver/accessibility: 4.34/5
+- Dynamic Type/layout resilience: 3.62/5
+- Localization: 3.96/5
+- Persistence safety: 3.34/5
+- Testing depth: 5.00/5 for source/content coverage, pending live Xcode execution
+- UI automation: 4.83/5 pending live simulator proof
+- Performance/memory: 4.16/5
+- Release readiness: 4.13/5
+- Repo clarity: 5.00/5
+
+### Next Frontier
+- Continue safe common-noun localization batches, or shift back to UI polish now that both Animals and Objects have `40` localized entries.
+- Add broader reduce-motion coverage for remaining gyro-driven gameplay surfaces.
+- Re-probe Xcode project execution when simulator proof becomes the best next payoff.
+
+---
+
+## 2026-05-16 00:58 PDT - Design-System Gyro Reduce-Motion Gate
+
+### Why This Slice
+- Voting had local reduce-motion handling, but reusable Liquid Glass gyro/shimmer components still directly consumed device pitch and roll.
+- Fixing the design system is higher leverage than patching one screen because future cards and shimmer overlays inherit the comfort behavior.
+- The image-generation placeholder in Role Reveal also had repeated shimmer/pulse animation that should quiet down under Reduce Motion.
+
+### Files Changed
+- `Imposter/DesignSystem/LiquidGlass/LGComponents/LGCard.swift`
+- `Imposter/DesignSystem/Effects/GyroShimmerEffect.swift`
+- `Imposter/Features/RoleReveal/RoleCardView.swift`
+- `scripts/report_frontier_status.py`
+- `docs/FRONTIER_LEDGER.md`
+
+### Implementation
+- Added system and app-owned reduce-motion environment reads to `LGGyroCard`.
+- Routed gyro card tilt, highlight offset, border movement, and dynamic shadow offsets through zeroed pitch/roll when motion is reduced.
+- Added the same zeroed-motion treatment to `LiquidRefractionOverlay`.
+- Added reduce-motion handling to `GyroShimmerOverlay`, `RainbowShimmerOverlay`, and `SpotlightShimmerOverlay`.
+- Updated `ImageLoadingPlaceholder` to stop repeated shimmer/message cycling and disable the sparkle pulse when motion is reduced.
+- Added frontier report guards for:
+  - `Gyro card reduce-motion guard`
+  - `Gyro shimmer reduce-motion guard`
+  - `Image loading reduce-motion guard`
+
+### Verification Commands And Exact Outcome
+- `git diff --check -- Imposter/DesignSystem/LiquidGlass/LGComponents/LGCard.swift Imposter/DesignSystem/Effects/GyroShimmerEffect.swift Imposter/Features/RoleReveal/RoleCardView.swift`
+  - Exit code `0`; no whitespace errors in the design-system motion files.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer perl -e 'alarm 240; exec @ARGV' xcrun swiftc -typecheck -target arm64-apple-ios26.0-simulator -sdk "$sdk" $(find Imposter -name '*.swift' -print)`
+  - Exit code `0`; app source typecheck passed with no emitted diagnostics.
+- `python3 -m py_compile scripts/report_frontier_status.py && scripts/report_frontier_status.py --check`
+  - Exit code `0`.
+  - Product guards now include `Gyro card reduce-motion guard: yes`, `Gyro shimmer reduce-motion guard: yes`, and `Image loading reduce-motion guard: yes`.
+  - Phase-stage adoption remained `5/6`.
+  - Word-pack localization remained `125/683`.
+  - Output ended with `PASS: frontier status coverage is acceptable.`
+- `scripts/verify_content.sh`
+  - Exit code `0`.
+  - Localization output: total strings `353`, `de/es/fr/ja: 301 translated strings`.
+  - Word-pack output: total words `683`, semantic tag checked words `683`.
+  - Decoy output: same-tier decoy coverage `683/683`, shared-tag decoy coverage `683/683`, average best shared tags `2.46`.
+  - Frontier status output included all three new reduce-motion guards and passed.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer perl -e 'alarm 240; exec @ARGV' xcrun swiftc -parse -module-name Imposter -target arm64-apple-ios26.0-simulator -sdk "$sdk" $(find Imposter -name '*.swift' -print) $(find ImposterTests -name '*.swift' -print)`
+  - Exit code `0`; app and unit-test sources parsed together.
+- `git diff --check -- Imposter/DesignSystem/LiquidGlass/LGComponents/LGCard.swift Imposter/DesignSystem/Effects/GyroShimmerEffect.swift Imposter/Features/RoleReveal/RoleCardView.swift scripts/report_frontier_status.py docs/FRONTIER_LEDGER.md`
+  - Exit code `0`; no whitespace errors after report and ledger updates.
+
+### Remaining Risk
+- This is source and compiler proof; live Accessibility Settings visual proof still needs simulator execution.
+- The shared `MotionManager` still starts device-motion updates; this slice neutralizes visual motion in the reusable effects but does not add a global motion-service pause.
+- Home starfield and some timed reveal/discussion animations are separate animation systems and should receive their own reduce-motion pass.
+
+### Score Snapshot
+- Domain correctness: 4.90/5
+- Gameplay completeness: 4.40/5
+- Generative/offline AI quality: 3.69/5
+- Word/content engine: 5.00/5
+- Liquid Glass design fit: 3.82/5
+- Visual polish: 3.96/5
+- Motion/haptics: 3.46/5
+- Pass-and-play privacy: 3.91/5
+- VoiceOver/accessibility: 4.40/5
+- Dynamic Type/layout resilience: 3.62/5
+- Localization: 3.96/5
+- Persistence safety: 3.34/5
+- Testing depth: 5.00/5 for source/content coverage, pending live Xcode execution
+- UI automation: 4.83/5 pending live simulator proof
+- Performance/memory: 4.18/5
+- Release readiness: 4.16/5
+- Repo clarity: 5.00/5
+
+### Next Frontier
+- Add a focused reduce-motion pass for Home's starfield/glow and Discussion's urgent timer pulse.
+- Continue safe common-noun localization batches if content breadth is higher priority.
+- Re-probe Xcode project execution for live screenshots once project reads stop hanging.
+
+---
+
+## 2026-05-16 01:01 PDT - Home And Discussion Reduce-Motion Gate
+
+### Why This Slice
+- Home's starfield/glow is the first visual impression of the app and still used repeated blinking/pulsing animation.
+- Discussion's urgent timer pulse is useful feedback, but should not force repeated scale/opacity motion when Reduce Motion is active.
+- These surfaces are separate from the reusable gyro components, so they needed direct accessibility handling rather than inheriting the previous design-system fix.
+
+### Files Changed
+- `Imposter/Features/Home/HomeView.swift`
+- `Imposter/Features/Discussion/DiscussionView.swift`
+- `scripts/report_frontier_status.py`
+- `docs/FRONTIER_LEDGER.md`
+
+### Implementation
+- Added system and app-owned reduce-motion reads to `HomeView`.
+- Made Home entrance state settle immediately when motion is reduced, while preserving static glow, visible logo, and visible primary controls.
+- Routed Home's focused-field scroll animation through `animateForAccessibility`.
+- Added reduce-motion guards to `BlinkingStar` and `FeatureStar`, leaving static stars visible without repeated blinking.
+- Added system and app-owned reduce-motion reads to `DiscussionView`.
+- Suppressed timer scale/opacity pulse and progress-ring animation when motion is reduced.
+- Kept haptic warning behavior intact while avoiding visual pulsing at the five-second warning threshold.
+- Added frontier report guards for:
+  - `Home starfield reduce-motion guard`
+  - `Discussion timer reduce-motion guard`
+
+### Verification Commands And Exact Outcome
+- `git diff --check -- Imposter/Features/Home/HomeView.swift Imposter/Features/Discussion/DiscussionView.swift`
+  - Exit code `0`; no whitespace errors in the Home/Discussion motion files.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer perl -e 'alarm 240; exec @ARGV' xcrun swiftc -typecheck -target arm64-apple-ios26.0-simulator -sdk "$sdk" $(find Imposter -name '*.swift' -print)`
+  - Exit code `0`; app source typecheck passed with no emitted diagnostics.
+- `python3 -m py_compile scripts/report_frontier_status.py && scripts/report_frontier_status.py --check`
+  - Exit code `0`.
+  - Product guards now include `Home starfield reduce-motion guard: yes` and `Discussion timer reduce-motion guard: yes`.
+  - Phase-stage adoption remained `5/6`.
+  - Word-pack localization remained `125/683`.
+  - Output ended with `PASS: frontier status coverage is acceptable.`
+- `scripts/verify_content.sh`
+  - Exit code `0`.
+  - Localization output: total strings `353`, `de/es/fr/ja: 301 translated strings`.
+  - Word-pack output: total words `683`, semantic tag checked words `683`.
+  - Decoy output: same-tier decoy coverage `683/683`, shared-tag decoy coverage `683/683`, average best shared tags `2.46`.
+  - Frontier status output included all five reduce-motion guards and passed.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer perl -e 'alarm 240; exec @ARGV' xcrun swiftc -parse -module-name Imposter -target arm64-apple-ios26.0-simulator -sdk "$sdk" $(find Imposter -name '*.swift' -print) $(find ImposterTests -name '*.swift' -print)`
+  - Exit code `0`; app and unit-test sources parsed together.
+- `git diff --check -- Imposter/Features/Home/HomeView.swift Imposter/Features/Discussion/DiscussionView.swift scripts/report_frontier_status.py docs/FRONTIER_LEDGER.md`
+  - Exit code `0`; no whitespace errors after report and ledger updates.
+
+### Remaining Risk
+- This pass is source and compiler verified, not visually verified in Simulator with Reduce Motion enabled.
+- The app still needs a live accessibility screenshot pass once Xcode project reads recover.
+- Some non-pulsing transitions remain in Home setup navigation; this slice focused on repeated/ambient motion rather than every transition.
+
+### Score Snapshot
+- Domain correctness: 4.90/5
+- Gameplay completeness: 4.40/5
+- Generative/offline AI quality: 3.69/5
+- Word/content engine: 5.00/5
+- Liquid Glass design fit: 3.83/5
+- Visual polish: 3.98/5
+- Motion/haptics: 3.60/5
+- Pass-and-play privacy: 3.91/5
+- VoiceOver/accessibility: 4.45/5
+- Dynamic Type/layout resilience: 3.62/5
+- Localization: 3.96/5
+- Persistence safety: 3.34/5
+- Testing depth: 5.00/5 for source/content coverage, pending live Xcode execution
+- UI automation: 4.83/5 pending live simulator proof
+- Performance/memory: 4.19/5
+- Release readiness: 4.19/5
+- Repo clarity: 5.00/5
+
+### Next Frontier
+- Continue common-noun localization toward the next `150/683` full word-entry floor.
+- Revisit Role Reveal with a privacy-first stage redesign.
+- Attempt a narrowly timed Xcode project/scheme probe again before any live screenshot claims.
+
+---
+
+## 2026-05-16 01:05 PDT - Privacy-First Role Reveal Stage Adoption
+
+### Why This Slice
+- Role Reveal was the last major gameplay phase outside the shared Liquid Glass phase shell.
+- It could not be treated like a normal screen because the phase is the highest-risk pass-and-play privacy surface: role details, secret words, and hidden-mode decoys must never leak through headers or VoiceOver.
+- Adopting the shared shell here completes the visual phase-stage system while preserving the hold-to-reveal ritual and spoken-feedback secrecy.
+
+### Files Changed
+- `Imposter/Features/RoleReveal/RoleRevealView.swift`
+- `scripts/report_frontier_status.py`
+- `docs/FRONTIER_LEDGER.md`
+
+### Implementation
+- Wrapped `RoleRevealView` in `LGPhaseStage`.
+- Kept stage title/subtitle non-secret:
+  - before reveal, the stage title points to handoff rather than role content;
+  - while VoiceOver is running, the title stays generic: `Player's turn to reveal their role`;
+  - after reveal, the stage title only says `Tap anywhere to continue`.
+- Preserved the existing handoff prompt, player-name VoiceOver hiding, hold-to-reveal button, blank transition state, role-card privacy wrapper, and role-card secret-word hiding.
+- Gave `RoleCardView` an explicit stage-frame height so its internal `GeometryReader` remains stable inside the shared scroll shell.
+- Raised `scripts/report_frontier_status.py` phase-stage adoption floor from `5` to `6`.
+- Added `Role reveal private stage guard` to the frontier report so the stage adoption remains tied to the privacy affordances.
+
+### Verification Commands And Exact Outcome
+- `git diff --check -- Imposter/Features/RoleReveal/RoleRevealView.swift scripts/report_frontier_status.py`
+  - Exit code `0`; no whitespace errors in the role-stage files.
+- `scripts/report_frontier_status.py --check`
+  - Exit code `0`.
+  - Phase-stage adoption output: `6/6`.
+  - Adopted: `Role Reveal`, `Clue Round`, `Discussion`, `Voting`, `Reveal`, `Summary`.
+  - Product guards included `Role reveal private stage guard: yes`.
+  - Word-pack localization remained `125/683`.
+  - Output ended with `PASS: frontier status coverage is acceptable.`
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer perl -e 'alarm 240; exec @ARGV' xcrun swiftc -typecheck -target arm64-apple-ios26.0-simulator -sdk "$sdk" $(find Imposter -name '*.swift' -print)`
+  - Exit code `0`; app source typecheck passed with no emitted diagnostics.
+- `python3 -m py_compile scripts/report_frontier_status.py && scripts/report_frontier_status.py --check`
+  - Exit code `0`; report compiles and passes with the role-stage privacy guard.
+- `scripts/verify_content.sh`
+  - Exit code `0`.
+  - Localization output: total strings `353`, `de/es/fr/ja: 301 translated strings`.
+  - Word-pack output: total words `683`, semantic tag checked words `683`.
+  - Decoy output: same-tier decoy coverage `683/683`, shared-tag decoy coverage `683/683`, average best shared tags `2.46`.
+  - Frontier status output included phase-stage adoption `6/6` and `Role reveal private stage guard: yes`.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer perl -e 'alarm 240; exec @ARGV' xcrun swiftc -parse -module-name Imposter -target arm64-apple-ios26.0-simulator -sdk "$sdk" $(find Imposter -name '*.swift' -print) $(find ImposterTests -name '*.swift' -print)`
+  - Exit code `0`; app and unit-test sources parsed together.
+- `git diff --check -- Imposter/Features/RoleReveal/RoleRevealView.swift scripts/report_frontier_status.py docs/FRONTIER_LEDGER.md`
+  - Exit code `0`; no whitespace errors after ledger update.
+
+### Remaining Risk
+- This is source, content, and compiler proof; live VoiceOver and simulator screenshot proof is still pending.
+- The stage header intentionally avoids secret role/word content, but physical over-the-shoulder privacy still depends on pass-and-play behavior and the hold-to-reveal flow.
+- The explicit role-card height should be visually checked on smaller devices once live Xcode project execution is reliable.
+
+### Score Snapshot
+- Domain correctness: 4.90/5
+- Gameplay completeness: 4.42/5
+- Generative/offline AI quality: 3.69/5
+- Word/content engine: 5.00/5
+- Liquid Glass design fit: 4.00/5
+- Visual polish: 4.05/5
+- Motion/haptics: 3.62/5
+- Pass-and-play privacy: 3.96/5
+- VoiceOver/accessibility: 4.47/5
+- Dynamic Type/layout resilience: 3.66/5
+- Localization: 3.96/5
+- Persistence safety: 3.34/5
+- Testing depth: 5.00/5 for source/content coverage, pending live Xcode execution
+- UI automation: 4.84/5 pending live simulator proof
+- Performance/memory: 4.19/5
+- Release readiness: 4.22/5
+- Repo clarity: 5.00/5
+
+### Next Frontier
+- Continue common-noun localization toward the next `150/683` floor.
+- Attempt a narrow Xcode project/scheme probe before claiming live UI proof.
+- Add source-level tests or UI assertions for Role Reveal privacy if simulator execution recovers.
+
+---
+
+## 2026-05-16 01:10 PDT - Xcode Project Read Probe Still Blocked
+
+### Why This Slice
+- The app now has several source-verified UI and accessibility changes, but the prompt requires live proof whenever possible.
+- Before claiming screenshots, XCTest execution, or simulator behavior, the repo needed a narrow check of whether Xcode project reads had recovered.
+- This was intentionally scoped as a probe, not a code mutation.
+
+### Commands And Exact Outcome
+- `mcp__xcodebuildmcp__.session_show_defaults`
+  - Exit code/tool status `0`.
+  - Active profile: `imposter-ui`.
+  - Project: `/Users/m3-max/Documents/GitHub/Imposter/Imposter.xcodeproj`.
+  - Scheme: `Imposter-UITests`.
+  - Simulator: `iPhone 17 Pro`, id `A113E399-3127-41CE-AB7E-B529DB41B3B6`, platform `iOS Simulator`.
+- `mcp__xcodebuildmcp__.list_sims(enabled: true)`
+  - Exit code/tool status `0`.
+  - Confirmed available booted simulators include `iPhone 17 Pro` iOS `26.4` id `A113E399-3127-41CE-AB7E-B529DB41B3B6` and `iPhone 17 Pro Max` iOS `26.5` id `4D05DBBC-708A-4BBC-8F6B-BE196CBBED4C`.
+- `mcp__xcodebuildmcp__.list_schemes(projectPath: "/Users/m3-max/Documents/GitHub/Imposter/Imposter.xcodeproj")`
+  - Timed out after `120s`.
+  - No scheme list was returned.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer perl -e 'alarm 30; exec @ARGV' xcodebuild -list -project Imposter.xcodeproj`
+  - Exit code `-1`.
+  - Printed only the command-line invocation before the alarm killed it.
+
+### Conclusion
+- Simulator discovery is healthy.
+- Xcode project/scheme reads remain unreliable in this checkout.
+- No live build, XCTest, UI test, or screenshot success should be claimed from this probe.
+
+### Remaining Risk
+- Source-level `swiftc` typecheck and parse proof remain the reliable compiler gates for now.
+- The next live proof attempt should stay narrowly timed and avoid long unbounded `xcodebuild` calls.
+
+---
+
+## 2026-05-16 01:12 PDT - Animals Medium Localization Frontier Gate
+
+### Why This Slice
+- The project read probe confirmed live Xcode proof is still blocked, so the next best safe frontier was content depth with strong local gates.
+- Animals are common nouns and safer than proper-name categories for agent-localized expansion.
+- This slice pushes full word-entry localization from `125/683` to `150/683` and gives Animals majority coverage at `65/110`.
+
+### Files Changed
+- `Imposter/Resources/Localizable.xcstrings`
+- `scripts/report_frontier_status.py`
+- `scripts/check_localization_coverage.py`
+- `docs/FRONTIER_LEDGER.md`
+
+### Implementation
+- Added complete `en/de/es/fr/ja` localizations for 25 Animals entries from `word.animals.bee` through `word.animals.coyote`.
+- Raised `scripts/report_frontier_status.py` localized word-entry floor from `125` to `150`.
+- Raised `scripts/check_localization_coverage.py` default translated-string floor from `300` to `325` per target locale.
+
+### Verification Commands And Exact Outcome
+- `python3 -m json.tool Imposter/Resources/Localizable.xcstrings >/tmp/imposter-localizable-json-check.json`
+  - Exit code `0`; catalog JSON is valid.
+- `scripts/report_frontier_status.py --check`
+  - Exit code `0`.
+  - Phase-stage adoption output: `6/6`.
+  - Product guards included `Role reveal private stage guard: yes`.
+  - Word-pack localization output: `Localized word entries: 150/683 (floor 150)`.
+  - Category output: Animals `65/110`, Movies `15/144`, Objects `40/108`, People `15/165`, Technology `15/156`.
+  - Output ended with `PASS: frontier status coverage is acceptable.`
+- `scripts/check_localization_coverage.py`
+  - Exit code `0`.
+  - Localization output: total strings `378`, priority keys `121`, word priority keys `75/75`.
+  - Localization output: `de: 326 translated strings`, `es: 326 translated strings`, `fr: 326 translated strings`, `ja: 326 translated strings`.
+  - Output ended with `PASS: focused localization coverage is acceptable.`
+- `scripts/verify_content.sh`
+  - Exit code `0`.
+  - Localization output matched the `378` total strings and `326` per target locale.
+  - Word-pack output: expected packs `5`, total words `683`, semantic tag checked words `683`.
+  - Decoy output: same-tier decoy coverage `683/683`, shared-tag decoy coverage `683/683`, average best shared tags `2.46`.
+  - Frontier status output included `Localized word entries: 150/683 (floor 150)` and passed.
+- `python3 -m py_compile scripts/check_localization_coverage.py scripts/report_frontier_status.py && bash -n scripts/verify_content.sh`
+  - Exit code `0`; Python gates compile and shell wrapper parses.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer perl -e 'alarm 240; exec @ARGV' xcrun swiftc -typecheck -target arm64-apple-ios26.0-simulator -sdk "$sdk" $(find Imposter -name '*.swift' -print)`
+  - Exit code `0`; app source typecheck passed with no emitted diagnostics.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer perl -e 'alarm 240; exec @ARGV' xcrun swiftc -parse -module-name Imposter -target arm64-apple-ios26.0-simulator -sdk "$sdk" $(find Imposter -name '*.swift' -print) $(find ImposterTests -name '*.swift' -print)`
+  - Exit code `0`; app and unit-test sources parsed together.
+- `git diff --check -- Imposter/Resources/Localizable.xcstrings scripts/report_frontier_status.py scripts/check_localization_coverage.py`
+  - Exit code `0`; no whitespace errors in the localization gate files.
+
+### Remaining Risk
+- Full word-pack localization is still only `150/683`.
+- Translation quality is not native-speaker reviewed.
+- Live locale screenshots remain pending because Xcode project reads still hang.
+
+### Score Snapshot
+- Domain correctness: 4.90/5
+- Gameplay completeness: 4.42/5
+- Generative/offline AI quality: 3.69/5
+- Word/content engine: 5.00/5
+- Liquid Glass design fit: 4.00/5
+- Visual polish: 4.05/5
+- Motion/haptics: 3.62/5
+- Pass-and-play privacy: 3.96/5
+- VoiceOver/accessibility: 4.47/5
+- Dynamic Type/layout resilience: 3.66/5
+- Localization: 4.08/5
+- Persistence safety: 3.34/5
+- Testing depth: 5.00/5 for source/content coverage, pending live Xcode execution
+- UI automation: 4.84/5 pending live simulator proof
+- Performance/memory: 4.19/5
+- Release readiness: 4.25/5
+- Repo clarity: 5.00/5
+
+### Next Frontier
+- Continue common-noun localization toward `175/683`, likely Objects or remaining Animals.
+- Add source-level privacy assertions for Role Reveal if they can be made stable without simulator execution.
+- Keep Xcode project probes timed and narrow.
+
+---
+
+## 2026-05-16 01:16 PDT - Pass-And-Play Privacy Guard Gate
+
+### Why This Slice
+- Role Reveal now uses the shared phase stage, but that only proves visual consistency unless privacy guarantees are also checked directly.
+- Live VoiceOver/XCUITest proof remains blocked by Xcode project reads, so the repo needed a source-level privacy gate that can run in the current reliable content suite.
+- The goal is to fail fast if future edits leak secret role/word state into the stage header, remove the hold-to-reveal ritual, expose player names to VoiceOver at the wrong time, or make role-card secrets speakable.
+
+### Files Changed
+- `scripts/check_privacy_guards.py`
+- `scripts/verify_content.sh`
+- `scripts/report_frontier_status.py`
+- `docs/FRONTIER_LEDGER.md`
+
+### Implementation
+- Added `scripts/check_privacy_guards.py`.
+- The checker verifies:
+  - `roleStageTitle`, `roleStageSubtitle`, and `roleStageIcon` do not reference secret role/word state.
+  - Role Reveal checks `voiceOverRunning` before constructing the visual player-name stage title.
+  - The handoff prompt keeps the player name hidden from VoiceOver.
+  - The hold-to-reveal button and private VoiceOver indicator remain present.
+  - The between-player transition still blanks content.
+  - Role-card visual content stays hidden from VoiceOver and secret text remains `privacySensitive`.
+  - Hidden Imposter mode still visually masks itself as `INFORMED`.
+- Wired the checker into `scripts/verify_content.sh`.
+- Added `PrivacyGuardChecker` and `Privacy guard gate` to the frontier report.
+
+### Verification Commands And Exact Outcome
+- `python3 -m py_compile scripts/check_privacy_guards.py scripts/report_frontier_status.py && scripts/check_privacy_guards.py`
+  - Initial run before chmod failed with exit code `126` because the new checker was not executable.
+  - After `chmod +x scripts/check_privacy_guards.py`, rerun exit code `0`.
+  - Standalone output showed all checks `yes`, including `stage_header_avoids_secret_state`, `stage_voiceover_generic_title`, `player_name_hidden_from_voiceover`, `blank_transition_between_players`, `card_content_hidden_from_voiceover`, and `hidden_imposter_title_masked`.
+  - Output ended with `PASS: pass-and-play privacy guards are intact.`
+- `scripts/report_frontier_status.py --check`
+  - Exit code `0`.
+  - Required frontier files included `PrivacyGuardChecker: yes`.
+  - Product guards included `Privacy guard gate: yes`.
+  - Phase-stage adoption remained `6/6`.
+  - Word-pack localization remained `150/683`.
+- `scripts/verify_content.sh`
+  - Exit code `0`.
+  - Localization output: total strings `378`, `de/es/fr/ja: 326 translated strings`.
+  - Word-pack output: total words `683`, semantic tag checked words `683`.
+  - Decoy output: same-tier decoy coverage `683/683`, shared-tag decoy coverage `683/683`, average best shared tags `2.46`.
+  - Privacy guard output ended with `PASS: pass-and-play privacy guards are intact.`
+  - Frontier status output included `PrivacyGuardChecker: yes` and `Privacy guard gate: yes`.
+- `git diff --check -- scripts/check_privacy_guards.py scripts/verify_content.sh scripts/report_frontier_status.py`
+  - Exit code `0`; no whitespace errors in the privacy guard files.
+
+### Remaining Risk
+- This is a source-level privacy gate, not a substitute for live VoiceOver or screenshot proof.
+- The checker is intentionally conservative and pattern-based; structural Swift parsing would be stronger if the Xcode project path recovers.
+- Translation and layout proof remain separate concerns.
+
+### Score Snapshot
+- Domain correctness: 4.90/5
+- Gameplay completeness: 4.42/5
+- Generative/offline AI quality: 3.69/5
+- Word/content engine: 5.00/5
+- Liquid Glass design fit: 4.00/5
+- Visual polish: 4.05/5
+- Motion/haptics: 3.62/5
+- Pass-and-play privacy: 4.10/5
+- VoiceOver/accessibility: 4.50/5
+- Dynamic Type/layout resilience: 3.66/5
+- Localization: 4.08/5
+- Persistence safety: 3.34/5
+- Testing depth: 5.00/5 for source/content coverage, pending live Xcode execution
+- UI automation: 4.84/5 pending live simulator proof
+- Performance/memory: 4.19/5
+- Release readiness: 4.28/5
+- Repo clarity: 5.00/5
+
+### Next Frontier
+- Continue common-noun localization toward `175/683`.
+- Add more source-level privacy or layout checks only when they can be made meaningful and not brittle.
+- Keep live Xcode proof attempts narrow until project reads recover.
+
+---
+
+## 2026-05-16 01:18 PDT - Objects Medium Localization Frontier Gate
+
+### Why This Slice
+- The app had reached `150/683` localized word entries, but Objects still had a large common-noun gap.
+- The next 25 missing Object entries were all safe everyday nouns, avoiding the transliteration and cultural-context risk of proper-name categories.
+- This slice raises the enforceable full word-entry floor to `175/683` while keeping the stronger privacy guard suite active.
+
+### Files Changed
+- `Imposter/Resources/Localizable.xcstrings`
+- `scripts/report_frontier_status.py`
+- `scripts/check_localization_coverage.py`
+- `docs/FRONTIER_LEDGER.md`
+
+### Implementation
+- Added complete `en/de/es/fr/ja` localizations for 25 Objects entries from `word.objects.dress` through `word.objects.nail`.
+- Raised `scripts/report_frontier_status.py` localized word-entry floor from `150` to `175`.
+- Raised `scripts/check_localization_coverage.py` default translated-string floor from `325` to `350` per target locale.
+
+### Verification Commands And Exact Outcome
+- `python3 -m json.tool Imposter/Resources/Localizable.xcstrings >/tmp/imposter-localizable-json-check.json`
+  - Exit code `0`; catalog JSON is valid.
+- `scripts/report_frontier_status.py --check`
+  - Exit code `0`.
+  - Phase-stage adoption output: `6/6`.
+  - Required frontier files included `PrivacyGuardChecker: yes`.
+  - Product guards included `Privacy guard gate: yes`.
+  - Word-pack localization output: `Localized word entries: 175/683 (floor 175)`.
+  - Category output: Animals `65/110`, Movies `15/144`, Objects `65/108`, People `15/165`, Technology `15/156`.
+  - Output ended with `PASS: frontier status coverage is acceptable.`
+- `scripts/check_localization_coverage.py`
+  - Exit code `0`.
+  - Localization output: total strings `403`, priority keys `121`, word priority keys `75/75`.
+  - Localization output: `de: 351 translated strings`, `es: 351 translated strings`, `fr: 351 translated strings`, `ja: 351 translated strings`.
+  - Output ended with `PASS: focused localization coverage is acceptable.`
+- `scripts/verify_content.sh`
+  - Exit code `0`.
+  - Localization output matched the `403` total strings and `351` per target locale.
+  - Word-pack output: expected packs `5`, total words `683`, semantic tag checked words `683`.
+  - Decoy output: same-tier decoy coverage `683/683`, shared-tag decoy coverage `683/683`, average best shared tags `2.46`.
+  - Privacy guard output ended with `PASS: pass-and-play privacy guards are intact.`
+  - Frontier status output included `Localized word entries: 175/683 (floor 175)` and passed.
+- `python3 -m py_compile scripts/check_localization_coverage.py scripts/report_frontier_status.py scripts/check_privacy_guards.py && bash -n scripts/verify_content.sh`
+  - Exit code `0`; Python gates compile and shell wrapper parses.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer perl -e 'alarm 240; exec @ARGV' xcrun swiftc -typecheck -target arm64-apple-ios26.0-simulator -sdk "$sdk" $(find Imposter -name '*.swift' -print)`
+  - Exit code `0`; app source typecheck passed with no emitted diagnostics.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer perl -e 'alarm 240; exec @ARGV' xcrun swiftc -parse -module-name Imposter -target arm64-apple-ios26.0-simulator -sdk "$sdk" $(find Imposter -name '*.swift' -print) $(find ImposterTests -name '*.swift' -print)`
+  - Exit code `0`; app and unit-test sources parsed together.
+- `git diff --check -- Imposter/Resources/Localizable.xcstrings scripts/report_frontier_status.py scripts/check_localization_coverage.py`
+  - Exit code `0`; no whitespace errors in the localization gate files.
+
+### Remaining Risk
+- Full word-pack localization is still `175/683`, so there is substantial content work left.
+- Translation quality is still not native-speaker reviewed.
+- Live locale screenshots and XCTest remain blocked by Xcode project read hangs.
+
+### Score Snapshot
+- Domain correctness: 4.90/5
+- Gameplay completeness: 4.42/5
+- Generative/offline AI quality: 3.69/5
+- Word/content engine: 5.00/5
+- Liquid Glass design fit: 4.00/5
+- Visual polish: 4.05/5
+- Motion/haptics: 3.62/5
+- Pass-and-play privacy: 4.10/5
+- VoiceOver/accessibility: 4.50/5
+- Dynamic Type/layout resilience: 3.66/5
+- Localization: 4.20/5
+- Persistence safety: 3.34/5
+- Testing depth: 5.00/5 for source/content coverage, pending live Xcode execution
+- UI automation: 4.84/5 pending live simulator proof
+- Performance/memory: 4.19/5
+- Release readiness: 4.31/5
+- Repo clarity: 5.00/5
+
+### Next Frontier
+- Continue common-noun localization toward `200/683`, likely remaining Animals or Objects.
+- Add a higher-level completion audit checklist for `Enormousplans.md` before any future attempt to mark the goal complete.
+- Keep Xcode project probes narrow and timed.
+
+---
+
+## 2026-05-16 01:22 PDT - Animals 200-Entry Localization Frontier Gate
+
+### Why This Slice
+- The app had reached `175/683` localized word entries with Objects and Animals both materially improved.
+- The next Animals batch was still mostly common nouns, making it safer than proper-name categories and valuable for pass-and-play vocabulary breadth.
+- This slice crosses a clean `200/683` milestone while keeping the privacy, decoy, phase-stage, and localization gates active.
+
+### Files Changed
+- `Imposter/Resources/Localizable.xcstrings`
+- `scripts/report_frontier_status.py`
+- `scripts/check_localization_coverage.py`
+- `docs/FRONTIER_LEDGER.md`
+
+### Implementation
+- Added complete `en/de/es/fr/ja` localizations for 25 Animals entries from `word.animals.raccoon` through `word.animals.mongoose`.
+- Raised `scripts/report_frontier_status.py` localized word-entry floor from `175` to `200`.
+- Raised `scripts/check_localization_coverage.py` default translated-string floor from `350` to `375` per target locale.
+
+### Verification Commands And Exact Outcome
+- `python3 -m json.tool Imposter/Resources/Localizable.xcstrings >/tmp/imposter-localizable-json-check.json`
+  - Exit code `0`; catalog JSON is valid.
+- `scripts/report_frontier_status.py --check`
+  - Exit code `0`.
+  - Phase-stage adoption output: `6/6`.
+  - Required frontier files included `PrivacyGuardChecker: yes`.
+  - Product guards included `Privacy guard gate: yes`.
+  - Word-pack localization output: `Localized word entries: 200/683 (floor 200)`.
+  - Category output: Animals `90/110`, Movies `15/144`, Objects `65/108`, People `15/165`, Technology `15/156`.
+  - Output ended with `PASS: frontier status coverage is acceptable.`
+- `scripts/check_localization_coverage.py`
+  - Exit code `0`.
+  - Localization output: total strings `428`, priority keys `121`, word priority keys `75/75`.
+  - Localization output: `de: 376 translated strings`, `es: 376 translated strings`, `fr: 376 translated strings`, `ja: 376 translated strings`.
+  - Output ended with `PASS: focused localization coverage is acceptable.`
+- `scripts/verify_content.sh`
+  - Exit code `0`.
+  - Localization output matched the `428` total strings and `376` per target locale.
+  - Word-pack output: expected packs `5`, total words `683`, semantic tag checked words `683`.
+  - Decoy output: same-tier decoy coverage `683/683`, shared-tag decoy coverage `683/683`, average best shared tags `2.46`.
+  - Privacy guard output ended with `PASS: pass-and-play privacy guards are intact.`
+  - Frontier status output included `Localized word entries: 200/683 (floor 200)` and passed.
+- `python3 -m py_compile scripts/check_localization_coverage.py scripts/report_frontier_status.py scripts/check_privacy_guards.py && bash -n scripts/verify_content.sh`
+  - Exit code `0`; Python gates compile and shell wrapper parses.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer perl -e 'alarm 240; exec @ARGV' xcrun swiftc -typecheck -target arm64-apple-ios26.0-simulator -sdk "$sdk" $(find Imposter -name '*.swift' -print)`
+  - Exit code `0`; app source typecheck passed with no emitted diagnostics.
+- `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer perl -e 'alarm 240; exec @ARGV' xcrun swiftc -parse -module-name Imposter -target arm64-apple-ios26.0-simulator -sdk "$sdk" $(find Imposter -name '*.swift' -print) $(find ImposterTests -name '*.swift' -print)`
+  - Exit code `0`; app and unit-test sources parsed together.
+- `git diff --check -- Imposter/Resources/Localizable.xcstrings scripts/report_frontier_status.py scripts/check_localization_coverage.py`
+  - Exit code `0`; no whitespace errors in the localization gate files.
+
+### Remaining Risk
+- Full word-pack localization is still `200/683`, with Movies, People, and Technology still at pilot coverage.
+- Translation quality remains not native-speaker reviewed.
+- Live screenshots and XCTest remain blocked by Xcode project read hangs.
+
+### Score Snapshot
+- Domain correctness: 4.90/5
+- Gameplay completeness: 4.42/5
+- Generative/offline AI quality: 3.69/5
+- Word/content engine: 5.00/5
+- Liquid Glass design fit: 4.00/5
+- Visual polish: 4.05/5
+- Motion/haptics: 3.62/5
+- Pass-and-play privacy: 4.10/5
+- VoiceOver/accessibility: 4.50/5
+- Dynamic Type/layout resilience: 3.66/5
+- Localization: 4.32/5
+- Persistence safety: 3.34/5
+- Testing depth: 5.00/5 for source/content coverage, pending live Xcode execution
+- UI automation: 4.84/5 pending live simulator proof
+- Performance/memory: 4.19/5
+- Release readiness: 4.34/5
+- Repo clarity: 5.00/5
+
+### Next Frontier
+- Finish the remaining 20 Animals entries or continue Objects toward a similar majority/completion point.
+- Add a higher-level completion audit checklist for `Enormousplans.md`.
+- Keep Xcode project probes narrow and timed.

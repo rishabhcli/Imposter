@@ -53,10 +53,15 @@ final class MockWordServiceTests: XCTestCase {
     }
 
     func testSelectWord_TracksParameters() async throws {
-        _ = try await sut.selectWord(from: ["Animals"], difficulty: .hard)
+        _ = try await sut.selectWord(
+            from: ["Animals"],
+            difficulty: .hard,
+            avoiding: ["Elephant"]
+        )
 
         XCTAssertEqual(sut.lastSelectCategories, ["Animals"])
         XCTAssertEqual(sut.lastSelectDifficulty, .hard)
+        XCTAssertEqual(sut.lastAvoidedWords, ["Elephant"])
     }
 
     func testGenerateWord_ReturnsConfiguredWord() async throws {
@@ -82,6 +87,7 @@ final class MockWordServiceTests: XCTestCase {
         XCTAssertEqual(sut.selectWordCallCount, 0)
         XCTAssertEqual(sut.generateWordCallCount, 0)
         XCTAssertNil(sut.lastSelectCategories)
+        XCTAssertTrue(sut.lastAvoidedWords.isEmpty)
         XCTAssertNil(sut.lastGeneratePrompt)
     }
 }

@@ -1,115 +1,1984 @@
 {
   "category": "Animals",
   "words": [
-    {"word": "Dog", "difficulty": "easy"},
-    {"word": "Cat", "difficulty": "easy"},
-    {"word": "Bird", "difficulty": "easy"},
-    {"word": "Fish", "difficulty": "easy"},
-    {"word": "Horse", "difficulty": "easy"},
-    {"word": "Cow", "difficulty": "easy"},
-    {"word": "Pig", "difficulty": "easy"},
-    {"word": "Sheep", "difficulty": "easy"},
-    {"word": "Chicken", "difficulty": "easy"},
-    {"word": "Duck", "difficulty": "easy"},
-    {"word": "Rabbit", "difficulty": "easy"},
-    {"word": "Mouse", "difficulty": "easy"},
-    {"word": "Lion", "difficulty": "easy"},
-    {"word": "Tiger", "difficulty": "easy"},
-    {"word": "Bear", "difficulty": "easy"},
-    {"word": "Wolf", "difficulty": "easy"},
-    {"word": "Fox", "difficulty": "easy"},
-    {"word": "Deer", "difficulty": "easy"},
-    {"word": "Monkey", "difficulty": "easy"},
-    {"word": "Elephant", "difficulty": "easy"},
-    {"word": "Giraffe", "difficulty": "easy"},
-    {"word": "Zebra", "difficulty": "easy"},
-    {"word": "Penguin", "difficulty": "easy"},
-    {"word": "Dolphin", "difficulty": "easy"},
-    {"word": "Whale", "difficulty": "easy"},
-    {"word": "Shark", "difficulty": "easy"},
-    {"word": "Snake", "difficulty": "easy"},
-    {"word": "Turtle", "difficulty": "easy"},
-    {"word": "Frog", "difficulty": "easy"},
-    {"word": "Butterfly", "difficulty": "easy"},
-    {"word": "Bee", "difficulty": "easy"},
-    {"word": "Spider", "difficulty": "easy"},
-    {"word": "Ant", "difficulty": "easy"},
-    {"word": "Owl", "difficulty": "medium"},
-    {"word": "Eagle", "difficulty": "medium"},
-    {"word": "Hawk", "difficulty": "medium"},
-    {"word": "Parrot", "difficulty": "medium"},
-    {"word": "Peacock", "difficulty": "medium"},
-    {"word": "Flamingo", "difficulty": "medium"},
-    {"word": "Pelican", "difficulty": "medium"},
-    {"word": "Seagull", "difficulty": "medium"},
-    {"word": "Crocodile", "difficulty": "medium"},
-    {"word": "Alligator", "difficulty": "medium"},
-    {"word": "Lizard", "difficulty": "medium"},
-    {"word": "Chameleon", "difficulty": "medium"},
-    {"word": "Iguana", "difficulty": "medium"},
-    {"word": "Gorilla", "difficulty": "medium"},
-    {"word": "Chimpanzee", "difficulty": "medium"},
-    {"word": "Orangutan", "difficulty": "medium"},
-    {"word": "Kangaroo", "difficulty": "medium"},
-    {"word": "Koala", "difficulty": "medium"},
-    {"word": "Panda", "difficulty": "medium"},
-    {"word": "Polar Bear", "difficulty": "medium"},
-    {"word": "Grizzly", "difficulty": "medium"},
-    {"word": "Leopard", "difficulty": "medium"},
-    {"word": "Cheetah", "difficulty": "medium"},
-    {"word": "Jaguar", "difficulty": "medium"},
-    {"word": "Panther", "difficulty": "medium"},
-    {"word": "Hyena", "difficulty": "medium"},
-    {"word": "Coyote", "difficulty": "medium"},
-    {"word": "Raccoon", "difficulty": "medium"},
-    {"word": "Squirrel", "difficulty": "medium"},
-    {"word": "Hamster", "difficulty": "medium"},
-    {"word": "Guinea Pig", "difficulty": "medium"},
-    {"word": "Hedgehog", "difficulty": "medium"},
-    {"word": "Porcupine", "difficulty": "medium"},
-    {"word": "Skunk", "difficulty": "medium"},
-    {"word": "Otter", "difficulty": "medium"},
-    {"word": "Beaver", "difficulty": "medium"},
-    {"word": "Seal", "difficulty": "medium"},
-    {"word": "Walrus", "difficulty": "medium"},
-    {"word": "Octopus", "difficulty": "medium"},
-    {"word": "Squid", "difficulty": "medium"},
-    {"word": "Jellyfish", "difficulty": "medium"},
-    {"word": "Starfish", "difficulty": "medium"},
-    {"word": "Seahorse", "difficulty": "medium"},
-    {"word": "Crab", "difficulty": "medium"},
-    {"word": "Lobster", "difficulty": "medium"},
-    {"word": "Shrimp", "difficulty": "medium"},
-    {"word": "Clam", "difficulty": "medium"},
-    {"word": "Platypus", "difficulty": "hard"},
-    {"word": "Armadillo", "difficulty": "hard"},
-    {"word": "Anteater", "difficulty": "hard"},
-    {"word": "Sloth", "difficulty": "hard"},
-    {"word": "Tapir", "difficulty": "hard"},
-    {"word": "Capybara", "difficulty": "hard"},
-    {"word": "Chinchilla", "difficulty": "hard"},
-    {"word": "Lemur", "difficulty": "hard"},
-    {"word": "Meerkat", "difficulty": "hard"},
-    {"word": "Mongoose", "difficulty": "hard"},
-    {"word": "Wombat", "difficulty": "hard"},
-    {"word": "Echidna", "difficulty": "hard"},
-    {"word": "Pangolin", "difficulty": "hard"},
-    {"word": "Okapi", "difficulty": "hard"},
-    {"word": "Narwhal", "difficulty": "hard"},
-    {"word": "Manatee", "difficulty": "hard"},
-    {"word": "Dugong", "difficulty": "hard"},
-    {"word": "Axolotl", "difficulty": "hard"},
-    {"word": "Salamander", "difficulty": "hard"},
-    {"word": "Newt", "difficulty": "hard"},
-    {"word": "Komodo Dragon", "difficulty": "hard"},
-    {"word": "Cassowary", "difficulty": "hard"},
-    {"word": "Kiwi", "difficulty": "hard"},
-    {"word": "Emu", "difficulty": "hard"},
-    {"word": "Ostrich", "difficulty": "hard"},
-    {"word": "Toucan", "difficulty": "hard"},
-    {"word": "Hummingbird", "difficulty": "hard"},
-    {"word": "Albatross", "difficulty": "hard"},
-    {"word": "Condor", "difficulty": "hard"},
-    {"word": "Vulture", "difficulty": "hard"}
+    {
+      "id": "animals-dog",
+      "displayText": "Dog",
+      "word": "Dog",
+      "category": "Animals",
+      "difficulty": "easy",
+      "tags": [
+        "animals",
+        "easy",
+        "pet",
+        "household",
+        "mammal",
+        "loyal",
+        "bark"
+      ],
+      "localizationKey": "word.animals.dog",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-cat",
+      "displayText": "Cat",
+      "word": "Cat",
+      "category": "Animals",
+      "difficulty": "easy",
+      "tags": [
+        "animals",
+        "easy",
+        "pet",
+        "household",
+        "mammal",
+        "agile",
+        "independent"
+      ],
+      "localizationKey": "word.animals.cat",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-bird",
+      "displayText": "Bird",
+      "word": "Bird",
+      "category": "Animals",
+      "difficulty": "easy",
+      "tags": [
+        "animals",
+        "easy",
+        "bird",
+        "winged",
+        "feather",
+        "flight",
+        "sky"
+      ],
+      "localizationKey": "word.animals.bird",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-fish",
+      "displayText": "Fish",
+      "word": "Fish",
+      "category": "Animals",
+      "difficulty": "easy",
+      "tags": [
+        "animals",
+        "easy",
+        "aquatic",
+        "water",
+        "swim",
+        "gills"
+      ],
+      "localizationKey": "word.animals.fish",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-horse",
+      "displayText": "Horse",
+      "word": "Horse",
+      "category": "Animals",
+      "difficulty": "easy",
+      "tags": [
+        "animals",
+        "easy",
+        "farm",
+        "domesticated",
+        "mammal",
+        "ride",
+        "stable"
+      ],
+      "localizationKey": "word.animals.horse",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-cow",
+      "displayText": "Cow",
+      "word": "Cow",
+      "category": "Animals",
+      "difficulty": "easy",
+      "tags": [
+        "animals",
+        "easy",
+        "farm",
+        "domesticated"
+      ],
+      "localizationKey": "word.animals.cow",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-pig",
+      "displayText": "Pig",
+      "word": "Pig",
+      "category": "Animals",
+      "difficulty": "easy",
+      "tags": [
+        "animals",
+        "easy",
+        "farm",
+        "domesticated"
+      ],
+      "localizationKey": "word.animals.pig",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-sheep",
+      "displayText": "Sheep",
+      "word": "Sheep",
+      "category": "Animals",
+      "difficulty": "easy",
+      "tags": [
+        "animals",
+        "easy",
+        "farm",
+        "domesticated"
+      ],
+      "localizationKey": "word.animals.sheep",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-chicken",
+      "displayText": "Chicken",
+      "word": "Chicken",
+      "category": "Animals",
+      "difficulty": "easy",
+      "tags": [
+        "animals",
+        "easy",
+        "farm",
+        "domesticated",
+        "bird",
+        "winged",
+        "feather"
+      ],
+      "localizationKey": "word.animals.chicken",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-duck",
+      "displayText": "Duck",
+      "word": "Duck",
+      "category": "Animals",
+      "difficulty": "easy",
+      "tags": [
+        "animals",
+        "easy",
+        "farm",
+        "domesticated",
+        "bird",
+        "winged",
+        "feather"
+      ],
+      "localizationKey": "word.animals.duck",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-rabbit",
+      "displayText": "Rabbit",
+      "word": "Rabbit",
+      "category": "Animals",
+      "difficulty": "easy",
+      "tags": [
+        "animals",
+        "easy",
+        "pet",
+        "household"
+      ],
+      "localizationKey": "word.animals.rabbit",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-mouse",
+      "displayText": "Mouse",
+      "word": "Mouse",
+      "category": "Animals",
+      "difficulty": "easy",
+      "tags": [
+        "animals",
+        "easy",
+        "pet",
+        "household"
+      ],
+      "localizationKey": "word.animals.mouse",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-lion",
+      "displayText": "Lion",
+      "word": "Lion",
+      "category": "Animals",
+      "difficulty": "easy",
+      "tags": [
+        "animals",
+        "easy",
+        "big-cat",
+        "predator"
+      ],
+      "localizationKey": "word.animals.lion",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-tiger",
+      "displayText": "Tiger",
+      "word": "Tiger",
+      "category": "Animals",
+      "difficulty": "easy",
+      "tags": [
+        "animals",
+        "easy",
+        "big-cat",
+        "predator"
+      ],
+      "localizationKey": "word.animals.tiger",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-bear",
+      "displayText": "Bear",
+      "word": "Bear",
+      "category": "Animals",
+      "difficulty": "easy",
+      "tags": [
+        "animals",
+        "easy",
+        "bear",
+        "mammal"
+      ],
+      "localizationKey": "word.animals.bear",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-wolf",
+      "displayText": "Wolf",
+      "word": "Wolf",
+      "category": "Animals",
+      "difficulty": "easy",
+      "tags": [
+        "animals",
+        "easy",
+        "canine",
+        "predator"
+      ],
+      "localizationKey": "word.animals.wolf",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-fox",
+      "displayText": "Fox",
+      "word": "Fox",
+      "category": "Animals",
+      "difficulty": "easy",
+      "tags": [
+        "animals",
+        "easy",
+        "canine",
+        "predator"
+      ],
+      "localizationKey": "word.animals.fox",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-deer",
+      "displayText": "Deer",
+      "word": "Deer",
+      "category": "Animals",
+      "difficulty": "easy",
+      "tags": [
+        "animals",
+        "easy",
+        "mammal",
+        "wildlife"
+      ],
+      "localizationKey": "word.animals.deer",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-monkey",
+      "displayText": "Monkey",
+      "word": "Monkey",
+      "category": "Animals",
+      "difficulty": "easy",
+      "tags": [
+        "animals",
+        "easy",
+        "primate",
+        "mammal"
+      ],
+      "localizationKey": "word.animals.monkey",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-elephant",
+      "displayText": "Elephant",
+      "word": "Elephant",
+      "category": "Animals",
+      "difficulty": "easy",
+      "tags": [
+        "animals",
+        "easy",
+        "mammal",
+        "wildlife"
+      ],
+      "localizationKey": "word.animals.elephant",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-giraffe",
+      "displayText": "Giraffe",
+      "word": "Giraffe",
+      "category": "Animals",
+      "difficulty": "easy",
+      "tags": [
+        "animals",
+        "easy",
+        "mammal",
+        "wildlife"
+      ],
+      "localizationKey": "word.animals.giraffe",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-zebra",
+      "displayText": "Zebra",
+      "word": "Zebra",
+      "category": "Animals",
+      "difficulty": "easy",
+      "tags": [
+        "animals",
+        "easy",
+        "mammal",
+        "wildlife"
+      ],
+      "localizationKey": "word.animals.zebra",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-penguin",
+      "displayText": "Penguin",
+      "word": "Penguin",
+      "category": "Animals",
+      "difficulty": "easy",
+      "tags": [
+        "animals",
+        "easy",
+        "wildlife",
+        "guessable"
+      ],
+      "localizationKey": "word.animals.penguin",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-dolphin",
+      "displayText": "Dolphin",
+      "word": "Dolphin",
+      "category": "Animals",
+      "difficulty": "easy",
+      "tags": [
+        "animals",
+        "easy",
+        "aquatic",
+        "water"
+      ],
+      "localizationKey": "word.animals.dolphin",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-whale",
+      "displayText": "Whale",
+      "word": "Whale",
+      "category": "Animals",
+      "difficulty": "easy",
+      "tags": [
+        "animals",
+        "easy",
+        "aquatic",
+        "water"
+      ],
+      "localizationKey": "word.animals.whale",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-shark",
+      "displayText": "Shark",
+      "word": "Shark",
+      "category": "Animals",
+      "difficulty": "easy",
+      "tags": [
+        "animals",
+        "easy",
+        "aquatic",
+        "water"
+      ],
+      "localizationKey": "word.animals.shark",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-snake",
+      "displayText": "Snake",
+      "word": "Snake",
+      "category": "Animals",
+      "difficulty": "easy",
+      "tags": [
+        "animals",
+        "easy",
+        "reptile-amphibian",
+        "cold-blooded"
+      ],
+      "localizationKey": "word.animals.snake",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-turtle",
+      "displayText": "Turtle",
+      "word": "Turtle",
+      "category": "Animals",
+      "difficulty": "easy",
+      "tags": [
+        "animals",
+        "easy",
+        "aquatic",
+        "water",
+        "reptile-amphibian",
+        "cold-blooded"
+      ],
+      "localizationKey": "word.animals.turtle",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-frog",
+      "displayText": "Frog",
+      "word": "Frog",
+      "category": "Animals",
+      "difficulty": "easy",
+      "tags": [
+        "animals",
+        "easy",
+        "aquatic",
+        "water",
+        "reptile-amphibian",
+        "cold-blooded"
+      ],
+      "localizationKey": "word.animals.frog",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-butterfly",
+      "displayText": "Butterfly",
+      "word": "Butterfly",
+      "category": "Animals",
+      "difficulty": "easy",
+      "tags": [
+        "animals",
+        "easy",
+        "small-creature",
+        "invertebrate"
+      ],
+      "localizationKey": "word.animals.butterfly",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-bee",
+      "displayText": "Bee",
+      "word": "Bee",
+      "category": "Animals",
+      "difficulty": "easy",
+      "tags": [
+        "animals",
+        "easy",
+        "small-creature",
+        "invertebrate"
+      ],
+      "localizationKey": "word.animals.bee",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-spider",
+      "displayText": "Spider",
+      "word": "Spider",
+      "category": "Animals",
+      "difficulty": "easy",
+      "tags": [
+        "animals",
+        "easy",
+        "small-creature",
+        "invertebrate"
+      ],
+      "localizationKey": "word.animals.spider",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-ant",
+      "displayText": "Ant",
+      "word": "Ant",
+      "category": "Animals",
+      "difficulty": "easy",
+      "tags": [
+        "animals",
+        "easy",
+        "small-creature",
+        "invertebrate"
+      ],
+      "localizationKey": "word.animals.ant",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-owl",
+      "displayText": "Owl",
+      "word": "Owl",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "bird",
+        "winged",
+        "feather",
+        "nocturnal",
+        "predator",
+        "forest"
+      ],
+      "localizationKey": "word.animals.owl",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-eagle",
+      "displayText": "Eagle",
+      "word": "Eagle",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "bird",
+        "winged",
+        "feather",
+        "predator",
+        "flight",
+        "symbol",
+        "sky"
+      ],
+      "localizationKey": "word.animals.eagle",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-hawk",
+      "displayText": "Hawk",
+      "word": "Hawk",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "bird",
+        "winged",
+        "feather",
+        "predator",
+        "flight",
+        "sharp-eyed",
+        "sky"
+      ],
+      "localizationKey": "word.animals.hawk",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-parrot",
+      "displayText": "Parrot",
+      "word": "Parrot",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "pet",
+        "household",
+        "bird",
+        "winged",
+        "feather",
+        "tropical",
+        "mimic",
+        "colorful"
+      ],
+      "localizationKey": "word.animals.parrot",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-peacock",
+      "displayText": "Peacock",
+      "word": "Peacock",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "bird",
+        "winged",
+        "feather",
+        "colorful",
+        "display",
+        "feathers",
+        "ornamental"
+      ],
+      "localizationKey": "word.animals.peacock",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-flamingo",
+      "displayText": "Flamingo",
+      "word": "Flamingo",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "bird",
+        "winged",
+        "feather"
+      ],
+      "localizationKey": "word.animals.flamingo",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-pelican",
+      "displayText": "Pelican",
+      "word": "Pelican",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "bird",
+        "winged",
+        "feather"
+      ],
+      "localizationKey": "word.animals.pelican",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-seagull",
+      "displayText": "Seagull",
+      "word": "Seagull",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "bird",
+        "winged",
+        "feather"
+      ],
+      "localizationKey": "word.animals.seagull",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-crocodile",
+      "displayText": "Crocodile",
+      "word": "Crocodile",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "reptile-amphibian",
+        "cold-blooded"
+      ],
+      "localizationKey": "word.animals.crocodile",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-alligator",
+      "displayText": "Alligator",
+      "word": "Alligator",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "reptile-amphibian",
+        "cold-blooded"
+      ],
+      "localizationKey": "word.animals.alligator",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-lizard",
+      "displayText": "Lizard",
+      "word": "Lizard",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "reptile-amphibian",
+        "cold-blooded"
+      ],
+      "localizationKey": "word.animals.lizard",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-chameleon",
+      "displayText": "Chameleon",
+      "word": "Chameleon",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "reptile-amphibian",
+        "cold-blooded"
+      ],
+      "localizationKey": "word.animals.chameleon",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-iguana",
+      "displayText": "Iguana",
+      "word": "Iguana",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "reptile-amphibian",
+        "cold-blooded"
+      ],
+      "localizationKey": "word.animals.iguana",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-gorilla",
+      "displayText": "Gorilla",
+      "word": "Gorilla",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "primate",
+        "mammal"
+      ],
+      "localizationKey": "word.animals.gorilla",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-chimpanzee",
+      "displayText": "Chimpanzee",
+      "word": "Chimpanzee",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "primate",
+        "mammal"
+      ],
+      "localizationKey": "word.animals.chimpanzee",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-orangutan",
+      "displayText": "Orangutan",
+      "word": "Orangutan",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "primate",
+        "mammal"
+      ],
+      "localizationKey": "word.animals.orangutan",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-kangaroo",
+      "displayText": "Kangaroo",
+      "word": "Kangaroo",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "marsupial",
+        "australia"
+      ],
+      "localizationKey": "word.animals.kangaroo",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-koala",
+      "displayText": "Koala",
+      "word": "Koala",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "marsupial",
+        "australia"
+      ],
+      "localizationKey": "word.animals.koala",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-panda",
+      "displayText": "Panda",
+      "word": "Panda",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "bear",
+        "mammal"
+      ],
+      "localizationKey": "word.animals.panda",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-polar-bear",
+      "displayText": "Polar Bear",
+      "word": "Polar Bear",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "bear",
+        "mammal"
+      ],
+      "localizationKey": "word.animals.polar-bear",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-grizzly",
+      "displayText": "Grizzly",
+      "word": "Grizzly",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "bear",
+        "mammal"
+      ],
+      "localizationKey": "word.animals.grizzly",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-leopard",
+      "displayText": "Leopard",
+      "word": "Leopard",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "big-cat",
+        "predator"
+      ],
+      "localizationKey": "word.animals.leopard",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-cheetah",
+      "displayText": "Cheetah",
+      "word": "Cheetah",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "big-cat",
+        "predator"
+      ],
+      "localizationKey": "word.animals.cheetah",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-jaguar",
+      "displayText": "Jaguar",
+      "word": "Jaguar",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "big-cat",
+        "predator"
+      ],
+      "localizationKey": "word.animals.jaguar",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-panther",
+      "displayText": "Panther",
+      "word": "Panther",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "big-cat",
+        "predator"
+      ],
+      "localizationKey": "word.animals.panther",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-hyena",
+      "displayText": "Hyena",
+      "word": "Hyena",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "canine",
+        "predator"
+      ],
+      "localizationKey": "word.animals.hyena",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-coyote",
+      "displayText": "Coyote",
+      "word": "Coyote",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "canine",
+        "predator"
+      ],
+      "localizationKey": "word.animals.coyote",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-raccoon",
+      "displayText": "Raccoon",
+      "word": "Raccoon",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "mammal",
+        "wildlife"
+      ],
+      "localizationKey": "word.animals.raccoon",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-squirrel",
+      "displayText": "Squirrel",
+      "word": "Squirrel",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "rodent",
+        "small-mammal"
+      ],
+      "localizationKey": "word.animals.squirrel",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-hamster",
+      "displayText": "Hamster",
+      "word": "Hamster",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "pet",
+        "household",
+        "rodent",
+        "small-mammal"
+      ],
+      "localizationKey": "word.animals.hamster",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-guinea-pig",
+      "displayText": "Guinea Pig",
+      "word": "Guinea Pig",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "pet",
+        "household",
+        "rodent",
+        "small-mammal"
+      ],
+      "localizationKey": "word.animals.guinea-pig",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-hedgehog",
+      "displayText": "Hedgehog",
+      "word": "Hedgehog",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "mammal",
+        "wildlife"
+      ],
+      "localizationKey": "word.animals.hedgehog",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-porcupine",
+      "displayText": "Porcupine",
+      "word": "Porcupine",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "rodent",
+        "small-mammal"
+      ],
+      "localizationKey": "word.animals.porcupine",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-skunk",
+      "displayText": "Skunk",
+      "word": "Skunk",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "mammal",
+        "wildlife"
+      ],
+      "localizationKey": "word.animals.skunk",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-otter",
+      "displayText": "Otter",
+      "word": "Otter",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "aquatic",
+        "water"
+      ],
+      "localizationKey": "word.animals.otter",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-beaver",
+      "displayText": "Beaver",
+      "word": "Beaver",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "aquatic",
+        "water",
+        "rodent",
+        "small-mammal"
+      ],
+      "localizationKey": "word.animals.beaver",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-seal",
+      "displayText": "Seal",
+      "word": "Seal",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "aquatic",
+        "water"
+      ],
+      "localizationKey": "word.animals.seal",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-walrus",
+      "displayText": "Walrus",
+      "word": "Walrus",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "aquatic",
+        "water"
+      ],
+      "localizationKey": "word.animals.walrus",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-octopus",
+      "displayText": "Octopus",
+      "word": "Octopus",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "aquatic",
+        "water"
+      ],
+      "localizationKey": "word.animals.octopus",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-squid",
+      "displayText": "Squid",
+      "word": "Squid",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "aquatic",
+        "water"
+      ],
+      "localizationKey": "word.animals.squid",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-jellyfish",
+      "displayText": "Jellyfish",
+      "word": "Jellyfish",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "aquatic",
+        "water"
+      ],
+      "localizationKey": "word.animals.jellyfish",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-starfish",
+      "displayText": "Starfish",
+      "word": "Starfish",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "aquatic",
+        "water"
+      ],
+      "localizationKey": "word.animals.starfish",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-seahorse",
+      "displayText": "Seahorse",
+      "word": "Seahorse",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "aquatic",
+        "water"
+      ],
+      "localizationKey": "word.animals.seahorse",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-crab",
+      "displayText": "Crab",
+      "word": "Crab",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "aquatic",
+        "water"
+      ],
+      "localizationKey": "word.animals.crab",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-lobster",
+      "displayText": "Lobster",
+      "word": "Lobster",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "aquatic",
+        "water"
+      ],
+      "localizationKey": "word.animals.lobster",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-shrimp",
+      "displayText": "Shrimp",
+      "word": "Shrimp",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "aquatic",
+        "water"
+      ],
+      "localizationKey": "word.animals.shrimp",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-clam",
+      "displayText": "Clam",
+      "word": "Clam",
+      "category": "Animals",
+      "difficulty": "medium",
+      "tags": [
+        "animals",
+        "medium",
+        "aquatic",
+        "water"
+      ],
+      "localizationKey": "word.animals.clam",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-platypus",
+      "displayText": "Platypus",
+      "word": "Platypus",
+      "category": "Animals",
+      "difficulty": "hard",
+      "tags": [
+        "animals",
+        "hard",
+        "aquatic",
+        "water",
+        "mammal",
+        "egg-laying",
+        "australia",
+        "unusual"
+      ],
+      "localizationKey": "word.animals.platypus",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-armadillo",
+      "displayText": "Armadillo",
+      "word": "Armadillo",
+      "category": "Animals",
+      "difficulty": "hard",
+      "tags": [
+        "animals",
+        "hard",
+        "mammal",
+        "unusual",
+        "armored",
+        "burrow",
+        "desert"
+      ],
+      "localizationKey": "word.animals.armadillo",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-anteater",
+      "displayText": "Anteater",
+      "word": "Anteater",
+      "category": "Animals",
+      "difficulty": "hard",
+      "tags": [
+        "animals",
+        "hard",
+        "mammal",
+        "unusual",
+        "insect-eater",
+        "long-snout",
+        "tongue"
+      ],
+      "localizationKey": "word.animals.anteater",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-sloth",
+      "displayText": "Sloth",
+      "word": "Sloth",
+      "category": "Animals",
+      "difficulty": "hard",
+      "tags": [
+        "animals",
+        "hard",
+        "mammal",
+        "unusual",
+        "slow",
+        "rainforest",
+        "tree"
+      ],
+      "localizationKey": "word.animals.sloth",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-tapir",
+      "displayText": "Tapir",
+      "word": "Tapir",
+      "category": "Animals",
+      "difficulty": "hard",
+      "tags": [
+        "animals",
+        "hard",
+        "mammal",
+        "unusual",
+        "rainforest",
+        "snout",
+        "herbivore"
+      ],
+      "localizationKey": "word.animals.tapir",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-capybara",
+      "displayText": "Capybara",
+      "word": "Capybara",
+      "category": "Animals",
+      "difficulty": "hard",
+      "tags": [
+        "animals",
+        "hard",
+        "rodent",
+        "small-mammal"
+      ],
+      "localizationKey": "word.animals.capybara",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-chinchilla",
+      "displayText": "Chinchilla",
+      "word": "Chinchilla",
+      "category": "Animals",
+      "difficulty": "hard",
+      "tags": [
+        "animals",
+        "hard",
+        "rodent",
+        "small-mammal"
+      ],
+      "localizationKey": "word.animals.chinchilla",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-lemur",
+      "displayText": "Lemur",
+      "word": "Lemur",
+      "category": "Animals",
+      "difficulty": "hard",
+      "tags": [
+        "animals",
+        "hard",
+        "primate",
+        "mammal"
+      ],
+      "localizationKey": "word.animals.lemur",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-meerkat",
+      "displayText": "Meerkat",
+      "word": "Meerkat",
+      "category": "Animals",
+      "difficulty": "hard",
+      "tags": [
+        "animals",
+        "hard",
+        "mammal",
+        "unusual"
+      ],
+      "localizationKey": "word.animals.meerkat",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-mongoose",
+      "displayText": "Mongoose",
+      "word": "Mongoose",
+      "category": "Animals",
+      "difficulty": "hard",
+      "tags": [
+        "animals",
+        "hard",
+        "mammal",
+        "unusual"
+      ],
+      "localizationKey": "word.animals.mongoose",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-wombat",
+      "displayText": "Wombat",
+      "word": "Wombat",
+      "category": "Animals",
+      "difficulty": "hard",
+      "tags": [
+        "animals",
+        "hard",
+        "marsupial",
+        "australia"
+      ],
+      "localizationKey": "word.animals.wombat",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-echidna",
+      "displayText": "Echidna",
+      "word": "Echidna",
+      "category": "Animals",
+      "difficulty": "hard",
+      "tags": [
+        "animals",
+        "hard",
+        "mammal",
+        "unusual"
+      ],
+      "localizationKey": "word.animals.echidna",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-pangolin",
+      "displayText": "Pangolin",
+      "word": "Pangolin",
+      "category": "Animals",
+      "difficulty": "hard",
+      "tags": [
+        "animals",
+        "hard",
+        "mammal",
+        "unusual"
+      ],
+      "localizationKey": "word.animals.pangolin",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-okapi",
+      "displayText": "Okapi",
+      "word": "Okapi",
+      "category": "Animals",
+      "difficulty": "hard",
+      "tags": [
+        "animals",
+        "hard",
+        "mammal",
+        "unusual"
+      ],
+      "localizationKey": "word.animals.okapi",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-narwhal",
+      "displayText": "Narwhal",
+      "word": "Narwhal",
+      "category": "Animals",
+      "difficulty": "hard",
+      "tags": [
+        "animals",
+        "hard",
+        "aquatic",
+        "water"
+      ],
+      "localizationKey": "word.animals.narwhal",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-manatee",
+      "displayText": "Manatee",
+      "word": "Manatee",
+      "category": "Animals",
+      "difficulty": "hard",
+      "tags": [
+        "animals",
+        "hard",
+        "aquatic",
+        "water"
+      ],
+      "localizationKey": "word.animals.manatee",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-dugong",
+      "displayText": "Dugong",
+      "word": "Dugong",
+      "category": "Animals",
+      "difficulty": "hard",
+      "tags": [
+        "animals",
+        "hard",
+        "aquatic",
+        "water"
+      ],
+      "localizationKey": "word.animals.dugong",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-axolotl",
+      "displayText": "Axolotl",
+      "word": "Axolotl",
+      "category": "Animals",
+      "difficulty": "hard",
+      "tags": [
+        "animals",
+        "hard",
+        "aquatic",
+        "water",
+        "reptile-amphibian",
+        "cold-blooded"
+      ],
+      "localizationKey": "word.animals.axolotl",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-salamander",
+      "displayText": "Salamander",
+      "word": "Salamander",
+      "category": "Animals",
+      "difficulty": "hard",
+      "tags": [
+        "animals",
+        "hard",
+        "aquatic",
+        "water",
+        "reptile-amphibian",
+        "cold-blooded"
+      ],
+      "localizationKey": "word.animals.salamander",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-newt",
+      "displayText": "Newt",
+      "word": "Newt",
+      "category": "Animals",
+      "difficulty": "hard",
+      "tags": [
+        "animals",
+        "hard",
+        "aquatic",
+        "water",
+        "reptile-amphibian",
+        "cold-blooded"
+      ],
+      "localizationKey": "word.animals.newt",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-komodo-dragon",
+      "displayText": "Komodo Dragon",
+      "word": "Komodo Dragon",
+      "category": "Animals",
+      "difficulty": "hard",
+      "tags": [
+        "animals",
+        "hard",
+        "reptile-amphibian",
+        "cold-blooded",
+        "wildlife",
+        "distinctive"
+      ],
+      "localizationKey": "word.animals.komodo-dragon",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-cassowary",
+      "displayText": "Cassowary",
+      "word": "Cassowary",
+      "category": "Animals",
+      "difficulty": "hard",
+      "tags": [
+        "animals",
+        "hard",
+        "bird",
+        "winged",
+        "feather",
+        "wildlife",
+        "distinctive"
+      ],
+      "localizationKey": "word.animals.cassowary",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-kiwi",
+      "displayText": "Kiwi",
+      "word": "Kiwi",
+      "category": "Animals",
+      "difficulty": "hard",
+      "tags": [
+        "animals",
+        "hard",
+        "bird",
+        "winged",
+        "feather",
+        "wildlife",
+        "distinctive"
+      ],
+      "localizationKey": "word.animals.kiwi",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-emu",
+      "displayText": "Emu",
+      "word": "Emu",
+      "category": "Animals",
+      "difficulty": "hard",
+      "tags": [
+        "animals",
+        "hard",
+        "bird",
+        "winged",
+        "feather",
+        "wildlife",
+        "distinctive"
+      ],
+      "localizationKey": "word.animals.emu",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-ostrich",
+      "displayText": "Ostrich",
+      "word": "Ostrich",
+      "category": "Animals",
+      "difficulty": "hard",
+      "tags": [
+        "animals",
+        "hard",
+        "bird",
+        "winged",
+        "feather",
+        "wildlife",
+        "distinctive"
+      ],
+      "localizationKey": "word.animals.ostrich",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-toucan",
+      "displayText": "Toucan",
+      "word": "Toucan",
+      "category": "Animals",
+      "difficulty": "hard",
+      "tags": [
+        "animals",
+        "hard",
+        "bird",
+        "winged",
+        "feather",
+        "wildlife",
+        "distinctive"
+      ],
+      "localizationKey": "word.animals.toucan",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-hummingbird",
+      "displayText": "Hummingbird",
+      "word": "Hummingbird",
+      "category": "Animals",
+      "difficulty": "hard",
+      "tags": [
+        "animals",
+        "hard",
+        "bird",
+        "winged",
+        "feather",
+        "wildlife",
+        "distinctive"
+      ],
+      "localizationKey": "word.animals.hummingbird",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-albatross",
+      "displayText": "Albatross",
+      "word": "Albatross",
+      "category": "Animals",
+      "difficulty": "hard",
+      "tags": [
+        "animals",
+        "hard",
+        "bird",
+        "winged",
+        "feather",
+        "wildlife",
+        "distinctive"
+      ],
+      "localizationKey": "word.animals.albatross",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-condor",
+      "displayText": "Condor",
+      "word": "Condor",
+      "category": "Animals",
+      "difficulty": "hard",
+      "tags": [
+        "animals",
+        "hard",
+        "bird",
+        "winged",
+        "feather",
+        "wildlife",
+        "distinctive"
+      ],
+      "localizationKey": "word.animals.condor",
+      "safety": {
+        "level": "general"
+      }
+    },
+    {
+      "id": "animals-vulture",
+      "displayText": "Vulture",
+      "word": "Vulture",
+      "category": "Animals",
+      "difficulty": "hard",
+      "tags": [
+        "animals",
+        "hard",
+        "bird",
+        "winged",
+        "feather",
+        "wildlife",
+        "distinctive"
+      ],
+      "localizationKey": "word.animals.vulture",
+      "safety": {
+        "level": "general"
+      }
+    }
   ]
 }

@@ -64,6 +64,9 @@ public enum AccessibilityIDs {
     /// Start game button
     public static let startGameButton = "startGameButton"
 
+    /// Setup rule summary card
+    public static let ruleSummary = "ruleSummary"
+
     /// Player name text field (use the player UUID for uniqueness)
     public static func playerNameField(for playerID: UUID) -> String {
         "playerNameField_\(playerID.uuidString)"
@@ -94,6 +97,9 @@ public enum AccessibilityIDs {
     }
 
     // MARK: - Role Reveal
+
+    /// Non-sensitive word generation status shown before role reveal
+    public static let wordGenerationStatus = "wordGenerationStatus"
 
     /// Reveal role button
     public static let revealRoleButton = "revealRoleButton"

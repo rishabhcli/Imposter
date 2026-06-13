@@ -7,6 +7,7 @@
           "fill" : {
             "solid" : "srgb:0.58072,0.06673,0.00000,1.00000"
           },
+          "glass" : true,
           "image-name" : "Pasted Graphic 7.heic",
           "name" : "Pasted Graphic 7",
           "position" : {

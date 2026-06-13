@@ -25,8 +25,8 @@ final class AIWordService: WordServiceProtocol {
 
     // MARK: - Initialization
 
-    init(fallbackService: WordService = WordService()) {
-        self.fallbackService = fallbackService
+    init(fallbackService: WordService? = nil) {
+        self.fallbackService = fallbackService ?? WordService()
     }
 
     // MARK: - WordServiceProtocol
@@ -59,10 +59,29 @@ final class AIWordService: WordServiceProtocol {
 
     func selectWord(
         from categories: [String]?,
-        difficulty: GameSettings.Difficulty
+        difficulty: GameSettings.Difficulty,
+        avoiding avoidedWords: Set<String>
     ) async throws -> String {
         // Delegate to fallback service for random selection
-        try await fallbackService.selectWord(from: categories, difficulty: difficulty)
+        try await fallbackService.selectWord(
+            from: categories,
+            difficulty: difficulty,
+            avoiding: avoidedWords
+        )
+    }
+
+    func selectAlternateWord(
+        matching secretWord: String,
+        from categories: [String]?,
+        difficulty: GameSettings.Difficulty,
+        avoiding avoidedWords: Set<String>
+    ) async throws -> String? {
+        try await fallbackService.selectAlternateWord(
+            matching: secretWord,
+            from: categories,
+            difficulty: difficulty,
+            avoiding: avoidedWords
+        )
     }
 
     func generateWord(from prompt: String) async throws -> String {
@@ -100,33 +119,17 @@ final class AIWordService: WordServiceProtocol {
             let response = try await session.respond(to: fullPrompt)
             let responseText = response.content
 
-            // Clean up response
-            var cleanedWord = responseText
-                .trimmingCharacters(in: .whitespacesAndNewlines)
-                .replacingOccurrences(of: "\"", with: "")
-                .replacingOccurrences(of: "'", with: "")
-                .replacingOccurrences(of: ".", with: "")
-                .replacingOccurrences(of: ":", with: "")
-
-            // Take only first line if multiple
-            if let firstLine = cleanedWord.split(separator: "\n").first {
-                cleanedWord = String(firstLine).trimmingCharacters(in: .whitespacesAndNewlines)
-            }
-
-            // Validate response
-            guard !cleanedWord.isEmpty, cleanedWord.count <= 50 else {
-                logger.error("AI generated invalid response: '\(cleanedWord)'")
+            switch GeneratedWordPolicy.validate(rawResponse: responseText, prompt: prompt) {
+            case .success(let cleanedWord):
+                logger.info("AI generated word: \(cleanedWord)")
+                return cleanedWord
+            case .failure(.promptEcho):
+                logger.warning("AI generated same or near-duplicate word as prompt")
+                throw WordServiceError.aiSameAsPrompt
+            case .failure(let rejection):
+                logger.error("AI generated invalid response: \(String(describing: rejection))")
                 throw WordServiceError.aiInvalidResponse
             }
-
-            // Check it's not the same as prompt
-            if cleanedWord.lowercased() == prompt.lowercased() {
-                logger.warning("AI generated same word as prompt")
-                throw WordServiceError.aiSameAsPrompt
-            }
-
-            logger.info("AI generated word: \(cleanedWord)")
-            return cleanedWord.capitalized
 
         } catch let error as WordServiceError {
             throw error

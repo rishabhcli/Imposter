@@ -21,6 +21,9 @@ enum SetupStep {
 /// The main menu screen with integrated setup flow
 struct HomeView: View {
     @Environment(GameStore.self) private var store
+    @Environment(\.accessibilityReduceMotion) private var systemReduceMotion
+    @Environment(\.imposterAccessibilityPreferences) private var accessibilityPreferences
+
     @State private var setupStep: SetupStep = .home
     @State private var showHowToPlay = false
     @State private var showSettings = false
@@ -78,7 +81,7 @@ struct HomeView: View {
                     .scrollDismissesKeyboard(.interactively)
                     .onChange(of: isTextFieldFocused) { _, focused in
                         if focused {
-                            withAnimation {
+                            animateForAccessibility(.default) {
                                 proxy.scrollTo(AccessibilityIDs.customPromptField, anchor: .center)
                             }
                         }
@@ -98,6 +101,15 @@ struct HomeView: View {
     }
     
     private func startAnimations() {
+        guard !reduceMotion else {
+            glowIntensity = 0.75
+            logoScale = 1.0
+            logoOpacity = 1.0
+            buttonsOffset = 0
+            buttonsOpacity = 1.0
+            return
+        }
+
         // Glow pulsing
         withAnimation(.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) {
             glowIntensity = 1.0
@@ -114,6 +126,21 @@ struct HomeView: View {
             buttonsOffset = 0
             buttonsOpacity = 1.0
         }
+    }
+
+    private func animateForAccessibility(
+        _ animation: Animation?,
+        _ updates: @escaping () -> Void
+    ) {
+        if reduceMotion {
+            updates()
+        } else {
+            withAnimation(animation, updates)
+        }
+    }
+
+    private var reduceMotion: Bool {
+        systemReduceMotion || accessibilityPreferences.forceReduceMotion
     }
 
     // MARK: - Home Content
@@ -333,7 +360,10 @@ struct HomeView: View {
         case .categorySelection:
             return "Choose Word Source"
         case .playerSetup:
-            return "\(store.players.count) Players"
+            return String.localizedStringWithFormat(
+                String(localized: "%lld Players", comment: "Setup subtitle showing the current number of players."),
+                store.players.count
+            )
         }
     }
 
@@ -887,6 +917,9 @@ struct StarfieldView: View {
 // MARK: - Blinking Star
 
 struct BlinkingStar: View {
+    @Environment(\.accessibilityReduceMotion) private var systemReduceMotion
+    @Environment(\.imposterAccessibilityPreferences) private var accessibilityPreferences
+
     let star: StarfieldView.Star
     @State private var isVisible = true
 
@@ -896,6 +929,8 @@ struct BlinkingStar: View {
             .frame(width: star.size, height: star.size)
             .opacity(isVisible ? star.opacity : star.opacity * 0.1)
             .onAppear {
+                guard !reduceMotion else { return }
+
                 withAnimation(
                     .easeInOut(duration: star.blinkSpeed)
                     .repeatForever(autoreverses: true)
@@ -905,11 +940,18 @@ struct BlinkingStar: View {
                 }
             }
     }
+
+    private var reduceMotion: Bool {
+        systemReduceMotion || accessibilityPreferences.forceReduceMotion
+    }
 }
 
 // MARK: - Feature Star
 
 struct FeatureStar: View {
+    @Environment(\.accessibilityReduceMotion) private var systemReduceMotion
+    @Environment(\.imposterAccessibilityPreferences) private var accessibilityPreferences
+
     let star: StarfieldView.Star
     @State private var brightness: Double = 0.5
     @State private var scale: CGFloat = 1.0
@@ -943,6 +985,12 @@ struct FeatureStar: View {
         .scaleEffect(scale)
         .opacity(star.opacity)
         .onAppear {
+            guard !reduceMotion else {
+                brightness = 0.85
+                scale = 1.0
+                return
+            }
+
             withAnimation(
                 .easeInOut(duration: star.blinkSpeed)
                 .repeatForever(autoreverses: true)
@@ -952,6 +1000,10 @@ struct FeatureStar: View {
                 scale = 1.2
             }
         }
+    }
+
+    private var reduceMotion: Bool {
+        systemReduceMotion || accessibilityPreferences.forceReduceMotion
     }
 }
 
