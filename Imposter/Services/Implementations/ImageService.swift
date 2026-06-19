@@ -380,9 +380,10 @@ final class ImageService: ImageServiceProtocol, @unchecked Sendable {
     // MARK: - Initialization
 
     init() {
-        // Configure memory cache limits
-        memoryCache.countLimit = 10
-        memoryCache.totalCostLimit = 50 * 1024 * 1024 // 50MB
+        // Configure memory cache limits. Cost-based eviction keeps us within the
+        // memory budget even when high-resolution (1024px) images are cached.
+        memoryCache.countLimit = 24
+        memoryCache.totalCostLimit = 64 * 1024 * 1024 // 64MB
         
         // Setup disk cache directory
         let cacheDir = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
@@ -495,27 +496,31 @@ final class ImageService: ImageServiceProtocol, @unchecked Sendable {
         cacheKey: NSString
     ) async throws -> UIImage? {
         let concepts: [ImagePlaygroundConcept] = [.text(prompt)]
-        
+
         logger.debug("ImagePlayground: Generating image with prompt: '\(prompt)'")
-        
+
         do {
-            let imageSequence = creator.images(
-                for: concepts,
-                style: style,
-                limit: 1
-            )
-            
-            for try await generatedImage in imageSequence {
-                let uiImage = UIImage(cgImage: generatedImage.cgImage)
-                
-                // Save to memory cache
-                memoryCache.setObject(uiImage, forKey: cacheKey)
-                
-                // Save to disk cache for persistence
-                saveToDiskCache(image: uiImage, key: cacheKey as String)
-                
-                logger.info("ImagePlayground: Successfully generated and cached image")
-                return uiImage
+            // Prefer the options-based API (iOS 26.4+) so we can request a large,
+            // crisp image. Older OSes fall back to the original entry point.
+            if #available(iOS 26.4, *) {
+                let imageSequence = creator.images(
+                    for: concepts,
+                    style: style,
+                    options: makeHighQualityOptions(),
+                    limit: 1
+                )
+                for try await generatedImage in imageSequence {
+                    return finalize(cgImage: generatedImage.cgImage, cacheKey: cacheKey)
+                }
+            } else {
+                let imageSequence = creator.images(
+                    for: concepts,
+                    style: style,
+                    limit: 1
+                )
+                for try await generatedImage in imageSequence {
+                    return finalize(cgImage: generatedImage.cgImage, cacheKey: cacheKey)
+                }
             }
         } catch {
             // Check if it's the person identity error
@@ -526,8 +531,36 @@ final class ImageService: ImageServiceProtocol, @unchecked Sendable {
             }
             throw error
         }
-        
+
         return nil
+    }
+
+    /// Wraps a freshly generated image, caching it in memory (with an accurate
+    /// byte cost for eviction) and on disk before returning it.
+    private func finalize(cgImage: CGImage, cacheKey: NSString) -> UIImage {
+        let uiImage = UIImage(cgImage: cgImage)
+
+        // Use the true pixel footprint as the cache cost so large images evict correctly.
+        let cost = cgImage.bytesPerRow * cgImage.height
+        memoryCache.setObject(uiImage, forKey: cacheKey, cost: cost)
+
+        // Save to disk cache for persistence
+        saveToDiskCache(image: uiImage, key: cacheKey as String)
+
+        logger.info("ImagePlayground: Successfully generated and cached image (\(cgImage.width)x\(cgImage.height))")
+        return uiImage
+    }
+
+    /// Builds generation options tuned for the highest-quality result the OS supports.
+    /// On iOS 27+ we request a large square image so the artwork stays crisp on a card.
+    @available(iOS 26.4, *)
+    private func makeHighQualityOptions() -> ImagePlaygroundOptions {
+        var options = ImagePlaygroundOptions()
+        if #available(iOS 27.0, *) {
+            // Ask for the supported size closest to 1024x1024 for a sharp, detailed image.
+            options.sizeSpecification = .closest(to: CGSize(width: 1024, height: 1024))
+        }
+        return options
     }
 
     func clearCache() {
@@ -550,7 +583,7 @@ final class ImageService: ImageServiceProtocol, @unchecked Sendable {
         // Create a safe filename from the key
         let safeKey = key.replacingOccurrences(of: "/", with: "_")
             .replacingOccurrences(of: " ", with: "_")
-        return diskCacheDirectory.appendingPathComponent("\(safeKey).jpg")
+        return diskCacheDirectory.appendingPathComponent("\(safeKey).png")
     }
     
     private func loadFromDiskCache(key: String) -> UIImage? {
@@ -573,8 +606,8 @@ final class ImageService: ImageServiceProtocol, @unchecked Sendable {
     private func saveToDiskCache(image: UIImage, key: String) {
         let fileURL = diskCacheURL(for: key)
         
-        // Compress as JPEG for smaller file size
-        guard let data = image.jpegData(compressionQuality: 0.8) else {
+        // Encode losslessly as PNG to preserve the full detail of the generated artwork.
+        guard let data = image.pngData() else {
             logger.warning("Failed to encode image for disk cache")
             return
         }
@@ -636,6 +669,10 @@ final class ImageService: ImageServiceProtocol, @unchecked Sendable {
         return available.first ?? .animation
     }
 
+    /// Styling descriptors appended to prompts to push the model toward a polished,
+    /// vibrant, card-ready illustration while keeping the subject safe (no people/faces).
+    private let qualitySuffix = "highly detailed, vibrant saturated colors, soft studio lighting, smooth clean gradient background, balanced centered composition, polished professional illustration, crisp sharp focus, no text, no watermark, no people, no faces"
+
     private func createSafePrompt(for word: String, category: String) -> String {
         // Normalize the word for lookup
         let normalizedWord = word.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
@@ -643,13 +680,13 @@ final class ImageService: ImageServiceProtocol, @unchecked Sendable {
         // Check IP fallback mappings first for movies/TV
         if let moviePrompt = movieFallbackPrompts[normalizedWord] {
             logger.debug("Using movie fallback prompt for: \(word)")
-            return "\(moviePrompt), cute cartoon animation style, vibrant colors, no people, no faces"
+            return "\(moviePrompt), \(qualitySuffix)"
         }
         
         // Check IP fallback mappings for celebrities
         if let celebrityPrompt = celebrityFallbackPrompts[normalizedWord] {
             logger.debug("Using celebrity fallback prompt for: \(word)")
-            return "\(celebrityPrompt), cute cartoon animation style, vibrant colors, no people, no faces"
+            return "\(celebrityPrompt), \(qualitySuffix)"
         }
         
         // Categories that might have people or IP issues - use generic fallbacks
@@ -659,20 +696,20 @@ final class ImageService: ImageServiceProtocol, @unchecked Sendable {
             // If we don't have a specific mapping, use category-based abstract imagery
             switch category {
             case "People", "Celebrities":
-                return "A friendly cartoon character silhouette with sparkles and colorful aura, cute animated style, no real people"
+                return "A friendly glowing cartoon character silhouette surrounded by sparkles and a colorful aura, \(qualitySuffix), no real people"
             case "Movies", "Movies & TV":
-                return "A cute cartoon movie camera with film reels, sparkly cinema lights, happy popcorn character, no people"
+                return "A charming cartoon movie camera with spinning film reels and sparkly cinema lights beside a smiling popcorn bucket, \(qualitySuffix)"
             case "Music":
-                return "Happy musical notes dancing in colorful rainbow waves, cute cartoon instruments with faces, no people"
+                return "Joyful glowing musical notes dancing through colorful rainbow sound waves with cute cartoon instruments, \(qualitySuffix)"
             case "Sports":
-                return "Playful cartoon sports equipment bouncing around, dynamic motion lines, bright cheerful colors, no people"
+                return "Playful cartoon sports equipment in mid-bounce with dynamic motion lines and energetic bright colors, \(qualitySuffix)"
             default:
-                return "Cute colorful cartoon shapes representing: \(category), no people, no faces"
+                return "Colorful playful cartoon shapes representing the theme of \(category), \(qualitySuffix)"
             }
         }
 
         // Safe object-focused prompt - explicitly avoid any person implications
-        return "A single \(word) object floating in space, cute cartoon style illustration, no people, no hands, bright colorful background, simple clean design"
+        return "A single beautiful \(word) as the hero subject, \(qualitySuffix), no hands"
     }
     
     private func createFallbackPrompt(for word: String, category: String) -> String {
@@ -682,16 +719,16 @@ final class ImageService: ImageServiceProtocol, @unchecked Sendable {
         // Try movie fallback with more abstract styling
         if let moviePrompt = movieFallbackPrompts[normalizedWord] {
             logger.debug("Using movie abstract fallback for: \(word)")
-            return "Abstract artistic interpretation: \(moviePrompt), geometric shapes, vibrant colors, cartoon style, absolutely no people or faces"
+            return "Abstract artistic interpretation: \(moviePrompt), elegant geometric shapes, vibrant saturated colors, soft lighting, polished illustration, absolutely no people or faces"
         }
         
         // Try celebrity fallback with more abstract styling  
         if let celebrityPrompt = celebrityFallbackPrompts[normalizedWord] {
             logger.debug("Using celebrity abstract fallback for: \(word)")
-            return "Abstract artistic interpretation: \(celebrityPrompt), geometric shapes, vibrant colors, cartoon style, absolutely no people or faces"
+            return "Abstract artistic interpretation: \(celebrityPrompt), elegant geometric shapes, vibrant saturated colors, soft lighting, polished illustration, absolutely no people or faces"
         }
         
         // Ultra-safe abstract prompt that should never require person identity
-        return "Abstract colorful geometric shapes and patterns inspired by the concept of '\(category)', vibrant colors, playful design, cartoon illustration style, no people, no faces, no characters"
+        return "Beautiful abstract composition of colorful geometric shapes and flowing patterns inspired by the theme of '\(category)', vibrant saturated colors, soft lighting, polished illustration, no people, no faces, no characters"
     }
 }

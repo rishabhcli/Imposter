@@ -215,15 +215,15 @@ struct RevealView: View {
                     .foregroundStyle(.white.opacity(0.7))
                     .padding(.top, LGSpacing.large)
                 
-                // Sharp image in center (if available)
+                // Hero image in center (if available). Edges fade gradually
+                // into the blurred background so the artwork melts into the card.
                 if let generatedImage = store.state.roundState?.generatedImage {
                     Image(uiImage: generatedImage)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(maxHeight: 180)
-                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                        .shadow(color: .black.opacity(0.5), radius: 20, y: 8)
-                        .padding(.horizontal, 24)
+                        .frame(maxHeight: 200)
+                        .softFadedImageEdges(cornerRadius: 28, inset: 14, softness: 24)
+                        .padding(.horizontal, 16)
                 }
                 
                 Spacer()

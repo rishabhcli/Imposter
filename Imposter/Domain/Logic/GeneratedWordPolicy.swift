@@ -16,7 +16,24 @@ enum GeneratedWordPolicy {
         case tooManyWords
         case promptEcho
         case sentenceLike
+        case unsafeContent
     }
+
+    /// Reasons a raw user-supplied theme prompt is rejected before it is ever
+    /// sent to the on-device model. This is the first line of defense: it keeps
+    /// blatant prompt-injection / jailbreak attempts and obviously unsafe themes
+    /// out of the generation pipeline entirely.
+    enum PromptRejection: Error, Equatable, Sendable {
+        case empty
+        case tooLong
+        case injectionAttempt
+        case unsafeTheme
+    }
+
+    /// Maximum length of a user theme. Themes are short ("space animals",
+    /// "kitchen gadgets"); anything longer is almost certainly an attempt to
+    /// smuggle instructions into the prompt.
+    static let maximumPromptLength = 60
 
     static func validate(rawResponse: String, prompt: String) -> Result<String, Rejection> {
         let candidate = sanitizedCandidate(from: rawResponse)
@@ -41,8 +58,108 @@ enum GeneratedWordPolicy {
             return .failure(.promptEcho)
         }
 
+        // Output-side safety net. Guided generation plus the model's own
+        // guardrails block almost everything, but the word is shown verbatim to
+        // players, so we deterministically reject any term that slips through.
+        guard !containsUnsafeContent(candidate) else {
+            return .failure(.unsafeContent)
+        }
+
         return .success(displayCased(candidate))
     }
+
+    // MARK: - Input Validation (pre-generation guardrail)
+
+    /// Validates and sanitizes a raw user theme *before* it reaches the model.
+    /// - Returns: the trimmed prompt on success, or the reason it was rejected.
+    static func validateUserPrompt(_ rawPrompt: String) -> Result<String, PromptRejection> {
+        let trimmed = rawPrompt.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        guard !trimmed.isEmpty else {
+            return .failure(.empty)
+        }
+
+        guard trimmed.count <= maximumPromptLength else {
+            return .failure(.tooLong)
+        }
+
+        if looksLikePromptInjection(trimmed) {
+            return .failure(.injectionAttempt)
+        }
+
+        if containsUnsafeContent(trimmed) {
+            return .failure(.unsafeTheme)
+        }
+
+        return .success(trimmed)
+    }
+
+    /// Detects blatant attempts to override the system instructions or coax the
+    /// model out of its role. Matched case-insensitively as phrases so ordinary
+    /// themes (which never contain these sequences) are unaffected.
+    static func looksLikePromptInjection(_ value: String) -> Bool {
+        let lowered = value.lowercased()
+        return injectionMarkers.contains { lowered.contains($0) }
+    }
+
+    /// Word-boundary aware check for obviously unsafe content. Tokenizes on
+    /// non-alphanumerics so the "Scunthorpe problem" (innocent words containing
+    /// a blocked substring) is avoided, while still catching multi-word phrases.
+    static func containsUnsafeContent(_ value: String) -> Bool {
+        let lowered = value.lowercased()
+
+        if unsafePhrases.contains(where: { lowered.contains($0) }) {
+            return true
+        }
+
+        let tokens = Set(
+            lowered
+                .components(separatedBy: CharacterSet.alphanumerics.inverted)
+                .filter { !$0.isEmpty }
+        )
+        return !tokens.isDisjoint(with: unsafeTokens)
+    }
+
+    /// Phrases that signal an injection / jailbreak attempt against the theme.
+    private static let injectionMarkers: [String] = [
+        "ignore previous",
+        "ignore all previous",
+        "ignore the above",
+        "disregard previous",
+        "disregard the above",
+        "forget your instructions",
+        "forget previous",
+        "new instructions",
+        "system prompt",
+        "you are now",
+        "act as",
+        "pretend to be",
+        "developer mode",
+        "jailbreak",
+        "reveal your",
+        "repeat the theme",
+        "output the theme",
+        "say the theme",
+        "instead of a word"
+    ]
+
+    /// Multi-word unsafe phrases checked as substrings.
+    private static let unsafePhrases: [String] = [
+        "child abuse",
+        "how to make a bomb",
+        "kill yourself"
+    ]
+
+    /// Single tokens that mark a theme as inappropriate for a family party game
+    /// (sexual-explicit, graphic violence, self-harm, hard drugs). Kept compact
+    /// and deliberately conservative; the model's own guardrails cover the rest.
+    private static let unsafeTokens: Set<String> = [
+        "porn", "pornographic", "nude", "nudity", "naked", "nsfw", "explicit",
+        "sex", "sexual", "rape", "incest", "fetish", "orgy",
+        "suicide", "selfharm",
+        "heroin", "cocaine", "meth", "methamphetamine",
+        "genocide", "massacre", "terrorist", "terrorism"
+    ]
 
     private static func sanitizedCandidate(from rawResponse: String) -> String {
         let firstLine = rawResponse

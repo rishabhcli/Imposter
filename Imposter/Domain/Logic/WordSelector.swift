@@ -316,8 +316,12 @@ enum WordSelector {
 
         let sharedTokenCount = candidateSet.intersection(referenceSet).count
         let largerTokenCount = max(candidateSet.count, referenceSet.count)
+        // Two-of-three shared tokens (0.666…) is the canonical near-duplicate
+        // case (e.g. "Vision Pro headset" vs "Apple Vision Pro"), so the
+        // threshold sits just below it. One-of-two overlap (0.5) is still
+        // treated as distinct.
         if largerTokenCount > 1,
-           Double(sharedTokenCount) / Double(largerTokenCount) >= 0.67 {
+           Double(sharedTokenCount) / Double(largerTokenCount) >= 0.6 {
             return true
         }
 

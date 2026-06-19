@@ -509,12 +509,18 @@ final class ImposterUITests: XCTestCase {
         let returnButton = app.keyboards.buttons["return"]
         let doneButton = app.keyboards.buttons["Done"]
 
-        if returnButton.exists {
+        // Only tap a keyboard key when it is actually hittable. When the
+        // simulator has a hardware keyboard attached, the software keyboard's
+        // return key can be reported as existing while sitting offscreen, so
+        // tap() fails with a scroll-to-visible error. In that case dismiss the
+        // keyboard by tapping a neutral area instead of depending on key geometry.
+        if returnButton.exists && returnButton.isHittable {
             returnButton.tap()
-        } else if doneButton.exists {
+        } else if doneButton.exists && doneButton.isHittable {
             doneButton.tap()
         } else {
-            app.swipeDown()
+            let neutralPoint = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.08))
+            neutralPoint.tap()
         }
     }
 

@@ -87,55 +87,29 @@ final class AIWordService: WordServiceProtocol {
     func generateWord(from prompt: String) async throws -> String {
         logger.debug("Generating word from prompt: \(prompt)")
 
-        // Check availability
-        guard isAIGenerationAvailable else {
-            logger.warning("AI not available: \(self.aiUnavailabilityReason ?? "unknown")")
-            throw WordServiceError.aiNotAvailable(reason: aiUnavailabilityReason)
-        }
-
         do {
-            // Create language model session
-            let session = LanguageModelSession()
-
-            // Create prompt for word generation
-            let fullPrompt = """
-            You are a word generator for a party guessing game called Imposter.
-            Given a theme or topic, respond with ONLY a single word or very short phrase (2-3 words max) that is RELATED to the theme.
-
-            IMPORTANT RULES:
-            - Respond with ONLY the word, nothing else
-            - Do NOT use the exact word(s) from the input
-            - Choose something fun, specific, and guessable
-            - Keep it appropriate for all ages
-            - The word should be a concrete noun or simple concept
-            - No explanations, just the word
-
-            Theme: \(prompt)
-
-            Related word:
-            """
-
-            // Generate response
-            let response = try await session.respond(to: fullPrompt)
-            let responseText = response.content
-
-            switch GeneratedWordPolicy.validate(rawResponse: responseText, prompt: prompt) {
-            case .success(let cleanedWord):
-                logger.info("AI generated word: \(cleanedWord)")
-                return cleanedWord
-            case .failure(.promptEcho):
-                logger.warning("AI generated same or near-duplicate word as prompt")
-                throw WordServiceError.aiSameAsPrompt
-            case .failure(let rejection):
-                logger.error("AI generated invalid response: \(String(describing: rejection))")
-                throw WordServiceError.aiInvalidResponse
-            }
-
-        } catch let error as WordServiceError {
-            throw error
+            // Delegate to the single source of truth, which uses guided
+            // generation (@Generable) plus the deterministic safety net.
+            let word = try await WordGenerator.generateWord(from: prompt)
+            logger.info("AI generated word: \(word)")
+            return word
+        } catch let error as WordGenerator.WordGeneratorError {
+            throw Self.mapGeneratorError(error)
         } catch {
             logger.error("AI generation failed: \(error.localizedDescription)")
             throw WordServiceError.aiNotAvailable(reason: error.localizedDescription)
+        }
+    }
+
+    /// Translates `WordGenerator` errors into the service-level error vocabulary.
+    private static func mapGeneratorError(_ error: WordGenerator.WordGeneratorError) -> WordServiceError {
+        switch error {
+        case .notAvailable(let reason):
+            return .aiNotAvailable(reason: reason)
+        case .sameAsPrompt:
+            return .aiSameAsPrompt
+        case .invalidResponse, .unsafePrompt:
+            return .aiInvalidResponse
         }
     }
 

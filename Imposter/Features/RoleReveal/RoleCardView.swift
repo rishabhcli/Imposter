@@ -251,15 +251,17 @@ struct RoleCardView: View {
                 Spacer()
                     .frame(height: 50)
                 
-                // Sharp image in center (if available)
+                // Hero image in center (if available). Rather than a hard
+                // rounded clip, the edges fade gradually into the blurred
+                // full-bleed background behind it, so the artwork melts into
+                // the card instead of sitting in a crisp rectangle.
                 if let image = generatedImage {
                     Image(uiImage: image)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(maxHeight: 180)
-                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                        .shadow(color: .black.opacity(0.5), radius: 20, y: 8)
-                        .padding(.horizontal, 24)
+                        .frame(maxHeight: 200)
+                        .softFadedImageEdges(cornerRadius: 28, inset: 14, softness: 24)
+                        .padding(.horizontal, 16)
                 }
                 
                 Spacer()
@@ -925,5 +927,49 @@ struct GyroBorderView: View {
             playerColor: .azure,
             generatedImage: nil
         )
+    }
+}
+
+#Preview("Informed Player (with image)") {
+    ZStack {
+        AnimatedBackground(style: .gameplay)
+
+        RoleCardView(
+            role: .informed(word: "Elephant"),
+            playerName: "Alice",
+            playerEmoji: "😎",
+            playerColor: .crimson,
+            generatedImage: RoleCardView.sampleArtwork()
+        )
+    }
+}
+
+extension RoleCardView {
+    /// Draws a vibrant placeholder image so previews can demonstrate the soft
+    /// edge-fade without depending on on-device ImagePlayground generation.
+    static func sampleArtwork(size: CGSize = CGSize(width: 512, height: 512)) -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: size)
+        return renderer.image { context in
+            let cg = context.cgContext
+            let colors = [
+                UIColor(red: 1.0, green: 0.45, blue: 0.2, alpha: 1).cgColor,
+                UIColor(red: 0.6, green: 0.2, blue: 0.9, alpha: 1).cgColor
+            ] as CFArray
+            let gradient = CGGradient(
+                colorsSpace: CGColorSpaceCreateDeviceRGB(),
+                colors: colors,
+                locations: [0, 1]
+            )!
+            cg.drawLinearGradient(
+                gradient,
+                start: .zero,
+                end: CGPoint(x: size.width, y: size.height),
+                options: []
+            )
+            // A bright central disc so the fade at the edges is obvious.
+            UIColor.white.withAlphaComponent(0.9).setFill()
+            let inset = size.width * 0.28
+            cg.fillEllipse(in: CGRect(origin: .zero, size: size).insetBy(dx: inset, dy: inset))
+        }
     }
 }

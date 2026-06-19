@@ -8,6 +8,16 @@
 import Foundation
 import FoundationModels
 
+// MARK: - WordCategory
+
+/// Structured output for guided category classification. Constraining the model
+/// to this schema returns just the category label, so there's no prose to strip.
+@Generable(description: "A broad category for a word")
+struct WordCategory {
+    @Guide(description: "A one or two word category such as Animal, Food, Place, Object, Person, Activity, Vehicle, or Tool.")
+    var category: String
+}
+
 // MARK: - HintGenerator
 
 /// Generates category classifications for words
@@ -47,17 +57,22 @@ enum HintGenerator {
         // Super simple - just ask for category
         let session = LanguageModelSession(instructions: """
             Classify words into broad categories.
-            Reply with just 1-2 words.
             Examples: Animal, Food, Place, Object, Person, Activity, Vehicle, Tool
             """)
 
-        let prompt = "Category for: \(secretWord)"
-
-        let response = try await session.respond(to: prompt)
-        let hint = response.content
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-            .replacingOccurrences(of: "\"", with: "")
-            .replacingOccurrences(of: ".", with: "")
+        let hint: String
+        do {
+            // Guided generation returns the bare category, so no string cleanup.
+            let response = try await session.respond(
+                to: "Category for: \(secretWord)",
+                generating: WordCategory.self
+            )
+            hint = response.content.category.trimmingCharacters(in: .whitespacesAndNewlines)
+        } catch is LanguageModelSession.GenerationError {
+            // Guardrail or refusal on the word — surface as a clean failure
+            // so callers can fall back gracefully.
+            throw HintGeneratorError.generationFailed
+        }
 
         guard !hint.isEmpty else {
             throw HintGeneratorError.generationFailed
